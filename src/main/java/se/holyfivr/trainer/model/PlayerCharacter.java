@@ -1,46 +1,43 @@
 package se.holyfivr.trainer.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class PlayerCharacter {
 
     private String name;
     private String cardAmount;
-    private String maxHealthLevelOne;
-    private String maxHealthLevelTwo;
-    private String maxHealthLevelThree;
-    private String maxHealthLevelFour;
-    private String maxHealthLevelFive;
-    private String maxHealthLevelSix;
-    private String maxHealthLevelSeven;
-    private String maxHealthLevelEight;
-    private String maxHealthLevelNine;
+    private String hpLvlOne;
+    private String hpLvlTwo;
+    private String hpLvlThree;
+    private String hpLvlFour;
+    private String hpLvlFive;
+    private String hpLvlSix;
+    private String hpLvlSeven;
+    private String hpLvlEight;
+    private String hpLvlNine;
 
     public PlayerCharacter(
     String name,
     String cardAmount,
-    String maxHealthLevelOne,
-    String maxHealthLevelTwo,
-    String maxHealthLevelThree,
-    String maxHealthLevelFour,
-    String maxHealthLevelFive,
-    String maxHealthLevelSix,
-    String maxHealthLevelSeven,
-    String maxHealthLevelEight,
-    String maxHealthLevelNine) {
+    String hpLvlOne,
+    String hpLvlTwo,
+    String hpLvlThree,
+    String hpLvlFour,
+    String hpLvlFive,
+    String hpLvlSix,
+    String hpLvlSeven,
+    String hpLvlEight,
+    String hpLvlNine) {
 
         this.name = name;
         this.cardAmount = cardAmount;
-        this.maxHealthLevelOne = maxHealthLevelOne;
-        this.maxHealthLevelTwo = maxHealthLevelTwo;
-        this.maxHealthLevelThree = maxHealthLevelThree;
-        this.maxHealthLevelFour = maxHealthLevelFour;
-        this.maxHealthLevelFive = maxHealthLevelFive;
-        this.maxHealthLevelSix = maxHealthLevelSix;
-        this.maxHealthLevelSeven = maxHealthLevelSeven;
-        this.maxHealthLevelEight = maxHealthLevelEight;
-        this.maxHealthLevelNine = maxHealthLevelNine;       
+        this.hpLvlOne = hpLvlOne;
+        this.hpLvlTwo = hpLvlTwo;
+        this.hpLvlThree = hpLvlThree;
+        this.hpLvlFour = hpLvlFour;
+        this.hpLvlFive = hpLvlFive;
+        this.hpLvlSix = hpLvlSix;
+        this.hpLvlSeven = hpLvlSeven;
+        this.hpLvlEight = hpLvlEight;
+        this.hpLvlNine = hpLvlNine;       
     }
 
     public String getName() {
@@ -59,76 +56,76 @@ public class PlayerCharacter {
         this.cardAmount = cardAmount;
     }
 
-    public String getMaxHealthLevelOne() {
-        return maxHealthLevelOne;
+    public String getHpLvlOne() {
+        return hpLvlOne;
     }
 
-    public void setMaxHealthLevelOne(String maxHealthLevelOne) {
-        this.maxHealthLevelOne = maxHealthLevelOne;
+    public void setHpLvlOne(String hpLvlOne) {
+        this.hpLvlOne = hpLvlOne;
     }
 
-    public String getMaxHealthLevelTwo() {
-        return maxHealthLevelTwo;
+    public String getHpLvlTwo() {
+        return hpLvlTwo;
     }
 
-    public void setMaxHealthLevelTwo(String maxHealthLevelTwo) {
-        this.maxHealthLevelTwo = maxHealthLevelTwo;
+    public void setHpLvlTwo(String hpLvlTwo) {
+        this.hpLvlTwo = hpLvlTwo;
     }
 
-    public String getMaxHealthLevelThree() {
-        return maxHealthLevelThree;
+    public String getHpLvlThree() {
+        return hpLvlThree;
     }
 
-    public void setMaxHealthLevelThree(String maxHealthLevelThree) {
-        this.maxHealthLevelThree = maxHealthLevelThree;
+    public void setHpLvlThree(String hpLvlThree) {
+        this.hpLvlThree = hpLvlThree;
     }
 
-    public String getMaxHealthLevelFour() {
-        return maxHealthLevelFour;
+    public String getHpLvlFour() {
+        return hpLvlFour;
     }
 
-    public void setMaxHealthLevelFour(String maxHealthLevelFour) {
-        this.maxHealthLevelFour = maxHealthLevelFour;
+    public void setHpLvlFour(String hpLvlFour) {
+        this.hpLvlFour = hpLvlFour;
     }
 
-    public String getMaxHealthLevelFive() {
-        return maxHealthLevelFive;
+    public String getHpLvlFive() {
+        return hpLvlFive;
     }
 
-    public void setMaxHealthLevelFive(String maxHealthLevelFive) {
-        this.maxHealthLevelFive = maxHealthLevelFive;
+    public void setHpLvlFive(String hpLvlFive) {
+        this.hpLvlFive = hpLvlFive;
     }
 
-    public String getMaxHealthLevelSix() {
-        return maxHealthLevelSix;
+    public String getHpLvlSix() {
+        return hpLvlSix;
     }
 
-    public void setMaxHealthLevelSix(String maxHealthLevelSix) {
-        this.maxHealthLevelSix = maxHealthLevelSix;
+    public void setHpLvlSix(String hpLvlSix) {
+        this.hpLvlSix = hpLvlSix;
     }
 
-    public String getMaxHealthLevelSeven() {
-        return maxHealthLevelSeven;
+    public String getHpLvlSeven() {
+        return hpLvlSeven;
     }
 
-    public void setMaxHealthLevelSeven(String maxHealthLevelSeven) {
-        this.maxHealthLevelSeven = maxHealthLevelSeven;
+    public void setHpLvlSeven(String hpLvlSeven) {
+        this.hpLvlSeven = hpLvlSeven;
     }
 
-    public String getMaxHealthLevelEight() {
-        return maxHealthLevelEight;
+    public String getHpLvlEight() {
+        return hpLvlEight;
     }
 
-    public void setMaxHealthLevelEight(String maxHealthLevelEight) {
-        this.maxHealthLevelEight = maxHealthLevelEight;
+    public void setHpLvlEight(String hpLvlEight) {
+        this.hpLvlEight = hpLvlEight;
     }
 
-    public String getMaxHealthLevelNine() {
-        return maxHealthLevelNine;
+    public String getHpLvlNine() {
+        return hpLvlNine;
     }
 
-    public void setMaxHealthLevelNine(String maxHealthLevelNine) {
-        this.maxHealthLevelNine = maxHealthLevelNine;
+    public void setHpLvlNine(String hpLvlNine) {
+        this.hpLvlNine = hpLvlNine;
     }
 
 }

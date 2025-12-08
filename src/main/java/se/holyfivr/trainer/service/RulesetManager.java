@@ -27,41 +27,76 @@ public class RulesetManager {
 
     // injected from the State class
     private final State appState;
+    private final RulesetSaver rulesetSaver;
 
-    // list of all characters parsed from the ruleset
-    private List<PlayerCharacter> characterList = new ArrayList<>();
+    public List<PlayerCharacter> getCharacterList() {
+        return new ArrayList<>(appState.getCharacters().values());
+    }
 
     // these hold the raw byte arrays of the ruleset and its parts
     private byte[] rawRulesetBytes; // the entire ruleset
-    private byte[] headerBytes; // the header
-    private byte[] contentAndFillerBytes; // the main content + filler
-    private byte[] footerBytes; // the footer
+    private byte[] headerBytes; // the binary header (DO NOT TOUCH)
+    private byte[] contentBytes; // the text content (Editable)
+    private byte[] footerBytes; // the binary footer (DO NOT TOUCH)
+
+    // This string holds the original text content of the file.
+    // We use this as a "template" when saving, to ensure we don't break
+    // parts of the file we haven't parsed.
+    private String originalContentString;
+
+    // We store the total size of the original file to validate that our
+    // output file is EXACTLY the same size before saving.
+    private int originalTotalSize;
 
     // "appstate" is injected from the state.java component class, which holds the
-    // path to the ruleset file
-    public RulesetManager(State appState) {
+    // path to the ruleset file (among other things)
+    public RulesetManager(State appState, RulesetSaver rulesetSaver) {
         this.appState = appState;
+        this.rulesetSaver = rulesetSaver;
     }
 
-    // This method loads the ruleset (duh)
+    /* ============================================================================================ */
+    /*                                      SAVE RULESET                                            */
+    /*                                                                                              */
+    /* Delegates the saving process to the RulesetSaver service.                                    */
+    /* ============================================================================================ */
+    public void saveRuleset() {
+        rulesetSaver.saveRuleset(
+            appState.getHardcodedPath(),
+            headerBytes,
+            footerBytes,
+            contentBytes,
+            originalContentString,
+            originalTotalSize,
+            appState.getCharacters()
+        );
+    }
+
+
+
+
+
+
+    /* ============================================================================================ */
+    /*                                      LOAD RULESET                                            */
+    /*                                                                                              */
+    /* This method loads the ruleset file from disk and initiates the splitting process.            */
+    /* It reads the file as raw bytes to preserve the binary structure of the header and footer.    */
+    /* ============================================================================================ */
     public void loadRuleset() {
 
         // Gets the ruleset path
         Path filePath = appState.getHardcodedPath();
 
-        // ADD FUNCTION TO SELECT PATH LOCATION HERE !!(TODO)!!
-
         // Opens inputstream and converts path to file
         try (FileInputStream ruleset = new FileInputStream(filePath.toFile())) {
 
-            // The entire file as a byte-array
+            // 1. Read the entire file into a byte array
             this.rawRulesetBytes = (ruleset.readAllBytes());
+            this.originalTotalSize = rawRulesetBytes.length;
 
-            // converted to a string in ISO_5589_1 to guarante a 1:1 byte/character ratio
-            String unParsedContent = new String(rawRulesetBytes, StandardCharsets.ISO_8859_1);
-
-            // Splits the ruleset into parts
-            splitRulesetContent(unParsedContent);
+            // 2. Split the file into Header, Content, and Footer using byte scanning
+            splitRulesetContent();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -69,62 +104,132 @@ public class RulesetManager {
         }
     }
 
-    // This method splits the ruleset into parts and divides them into sections
-    // depending on what type of block each part should be a part of.
-    // to start with, we divide it in 4 parts: header, filler, content, footer
-    private void splitRulesetContent(String unparsedContent) {
 
-        // these delimiters mark the start and end of the content section. The first
-        // object after the header is always Parser: HeroSummon
-        // and the last type of objects in the contentblock are always PetCards. These
-        // are not really of any interest to edit, so we are fine with
-        // leaving them out of the content section.
-        final String DELIMITER = "Parser: HeroSummon";
-        final String FOOTER_DELIMITER = "Parser: PetCard";
 
-        // finds the indexes of the delimiters.
-        int splitIndex = unparsedContent.indexOf(DELIMITER);
-        int splitIndexFooter = unparsedContent.indexOf(FOOTER_DELIMITER);
 
-        // just a precaution to make sure the delimiters were found
-        if (splitIndex != -1 && splitIndexFooter != -1) {
 
-            // splits the raw byte array into 3 separate arrays: header, content + filler,
-            // footer
-            // using Arrays.copyOfRange to copy the relevant parts of the byte array
-            // so the first line here is basically "copy the range from index 0, to the
-            // index of the first delimiter, from the rawRulesetBytes array"
-            this.headerBytes = Arrays.copyOfRange(rawRulesetBytes, 0, splitIndex);
-            this.contentAndFillerBytes = Arrays.copyOfRange(rawRulesetBytes, splitIndex, splitIndexFooter);
-            this.footerBytes = Arrays.copyOfRange(rawRulesetBytes, splitIndexFooter, rawRulesetBytes.length);
 
-            // Debug prints
-            System.out.println("Ruleset loaded and split successfully.");
-            System.out.println("Header size: " + headerBytes.length + " bytes.");
-            System.out.println("Content size: " + contentAndFillerBytes.length + " bytes.");
-            System.out.println("Footer size: " + footerBytes.length + " bytes.");
+    /* ============================================================================================ */
+    /*                                  SPLIT RULESET CONTENT                                       */
+    /*                                                                                              */
+    /* This method implements the "Split & Scan" algorithm to safely separate the binary parts      */
+    /* from the editable text part.                                                                 */
+    /*                                                                                              */
+    /* STRATEGY:                                                                                    */
+    /* 1. Find the start of the text section by looking for the unique string marker:               */
+    /*    "Parser: HeroSummon"                                                                      */
+    /* 2. Find the end of the text section by looking for the first NUL byte (0x00)                 */
+    /*    that appears AFTER the start marker.                                                      */
+    /*                                                                                              */
+    /* ============================================================================================ */
+    private void splitRulesetContent() {
 
-            // Now we can parse the content section
-            parseRulesetContent();
+        // The unique string that marks the beginning of the editable text section.
+        // We use ISO_8859_1 to get the correct byte sequence (1:1 mapping).
+        byte[] startMarker = "Parser: HeroSummon".getBytes(StandardCharsets.ISO_8859_1);
+        
+        int startIndex = -1;
+        int endIndex = -1;
 
-        } else if (splitIndex == -1) {
-            System.err.println("Could not find the delimiter '" + DELIMITER + "' in the file.");
-        } else {
-            System.err.println("Could not find the footer delimiter '" + FOOTER_DELIMITER + "' in the file.");
+        /* ============================================================================================ */
+        /* STEP 1: Find the Start Index                                                                 */
+        /*                                                                                              */
+        /* We scan through the raw bytes to find the sequence matching "Parser: HeroSummon".            */
+        /* We stop at length - marker.length to avoid index out of bounds.                              */
+        /* ============================================================================================ */
+        for (int i = 0; i < rawRulesetBytes.length - startMarker.length; i++) {
+            boolean match = true;
+
+            // Check if the sequence matches at this position
+            for (int j = 0; j < startMarker.length; j++) {
+                if (rawRulesetBytes[i + j] != startMarker[j]) {
+                    match = false;
+                    break;
+                }
+            }
+
+            // If we found the match, this is our start index.
+            if (match) {
+                startIndex = i;
+                break;
+            }
         }
+
+        if (startIndex == -1) {
+            throw new RuntimeException("CRITICAL ERROR: Could not find start marker 'Parser: HeroSummon' in ruleset file.");
+        }
+
+        /* ============================================================================================ */
+        /* STEP 2: Find the End Index                                                                   */                           
+        /*                                                                                              */                    
+        /* The text section ends where the binary footer begins. The footer always starts with          */
+        /* a NUL byte (0x00). We scan forward from the startIndex to find it.                           */
+        /* ============================================================================================ */
+        for (int i = startIndex; i < rawRulesetBytes.length; i++) {
+            if (rawRulesetBytes[i] == 0x00) {
+                endIndex = i;
+                break;
+            }
+        }
+
+        if (endIndex == -1) {
+            throw new RuntimeException("CRITICAL ERROR: Could not find end marker (NUL byte) in ruleset file.");
+        }
+
+        /* ============================================================================================ */
+        /* STEP 3: Extract the Sections                                                                 */  
+        /*                                                                                              */  
+        /* Now that we have the boundaries, we copy the bytes into their respective arrays.             */  
+        /*                                                                                              */  
+        /* Header: From start (0) to startIndex                                                         */  
+        /* Content: From startIndex to EndIndex                                                         */
+        /* Footer: From EndIndex to the end of the file                                                 */
+        /* ============================================================================================ */
+        this.headerBytes = Arrays.copyOfRange(rawRulesetBytes, 0, startIndex);
+        this.contentBytes = Arrays.copyOfRange(rawRulesetBytes, startIndex, endIndex);
+        this.footerBytes = Arrays.copyOfRange(rawRulesetBytes, endIndex, rawRulesetBytes.length);
+
+        /* ============================================================================================ */
+        /* STEP 4: Decode Content                                                                       */
+        /*                                                                                              */
+        /* We convert the content bytes to a String using ISO_8859_1.                                   */
+        /* This string will be used for parsing and as a template for saving.                           */
+        /* ============================================================================================ */
+        this.originalContentString = new String(contentBytes, StandardCharsets.ISO_8859_1);
+
+        // Debug prints
+        System.out.println("Ruleset loaded and split successfully.");
+        System.out.println("Header size: " + headerBytes.length + " bytes.");
+        System.out.println("Content size: " + contentBytes.length + " bytes.");
+        System.out.println("Footer size: " + footerBytes.length + " bytes.");
+        System.out.println("Total Reconstructed Size: " + (headerBytes.length + contentBytes.length + footerBytes.length) + " bytes (Should match " + originalTotalSize + ")");
+
+        // Now we can parse the content section
+        parseRulesetContent();
     }
 
 
-    //==================================== parseRulesetContent ====================================//
-    //  This method restructures the data retrieved from the ruleset. We start by creating a       //
-    //  string, based on the content-block. We make sure to use ISO_8859_1 to maintain 1:1 byte    //
-    //  ratio. We then split the content into smaller blocks, gathering the different objects in   //
-    //  their own blocks. These blocks are then processed one by one, extracting the relevant      //
-    //  data that we want to edit. This is then stores in POJOS for easy access in the rest of the //
-    //  program.                                                                                   //
-    //=============================================================================================//
+
+
+
+
+
+    /* ============================================================================================ */
+    /*                                    PARSED RULESET CONTENT                                    */
+    /*                                                                                              */
+    /* This method restructures the data retrieved from the ruleset.                                */
+    /* We use the 'originalContentString' which we decoded safely using UTF-8.                      */
+    /* We split the content into smaller blocks based on the "Parser: " tag.                        */
+    /* These blocks are then processed one by one, extracting the relevant data.                    */
+    /*                                                                                              */
+    /* ============================================================================================ */
     private void parseRulesetContent() {
-        String contentString = new String(contentAndFillerBytes, StandardCharsets.ISO_8859_1);
+        
+        // Clear any existing characters to ensure a fresh state
+        appState.clearCharacters();
+
+        // We use the string we decoded in splitRulesetContent
+        String contentString = this.originalContentString;
 
         // Splits up the content block into smaller blocks based on parser tags
         String[] allBlocks = contentString.split("Parser: ");
@@ -151,18 +256,18 @@ public class RulesetManager {
             }
         }
 
-        for (PlayerCharacter character : characterList) {
+        for (PlayerCharacter character : appState.getCharacters().values()) {
             System.out.println("Character Loaded: " + character.getName()); // DEBUG
             System.out.println("  Card Amount: " + character.getCardAmount()); // DEBUG
-            System.out.println("  Max HP Levels: " + character.getMaxHealthLevelOne() + ", " +
-                    character.getMaxHealthLevelTwo() + ", " +
-                    character.getMaxHealthLevelThree() + ", " +
-                    character.getMaxHealthLevelFour() + ", " +
-                    character.getMaxHealthLevelFive() + ", " +
-                    character.getMaxHealthLevelSix() + ", " +
-                    character.getMaxHealthLevelSeven() + ", " +
-                    character.getMaxHealthLevelEight() + ", " +
-                    character.getMaxHealthLevelNine()); // DEBUG
+            System.out.println("  Max HP Levels: " + character.getHpLvlOne() + ", " +
+                    character.getHpLvlTwo() + ", " +
+                    character.getHpLvlThree() + ", " +
+                    character.getHpLvlFour() + ", " +
+                    character.getHpLvlFive() + ", " +
+                    character.getHpLvlSix() + ", " +
+                    character.getHpLvlSeven() + ", " +
+                    character.getHpLvlEight() + ", " +
+                    character.getHpLvlNine()); // DEBUG
         }
 
         System.out.println("Total Characters Found: " + characterCount); // DEBUG
@@ -171,18 +276,17 @@ public class RulesetManager {
 
     }
 
-
-    //==================================== parseCharacterBlock ===================================//
-    //  This method extracts the relevant data from character blocks. It looks for specific       //
-    //  lines that contain the data we want, extracts that data, and stores it in a               //
-    //  PlayerCharacter POJO.                                                                     //
-    //============================================================================================//
+    /* ============================================================================================ */
+    /*                                  PARSE CHARACTER BLOCK                                       */
+    /*                                                                                              */
+    /*                                                                                              */
+    /* This method extracts the relevant data from character blocks. It looks for specific lines    */
+    /* that contain the data we want, extracts that data, and stores it in a PlayerCharacter POJO   */
+    /*                                                                                              */
+    /* ============================================================================================ */
     private void parseCharacterBlock(String currentBlock) {
 
-        // name to be added to pojo
         String name = null;
-
-        // card amount to be added to pojo
         String cardAmount = null;
 
         // hp per level to be added to pojo
@@ -197,11 +301,11 @@ public class RulesetManager {
             // get rid of leading/trailing whitespace
             line = line.trim();
 
-            // if line starts with Model:, it's the name
-            if (line.startsWith("Model:")) {
-                
-                // extract the name by removing "model:" and trimming whitespace
-                name = line.replace("Model:", "").trim();
+            // if line starts with ID:, it's the unique identifier
+            if (line.startsWith("ID:")) {
+
+                // extract the name by removing "ID:" and trimming whitespace
+                name = line.replace("ID:", "").trim();
 
             } else if (line.startsWith("HealthTable:")) {
 
@@ -219,9 +323,20 @@ public class RulesetManager {
             } else if (line.startsWith("NumberAbilityCardsInBattle:")) {
                 // extract the card amount
                 cardAmount = line.replace("NumberAbilityCardsInBattle:", "").trim();
-                
+
             }
 
+        }
+
+        // Filter out tutorial characters to prevent them from being loaded into State
+        // This ensures they are never modified or written back to the file with incorrect values
+        if (name != null && name.toLowerCase().contains("tutorial")) {
+            System.out.println("Filtering out tutorial character: " + name);
+            return;
+        }
+
+        if (name != null) {
+            System.out.println("Parsed Character: " + name + " | Cards: " + cardAmount);
         }
 
         // create PlayerCharacter object and add to list of characters
@@ -237,7 +352,7 @@ public class RulesetManager {
                 hpPerLevel[6],
                 hpPerLevel[7],
                 hpPerLevel[8]);
-        characterList.add(character);
+        appState.addCharacter(character);
 
     }
 }

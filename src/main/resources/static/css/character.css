@@ -1,0 +1,25 @@
+.hp-field {
+
+}
+td {
+    margin: 0 auto;
+    text-align: center;
+}
+input {
+    text-align: center;
+}
+
+#characterPane{
+    display: flex;
+    margin: 0 auto;
+    width: 500px;
+    height: 300px;
+    border: 2px solid black;
+    margin-top: 50px;
+    text-align: center;
+    justify-content: center;
+    flex-direction: column;
+}
+table {
+    margin: 0 auto;
+}

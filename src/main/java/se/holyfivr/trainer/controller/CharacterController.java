@@ -6,15 +6,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import se.holyfivr.trainer.model.PlayerCharacter;
-import se.holyfivr.trainer.service.State;
+import se.holyfivr.trainer.service.ActiveSessionData;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class CharacterController {
 
-    private final State state;
+    private final ActiveSessionData state;
 
-    CharacterController(State state) {
+    CharacterController(ActiveSessionData state) {
         this.state = state;
     }
 
@@ -43,8 +43,6 @@ public class CharacterController {
         ) {
         PlayerCharacter selectedCharacter = state.getCharacters().get(characterName);
         if (selectedCharacter != null) {
-            System.out.println("User modifying character: " + characterName);
-            System.out.println("  -> Setting cards to: " + maxAbilityCard);
             
             selectedCharacter.setCardAmount(maxAbilityCard);
             selectedCharacter.setHpLvlOne(hpFieldOne);

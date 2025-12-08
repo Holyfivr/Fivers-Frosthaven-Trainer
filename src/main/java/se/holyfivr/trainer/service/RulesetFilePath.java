@@ -1,4 +1,4 @@
-package se.holyfivr.trainer.service;
+/* package se.holyfivr.trainer.service;
 
 import java.nio.file.Path;
 
@@ -13,3 +13,4 @@ public class RulesetFilePath {
     }
 
 }
+ */

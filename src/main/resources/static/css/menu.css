@@ -1,0 +1,80 @@
+
+
+
+
+/* ------- MENY SKAL ------- */
+.menu-bar {
+    background: #eee;
+    border-bottom: 1px solid #bbb;
+    padding: 0;
+    margin: 0;
+    font-family: sans-serif;
+}
+
+/* ------- TOP-LEVEL MENU ------- */
+.menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.menu > li {
+    position: relative;
+    padding: 10px 16px;
+    cursor: pointer;
+    text-align: center;
+    
+}
+
+/* Hover style */
+.menu > li:hover {
+    background: #ddd;
+}
+
+/* ------- DROPDOWN ------- */
+.dropdown {
+    list-style: none;
+    padding: 4px 0;
+    margin: 0;
+    background: #fefefe;
+    border: 1px solid #ccc;
+    border-top: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    display: none;     /* hidden by default */
+    min-width: 150px;
+    z-index: 100;
+}
+
+.dropdown li {
+    cursor: pointer;
+    white-space: nowrap;
+    height: 30px;
+}
+
+.dropdown li:hover {
+    border: 1px solid black;
+    box-shadow: 1px 1px 2px black;
+    border-radius: 3px;
+    color: #797979;
+}
+
+.dropdown a {
+    text-decoration: none;
+    color:#000000;
+    transition: color 0.2s linear, transform 0.2s linear;
+}
+.dropdown a:hover {
+    color: #797979;
+}
+.dropdown div {
+    width: 100%;
+    height: 100%;
+}
+
+/* Show dropdown when hovering parent */
+.menu > li:hover .dropdown {
+    display: block;
+}

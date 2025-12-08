@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/menu.css}">
+    <script th:src="@{/js/script.js}" type="text/javascript" defer></script>
+</head>
+
+<body>
+
+    <nav class="menu-bar">
+        <ul class="menu">
+            <li>
+                File
+                <ul class="dropdown">
+                    <li>Open Ruleset</li>
+                    <li>Create Backup</li>
+                    <li>Manage Backups</li>
+                    <li><a th:href="@{/save}">Save Ruleset</a></li>
+                    <li><a th:href="@{/exit}">Exit Program</a></li>
+                </ul>
+            </li>
+            <li>
+                Characters
+                <ul class="dropdown">
+                    <li th:each="character : ${characterMap.values()}"><a target="contentFrame"
+                            th:href="@{/character/{character}(character = ${character.name})}">
+                            <div th:text="${character.getName()}" class="menuLinkDiv"> </div>
+                        </a></li>
+                    <hr>
+                    <li><a id="openMaxCards">
+                            <div>Max Cards</div>
+                        </a></li>
+                    <li><a id="openMaxHp">
+                            <div>Max HP</div>
+                        </a></li>
+                </ul>
+            </li>
+            <li>
+                Items
+                <ul class="dropdown">
+
+                </ul>
+            </li>
+            <li>
+                Ability Cards
+                <ul class="dropdown">
+
+                </ul>
+            </li>
+            <li>
+                About
+                <ul class="dropdown">
+
+                </ul>
+            </li>
+        </ul>
+    </nav>
+    <div id="maxCharacterValuesModal">
+        <h2>Are you sure?</h2>
+        <span id="maxHp">
+            <span>This will set all characters HP to 99</span><br>
+            <a th:href="@{/maxhp}" onClick="maxAllCharacters()">I am sure</a>
+            <a href="#" onClick="maxAllCharacters()">Nevermind</a>
+        </span>
+        <span id="maxCards">
+            <span>and their max ability cards in battle to 20.</span><br>
+            <a th:href="@{/maxcards}" onClick="maxAllCharacters()">I am sure</a>
+            <a href="#" onClick="maxAllCharacters()">Nevermind</a>
+        </span>
+    </div>
+
+    <iframe id="contentFrame" name="contentFrame" title="contentFrame">
+
+</body>
+
+</html>

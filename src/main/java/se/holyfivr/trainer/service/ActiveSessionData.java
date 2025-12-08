@@ -9,12 +9,10 @@ import org.springframework.stereotype.Component;
 import se.holyfivr.trainer.model.PlayerCharacter;
 
 @Component
-public class State {
+public class ActiveSessionData {
 
-    //private final Path hardCodedPath = Path.of("src/main/resources/ruleset/Base.ruleset");
+// TODO : ADD FEATURE TO MANUALLY SELECT PATH
 private final Path hardCodedPath = Path.of("D:/Steam/steamapps/common/Frosthaven/Frosthaven_Data/StreamingAssets/Rulebase/Base.ruleset");
-
-    
 
     public Path getHardcodedPath() {
         return hardCodedPath;
@@ -30,9 +28,9 @@ private final Path hardCodedPath = Path.of("D:/Steam/steamapps/common/Frosthaven
         this.rulesetPath = rulesetPath;
     }
 
-    // ===========================
-    // STORE ALL GAME ENTITIES
-    // ===========================
+    /* =========================== */
+    /*  STORE ALL GAME CHARACTERS  */
+    /* =========================== */
 
     private final Map<String, PlayerCharacter> characters = new LinkedHashMap<>();
 
@@ -43,7 +41,9 @@ private final Path hardCodedPath = Path.of("D:/Steam/steamapps/common/Frosthaven
     /* ==================================================================== */
     /*      This filters out the tutorial versions of bannerspear.          */
     /*      It basically says "if there is no match of the received name    */
-    /*      add it to the map".                                            */
+    /*      add it to the map". There is already a check like this one      */
+    /*      in the RulesetParser, but having it here as well adds an        */
+    /*      extra layer of safety.                                          */
     /* ==================================================================== */
     public void addCharacter(PlayerCharacter character) {
         if (character.getName() != null){

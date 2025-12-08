@@ -4,20 +4,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import se.holyfivr.trainer.service.RulesetManager;
-import se.holyfivr.trainer.service.State;
+import se.holyfivr.trainer.service.RulesetLoader;
+import se.holyfivr.trainer.service.ActiveSessionData;
 
 import javafx.application.Platform;
 
 @Controller
 public class StartController {
 
-    private final State state;
-    private final RulesetManager rulesetManager;
+    private final ActiveSessionData state;
+    private final RulesetLoader ruleserLoader;
 
-    public StartController(State state, RulesetManager rulesetManager) {
+    public StartController(ActiveSessionData state, RulesetLoader ruleserLoader) {
         this.state = state;
-        this.rulesetManager = rulesetManager;
+        this.ruleserLoader = ruleserLoader;
     }
 
 
@@ -40,7 +40,7 @@ public class StartController {
     
     @GetMapping("/save")
     public String saveRuleset() {
-        rulesetManager.saveRuleset();
+        ruleserLoader.saveRuleset();
         return "redirect:/start";
     }
     

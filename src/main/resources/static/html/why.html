@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../js/script.js" type="text/javascript" defer></script>
+    <script src="../js/copy.js" type="text/javascript" defer></script>
+
+</head>
+
+<body>
+    <div id="aboutContainer" style="width:800px;"><br>
+        <div style="margin: 0 auto; text-align: left; width:750px;">
+            It started with me wanting to tweak a few values in my Frosthaven campaign. Maybe give myself a bit more
+            gold, or adjust a character's stats. Sounds easy, right? I thought so too.
+            <br><br>
+            <center>I was wrong.</center>
+            <center><b>Very</b> wrong.</center>
+            <center>
+                <p><b>Technicals</b></p>
+            </center>
+            I quickly realized that the game's ruleset file is incredibly strict. You can't just open it in a text
+            editor and change a number. The file structure relies on precise byte conversions and is incredibly fragile
+            if anything is shifted.
+        </div>
+        <div style="margin: 0 auto; text-align: left; width:750px;">
+            If you change a value, and end up turning a 1-byte integer into a 2-byte integer, you have to
+            recalculate and adjust the file size perfectly. If you miss by a single byte, the whole file corrupts and
+            the game won't load. Oh, and this can't just be done in a text editor, because you aren't guaranteed to get
+            the same amount of bytes, even if you add/remove the same number of characters. This has to be done in a
+            hex editor, where you can see and control the exact byte values, or by altering the file on
+            byte-level/ISO-8859-1 encoding.
+            <br><br>
+            Knowing this, I suddenly faced a big issue. To compensate for added bytes when increasing values, I would
+            have to
+            find bytes to remove elsewhere in the file. This took me a lot of trial and error, but at some point, while
+            staring at the file in a hex editor, I noticed something interesting.<br>
+            I noticed that every line ended with double linebreaks (0D 0A). This is the standard for Windows
+            text files, however, in most cases, a single break is sufficient.
+            After some testing, I confirmed that I could just compensate for extra bytes added by removing one of these
+            linebreaks. The file is about 250,000 lines long, and the actual content section is about 100,000, so
+            there's plenty of bytes to play with...
+            <br>
+        </div>
+        <div style="margin: 0 auto; text-align: left; width:750px;">
+            I'll be honest, this project gave me more headaches than I care to admit. As a first-year student, this code
+            became much more advanced than I was prepared for.
+            <br><br>
+            In the end, I learned a lot about file handling, byte conversions, and Java programming in general.
+            I hope you find this program useful, and if you have any questions or suggestions, feel free to reach out on
+            GitHub.
+
+        </div>
+        <br>
+    </div>
+</body>
+
+</html>

@@ -73,7 +73,7 @@ public class RulesetLoader {
     /* ============================================================================================ */
     public void saveRuleset() {
         rulesetSaver.saveRuleset(
-            activeSession.getHardcodedPath(),
+            activeSession.getRulesetPath(),
             headerBytes,
             footerBytes,
             contentBytes,
@@ -93,7 +93,7 @@ public class RulesetLoader {
     public void loadRuleset() {
 
         // Gets the ruleset path
-        Path filePath = activeSession.getHardcodedPath();
+        Path filePath = activeSession.getRulesetPath();
 
         // Opens inputstream and converts path to file
         try (FileInputStream ruleset = new FileInputStream(filePath.toFile())) {

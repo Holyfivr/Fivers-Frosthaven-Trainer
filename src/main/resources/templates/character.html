@@ -16,10 +16,14 @@
     <div id="characterPane">
 
         
-            <h1 th:text="${character.getName()}"></h1>
-
-
+            <h1 th:text="${character.getDisplayName()}"></h1>
+            
+            
+            
             <form th:action="@{/character/submit}"><hr>
+                <div style="display: flex; align-items: center; justify-content: center;">
+                    
+                </div>
                 <input type="hidden" name="characterName" th:value="${character.getName()}">
                 Amount of cards in battle: <input id="maxAbilityCard" type="number" name="maxAbilityCard" min="6"
                     max="20" th:value="${character.getCardAmount}" maxlength="2" required>
@@ -58,10 +62,9 @@
                                 th:value="${character.getHpLvlNine}" maxlength="2"></td>
                     </tr>
                 </table>
+                <button class="btn" onClick="maxAllValues(event)">Max All Values</button>
                 <hr>
-                <button onClick="maxAllValues(event)">Max All Values</button>
-                <hr>
-                <input type="submit" value="Save">
+                <input class="btn" type="submit" value="Save">
             </form>
         
     </div>

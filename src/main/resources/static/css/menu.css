@@ -1,14 +1,21 @@
+:root {
 
+    --color-dark-blue: #1B3C53;
+    --color-mid-blue: #234C6A;
+    --color-light-blue: #456882;
+    --color-cream: #E3E3E3;
 
+}
 
-
-/* ------- MENY SKAL ------- */
+/* ------- MENU FRAME ------- */
 .menu-bar {
-    background: #eee;
+    background: var(--color-light-blue);
     border-bottom: 1px solid #bbb;
     padding: 0;
     margin: 0;
     font-family: sans-serif;
+    color: var(--color-cream);
+    box-shadow: 0px 5px 10px var(--color-light-blue);
 }
 
 /* ------- TOP-LEVEL MENU ------- */
@@ -19,17 +26,17 @@
     display: flex;
 }
 
-.menu > li {
+.menu>li {
     position: relative;
     padding: 10px 16px;
     cursor: pointer;
     text-align: center;
-    
 }
 
 /* Hover style */
-.menu > li:hover {
-    background: #ddd;
+.menu>li:hover {
+    background: var(--color-cream);
+    color: var(--color-light-blue);
 }
 
 /* ------- DROPDOWN ------- */
@@ -37,44 +44,73 @@
     list-style: none;
     padding: 4px 0;
     margin: 0;
-    background: #fefefe;
+    background: var(--color-cream);
     border: 1px solid #ccc;
     border-top: none;
     position: absolute;
     top: 100%;
     left: 0;
-    display: none;     /* hidden by default */
+    display: none;
+    /* hidden by default */
     min-width: 150px;
     z-index: 100;
+
 }
 
 .dropdown li {
+    display: flex;
     cursor: pointer;
     white-space: nowrap;
     height: 30px;
+ 
 }
 
 .dropdown li:hover {
     border: 1px solid black;
     box-shadow: 1px 1px 2px black;
     border-radius: 3px;
-    color: #797979;
+    color: var(--color-cream);
+    background-color: var(--color-light-blue);
+}
+
+.dropdown li:hover a {
+    color: var(--color-cream);
+
 }
 
 .dropdown a {
     text-decoration: none;
-    color:#000000;
+    color: var(--color-light-blue);
     transition: color 0.2s linear, transform 0.2s linear;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
 }
+
 .dropdown a:hover {
-    color: #797979;
+    color: #ffffff;
 }
+
 .dropdown div {
     width: 100%;
     height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Show dropdown when hovering parent */
-.menu > li:hover .dropdown {
+.menu>li:hover .dropdown {
     display: block;
+}
+
+.inactive {
+    pointer-events: none;
+    background-color: var(--color-cream);
+    color: rgba(109, 147, 157, 0.596);
+}
+.inactive a {
+    color: rgba(109, 147, 157, 0.596);
 }

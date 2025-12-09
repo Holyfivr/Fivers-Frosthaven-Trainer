@@ -1,52 +1,73 @@
-const maxCharacterValuesModal = document.getElementById("maxCharacterValuesModal");
-const maxCards = document.getElementById("maxCards");
-const maxHp = document.getElementById("maxHp");
+const confirmationModal = document.getElementById("confirmationModal");
 
-// Function to toggle the main modal visibility
-// Used by "Nevermind" and "I am sure" buttons to close the modal
-function maxAllCharacters() {
-    // We simply close it here, as the opening is handled by specific buttons
-    maxCharacterValuesModal.style.opacity = "0";
-    maxCharacterValuesModal.style.pointerEvents = "none";
-    
-    // Reset children visibility
-    maxCards.style.display = "none";
-    maxHp.style.display = "none";
+// Function to handle pending actions (save to storage)
+function registerPendingAction(actionName) {
+    sessionStorage.setItem("pendingAction", actionName);
 }
 
-const openMaxCards = document.getElementById("openMaxCards");
-if (openMaxCards) {
-    openMaxCards.addEventListener("click", function() {
-        // Check if this specific modal is already open
-        if (maxCharacterValuesModal.style.opacity === "1" && maxCards.style.display === "block") {
-            // It's open, so close it
-            maxAllCharacters();
-        } else {
-            // It's closed (or the other one is open), so open this one
-            maxCharacterValuesModal.style.opacity = "1";
-            maxCharacterValuesModal.style.pointerEvents = "auto";
+// Function to handle what to show in the confirmation modal (Success messages)
+function showSuccessMessage(action) {
+    let message = "";
+    switch(action) {
+        case "fileLoaded":
+            { const rulesetLoadedCheck = document.getElementById("rulesetLoadedCheck");
+            
+            // Check rulesetLoadedCheck if needed, or just trust the action
+            // Set message based on rulesetLoadedCheck value
+            if (rulesetLoadedCheck?.value === "true") message = "Ruleset Loaded Successfully!";
+            break; }
+        case "backupCreated":
+            message = "Backup Created Successfully!";
+            break;
+        case "backupRestored":
+            message = "Original Backup Restored!";
+            break;
+        case "rulesetSaved":
+            message = "Ruleset Saved Successfully!";
+            break;
+        case "linkCopied":
+            message = "Link Copied to Clipboard!";
+            break;
+    }
 
-            maxCards.style.display = "block";
-            maxHp.style.display = "none";
+    // Display the message in the modal
+    if (message) {
+        confirmationModal.innerHTML = `<h3>${message}</h3>`;
+        confirmationModal.style.opacity = "1";
+        setTimeout(() => {
+            confirmationModal.style.opacity = "0";
+        }, 3000);
+    }
+}
+
+// Function to handle opening input modals (Backup Form / Save Confirm / etc.)
+function openModal(templateId) {
+    const template = document.getElementById(templateId);
+    if (template && confirmationModal) {
+        // If already open with same content, close it
+        if (confirmationModal.style.opacity === "1" && confirmationModal.dataset.activeTemplate === templateId) {
+            closeModal();
+            return;
         }
-    });
+
+        confirmationModal.innerHTML = template.innerHTML;
+        confirmationModal.style.opacity = "1";
+        confirmationModal.style.pointerEvents = "all";
+        confirmationModal.dataset.activeTemplate = templateId;
+    }
 }
 
-const openMaxHp = document.getElementById("openMaxHp");
-if (openMaxHp) {
-    openMaxHp.addEventListener("click", function() {
-        // Check if this specific modal is already open
-        if (maxCharacterValuesModal.style.opacity === "1" && maxHp.style.display === "block") {
-            // It's open, so close it
-            maxAllCharacters();
-        } else {
-            // It's closed (or the other one is open), so open this one
-            maxCharacterValuesModal.style.opacity = "1";
-            maxCharacterValuesModal.style.pointerEvents = "auto";
-
-            maxHp.style.display = "block";
-            maxCards.style.display = "none";
-        }
-    });
+function closeModal() {
+    if (confirmationModal) {
+        confirmationModal.style.opacity = "0";
+        confirmationModal.style.pointerEvents = "none";
+        confirmationModal.dataset.activeTemplate = "";
+    }
 }
 
+// On Load: Check for pending actions
+const pending = sessionStorage.getItem("pendingAction");
+if (pending) {
+    showSuccessMessage(pending);
+    sessionStorage.removeItem("pendingAction");
+}

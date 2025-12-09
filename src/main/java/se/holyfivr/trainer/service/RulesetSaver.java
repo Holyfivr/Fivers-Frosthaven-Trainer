@@ -6,6 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -27,12 +28,19 @@ import se.holyfivr.trainer.model.PlayerCharacter;
 @Service
 public class RulesetSaver {
 
+    private final ActiveSessionData activeSessionData;
+
     private static final String BASE_RULESET = "Base.ruleset";
     
 
     // Regex patterns for finding character attributes
     private static final Pattern CARD_AMOUNT_PATTERN = Pattern.compile("NumberAbilityCardsInBattle:\\s*\\d+");
     private static final Pattern HEALTH_TABLE_PATTERN = Pattern.compile("HealthTable:\\s*\\[.*?\\]");
+    private static final Pattern UNLOCKED_CHARACTER_PATTERN = Pattern.compile("UnlockedClasses:\\s*\\[.*?\\]");
+
+    RulesetSaver(ActiveSessionData activeSessionData) {
+        this.activeSessionData = activeSessionData;
+    }
 
     /* ============================================================================================ */
     /*                                        SAVE RULESET                                          */
@@ -156,6 +164,19 @@ public class RulesetSaver {
                     currentBlock = updateCharacterBlockString(currentBlock, pc);
                 }
             }
+            if (currentBlock.trim().startsWith("GameMode")) {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("UnlockedClasses: [");
+                List<String> unlockedCharacters = activeSessionData.getUnlockedCharacterList();
+                for (int index = 0; index < unlockedCharacters.size(); index++) {
+                    stringBuilder.append(" ").append(unlockedCharacters.get(index).trim());
+                    if (index < unlockedCharacters.size() - 1) {
+                        stringBuilder.append(",");
+                    }
+                }
+                stringBuilder.append("]");
+                currentBlock = UNLOCKED_CHARACTER_PATTERN.matcher(currentBlock).replaceAll(stringBuilder.toString());
+            }
 
             /* ============================================================================= */
             /*                              FILLER BANK STRATEGY                             */
@@ -200,6 +221,8 @@ public class RulesetSaver {
 
         return block;
     }
+
+
 
     /* ============================================================================================ */
     /*                                      ADJUST BLOCK SIZE                                       */

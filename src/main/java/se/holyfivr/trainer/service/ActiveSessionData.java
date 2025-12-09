@@ -1,7 +1,9 @@
 package se.holyfivr.trainer.service;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Component;
@@ -47,6 +49,24 @@ public class ActiveSessionData {
 
     public void clearCharacters() {
         characters.clear();
+    }
+
+    
+    /* === */
+    private final List<String> unlockedCharacters = new ArrayList<>();
+
+    public List<String> getUnlockedCharacterList(){
+        return unlockedCharacters;
+    }
+
+    public void addUnlockedCharacter(String character){
+        unlockedCharacters.add(character);
+    }
+
+    public void clearUnlockedCharacters() {
+       for (int i = unlockedCharacters.size() - 1; i >= 0; i--) {
+            unlockedCharacters.remove(i);
+        }
     }
 
 }

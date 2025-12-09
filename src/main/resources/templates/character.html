@@ -2,72 +2,74 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link rel="stylesheet" th:href="@{/css/character.css}">
-    <script th:src="@{/js/script.js}" type="text/javascript" defer></script>
-    <script th:src="@{/js/character.js}" type="text/javascript" defer></script>
-    <title>Document</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" th:href="@{/css/style.css}">
+        <link rel="stylesheet" th:href="@{/css/character.css}">
+        <script th:src="@{/js/script.js}" type="text/javascript" defer></script>
+        <script th:src="@{/js/character.js}" type="text/javascript" defer></script>
+        <title>Document</title>
 </head>
 
 <body>
 
-    <div id="characterPane">
+        <div id="characterPane">
 
-        
-            <h1 th:text="${character.getDisplayName()}"></h1>
-            
-            
-            
-            <form th:action="@{/character/submit}"><hr>
-                <div style="display: flex; align-items: center; justify-content: center;">
-                    
-                </div>
-                <input type="hidden" name="characterName" th:value="${character.getName()}">
-                Amount of cards in battle: <input id="maxAbilityCard" type="number" name="maxAbilityCard" min="6"
-                    max="20" th:value="${character.getCardAmount}" maxlength="2" required>
-                <table>
-                    <tr>
-                        <td>Level:</td>
-                        <td>1</td>
-                        <td>2</td>
-                        <td>3</td>
-                        <td>4</td>
-                        <td>5</td>
-                        <td>6</td>
-                        <td>7</td>
-                        <td>8</td>
-                        <td>9</td>
-                    </tr>
-                    <tr>
-                        <td>Current:</td>
-                        <td><input class="hp-field" name="hpFieldOne" type="number" min="6" max="99"
-                                th:value="${character.getHpLvlOne}" maxlength="2"></td>
-                        <td><input class="hp-field" name="hpFieldTwo" type="number" min="6" max="99"
-                                th:value="${character.getHpLvlTwo}" maxlength="2"></td>
-                        <td><input class="hp-field" name="hpFieldThree" type="number" min="6" max="99"
-                                th:value="${character.getHpLvlThree}" maxlength="2"></td>
-                        <td><input class="hp-field" name="hpFieldFour" type="number" min="6" max="99"
-                                th:value="${character.getHpLvlFour}" maxlength="2"></td>
-                        <td><input class="hp-field" name="hpFieldFive" type="number" min="6" max="99"
-                                th:value="${character.getHpLvlFive}" maxlength="2"></td>
-                        <td><input class="hp-field" name="hpFieldSix" type="number" min="6" max="99"
-                                th:value="${character.getHpLvlSix}" maxlength="2"></td>
-                        <td><input class="hp-field" name="hpFieldSeven" type="number" min="6" max="99"
-                                th:value="${character.getHpLvlSeven}" maxlength="2"></td>
-                        <td><input class="hp-field" name="hpFieldEight" type="number" min="6" max="99"
-                                th:value="${character.getHpLvlEight}" maxlength="2"></td>
-                        <td><input class="hp-field" name="hpFieldNine" type="number" min="6" max="99"
-                                th:value="${character.getHpLvlNine}" maxlength="2"></td>
-                    </tr>
-                </table>
-                <button class="btn" onClick="maxAllValues(event)">Max All Values</button>
-                <hr>
-                <input class="btn" type="submit" value="Save">
-            </form>
-        
-    </div>
+
+                <h1 th:text="${character.getDisplayName()}"></h1>
+
+
+
+                <form th:action="@{/character/submit}">
+                        <hr>
+                        <div style="display: flex; align-items: center; justify-content: center;">
+                                <input type="checkbox" th:checked="${isUnlockedFromStart}" name="isUnlockedFromStart">
+                                Enable Character from start
+                        </div>
+                        <input type="hidden" name="characterName" th:value="${character.getName()}">
+                        Amount of cards in battle: <input id="maxAbilityCard" type="number" name="maxAbilityCard"
+                                min="6" max="20" th:value="${character.getCardAmount}" maxlength="2" required>
+                        <table>
+                                <tr>
+                                        <td>Level:</td>
+                                        <td>1</td>
+                                        <td>2</td>
+                                        <td>3</td>
+                                        <td>4</td>
+                                        <td>5</td>
+                                        <td>6</td>
+                                        <td>7</td>
+                                        <td>8</td>
+                                        <td>9</td>
+                                </tr>
+                                <tr>
+                                        <td>Current:</td>
+                                        <td><input class="hp-field" name="hpFieldOne" type="number" min="6" max="99"
+                                                        th:value="${character.getHpLvlOne}" maxlength="2"></td>
+                                        <td><input class="hp-field" name="hpFieldTwo" type="number" min="6" max="99"
+                                                        th:value="${character.getHpLvlTwo}" maxlength="2"></td>
+                                        <td><input class="hp-field" name="hpFieldThree" type="number" min="6" max="99"
+                                                        th:value="${character.getHpLvlThree}" maxlength="2"></td>
+                                        <td><input class="hp-field" name="hpFieldFour" type="number" min="6" max="99"
+                                                        th:value="${character.getHpLvlFour}" maxlength="2"></td>
+                                        <td><input class="hp-field" name="hpFieldFive" type="number" min="6" max="99"
+                                                        th:value="${character.getHpLvlFive}" maxlength="2"></td>
+                                        <td><input class="hp-field" name="hpFieldSix" type="number" min="6" max="99"
+                                                        th:value="${character.getHpLvlSix}" maxlength="2"></td>
+                                        <td><input class="hp-field" name="hpFieldSeven" type="number" min="6" max="99"
+                                                        th:value="${character.getHpLvlSeven}" maxlength="2"></td>
+                                        <td><input class="hp-field" name="hpFieldEight" type="number" min="6" max="99"
+                                                        th:value="${character.getHpLvlEight}" maxlength="2"></td>
+                                        <td><input class="hp-field" name="hpFieldNine" type="number" min="6" max="99"
+                                                        th:value="${character.getHpLvlNine}" maxlength="2"></td>
+                                </tr>
+                        </table>
+                        <button class="btn" onClick="maxAllValues(event)">Max All Values</button>
+                        <hr>
+                        <input class="btn" type="submit" value="Save">
+                </form>
+
+        </div>
 
 
 

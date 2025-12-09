@@ -1,5 +1,8 @@
 package se.holyfivr.trainer.controller;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +14,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class CharacterController {
+
+    private final String[] STARTING_CHARACTERS = {
+        "BannerSpearID",
+        "BoneshaperID",
+        "DrifterID",
+        "DeathwalkerID",
+        "BlinkbladeID",
+        "GeminateID"
+    };
 
     private final ActiveSessionData state;
 
@@ -24,6 +36,15 @@ public class CharacterController {
         PlayerCharacter selectedCharacter = state.getCharacters().get(characterName);
 
         model.addAttribute("character", selectedCharacter);
+        
+        boolean isUnlocked = false;
+        for (String character : state.getUnlockedCharacterList()){
+            if (character.trim().equals(characterName)) {
+                isUnlocked = true;
+                break;
+            }
+        }
+        model.addAttribute("isUnlockedFromStart", isUnlocked);
 
         return "character";
     }
@@ -39,11 +60,11 @@ public class CharacterController {
             @RequestParam("hpFieldSix") String hpFieldSix,
             @RequestParam("hpFieldSeven") String hpFieldSeven,
             @RequestParam("hpFieldEight") String hpFieldEight,
-            @RequestParam("hpFieldNine") String hpFieldNine
-        ) {
+            @RequestParam("hpFieldNine") String hpFieldNine,
+            @RequestParam("isUnlockedFromStart") boolean isUnlockedFromStart) {
         PlayerCharacter selectedCharacter = state.getCharacters().get(characterName);
         if (selectedCharacter != null) {
-            
+
             selectedCharacter.setCardAmount(maxAbilityCard);
             selectedCharacter.setHpLvlOne(hpFieldOne);
             selectedCharacter.setHpLvlTwo(hpFieldTwo);
@@ -54,19 +75,42 @@ public class CharacterController {
             selectedCharacter.setHpLvlSeven(hpFieldSeven);
             selectedCharacter.setHpLvlEight(hpFieldEight);
             selectedCharacter.setHpLvlNine(hpFieldNine);
+
         }
+
+        // Update unlocked list
+        List<String> unlockedList = state.getUnlockedCharacterList();
+        boolean isUnlocked = false;
+        // Check if character is already in the unlocked list
+        for (String unlocked : unlockedList) {
+            if (unlocked.trim().equals(characterName)) {
+                isUnlocked = true;
+                break;
+            }
+        }
+        // makes sure you cannot remove starting characters from the unlocked list
+        boolean isStartingCharacter = Arrays.asList(STARTING_CHARACTERS).contains(characterName);
+        
+        // Add or remove from unlocked list based on the checkbox
+        if (isUnlockedFromStart && !isUnlocked) {
+            unlockedList.add(characterName);
+            System.out.println("Added " + characterName + " to unlocked list."); // debug
+        } else if (!isUnlockedFromStart && isUnlocked && !isStartingCharacter) {
+            unlockedList.removeIf(s -> s.trim().equals(characterName));
+        }
+
         return "redirect:/character/" + characterName;
     }
-
 
     @GetMapping("/maxcards")
     public String maxCards(Model model) {
         for (PlayerCharacter character : state.getCharacters().values()) {
-            // Only update card amount if it's not null (some characters might not have cards)
+            // Only update card amount if it's not null (some characters might not have
+            // cards)
             if (character.getCardAmount() != null) {
                 character.setCardAmount("20");
             }
-            
+
             // Also set HP to 99 as requested by the "Max Cards" feature description
             character.setHpLvlOne("99");
             character.setHpLvlTwo("99");
@@ -81,9 +125,9 @@ public class CharacterController {
         model.addAttribute("maxcards", true);
         return "redirect:/start";
     }
-        @GetMapping("/maxhp")
-    public String maxHp(Model model
-    ) {
+
+    @GetMapping("/maxhp")
+    public String maxHp(Model model) {
         for (PlayerCharacter character : state.getCharacters().values()) {
             character.setHpLvlOne("99");
             character.setHpLvlTwo("99");

@@ -3,6 +3,9 @@ package se.holyfivr.trainer.model;
 public class PlayerCharacter {
 
     private String name;
+    private String displayName;
+  
+
     private String cardAmount;
     private String hpLvlOne;
     private String hpLvlTwo;
@@ -38,6 +41,15 @@ public class PlayerCharacter {
         this.hpLvlSeven = hpLvlSeven;
         this.hpLvlEight = hpLvlEight;
         this.hpLvlNine = hpLvlNine;       
+    }
+
+    public String getDisplayName() {
+
+        // cuts out the "ID" part from the name
+        if (name != null){
+            displayName = name.substring(0, name.length() -2);
+        }
+        return displayName;
     }
 
     public String getName() {

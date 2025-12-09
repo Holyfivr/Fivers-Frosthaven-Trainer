@@ -11,12 +11,6 @@ import se.holyfivr.trainer.model.PlayerCharacter;
 @Component
 public class ActiveSessionData {
 
-// TODO : ADD FEATURE TO MANUALLY SELECT PATH
-private final Path hardCodedPath = Path.of("D:/Steam/steamapps/common/Frosthaven/Frosthaven_Data/StreamingAssets/Rulebase/Base.ruleset");
-
-    public Path getHardcodedPath() {
-        return hardCodedPath;
-    }
 
     private Path rulesetPath;
 

@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,13 @@ import se.holyfivr.trainer.model.PlayerCharacter;
 
 @Service
 public class RulesetSaver {
+
+    private static final String BASE_RULESET = "Base.ruleset";
+    
+
+    // Regex patterns for finding character attributes
+    private static final Pattern CARD_AMOUNT_PATTERN = Pattern.compile("NumberAbilityCardsInBattle:\\s*\\d+");
+    private static final Pattern HEALTH_TABLE_PATTERN = Pattern.compile("HealthTable:\\s*\\[.*?\\]");
 
     /* ============================================================================================ */
     /*                                        SAVE RULESET                                          */
@@ -68,7 +77,24 @@ public class RulesetSaver {
             }
 
             // Finally, if everything is good, we write the bytes back to disk
-            Files.write(filePath, finalFileBytes);
+            
+            
+            
+            // This part ensures that no matter what backup is being edited, it will always update the Base.ruleset file
+            // when saving, as well as the current file being edited. This way, you don't need to manually rename
+            // any backup to Base.ruleset to have it be the file that the game uses.
+            if (filePath.getFileName().toString().equals(BASE_RULESET)){
+                Files.write(filePath, finalFileBytes);
+        
+            } else if (filePath.getFileName().toString().equals("ORIGINAL_BACKUP.ruleset")){
+                // If we are editing the original backup, we DO NOT want to overwrite it.
+                // We only want to apply the changes to the active game file (Base.ruleset).
+                Files.write(filePath.resolveSibling(BASE_RULESET), finalFileBytes);
+                
+            } else {
+                Files.write(filePath, finalFileBytes);
+                Files.copy(filePath, filePath.resolveSibling(BASE_RULESET), StandardCopyOption.REPLACE_EXISTING);
+            }
             System.out.println("File saved successfully!"); // debug
 
         } catch (IOException e) {
@@ -84,7 +110,7 @@ public class RulesetSaver {
     /* We then fetch the latest data from our ActiveSessionData.java class and inject it into       */
     /* the block.                                                                                   */
     /*                                                                                              */
-    /* Something very important to remember before editing this part: We use a "Filler Bank"      */
+    /* Something very important to remember before editing this part: We use a "Filler Bank"        */
     /* strategy here. This means every single block MUST maintain its exact original byte length    */
     /* to avoid breaking the file's structure.                                                      */
     /* We handle this by calling 'adjustBlockSize' for every block before appending it.             */
@@ -131,9 +157,9 @@ public class RulesetSaver {
                 }
             }
 
-            // ========================================================================================
-            // FILLER BANK STRATEGY (Padding/Trimming)
-            // ========================================================================================
+            /* ============================================================================= */
+            /*                              FILLER BANK STRATEGY                             */
+            /* ============================================================================= */
             // We must ensure currentBlock has the EXACT same length as originalBlock.
             currentBlock = adjustBlockSize(currentBlock, originalBlock.length());
 
@@ -161,8 +187,7 @@ public class RulesetSaver {
         // First we update Card Amount
         // Regex looks for "NumberAbilityCardsInBattle:" followed by any whitespace and digits
         if (pc.getCardAmount() != null) {
-            block = block.replaceAll("NumberAbilityCardsInBattle:\\s*\\d+",
-                    "NumberAbilityCardsInBattle: " + pc.getCardAmount());
+            block = CARD_AMOUNT_PATTERN.matcher(block).replaceAll("NumberAbilityCardsInBattle: " + pc.getCardAmount());
         }
 
         // Then we Update Health Table with the new values
@@ -171,11 +196,7 @@ public class RulesetSaver {
                 pc.getHpLvlSeven() + ", " + pc.getHpLvlEight() + ", " + pc.getHpLvlNine() + "]";
 
         // Regex looks for "HealthTable:" followed by whitespace and anything inside brackets [...]
-        // The regex in this case means:
-        // \\s* = any whitespace after the colon
-        // \\[.*?\\] = a pair of brackets containing any characters 
-        // (non-greedy - meaning it stops at the first closing bracket)
-        block = block.replaceAll("HealthTable:\\s*\\[.*?\\]", "HealthTable: " + newHealthTable);
+        block = HEALTH_TABLE_PATTERN.matcher(block).replaceAll("HealthTable: " + newHealthTable);
 
         return block;
     }
@@ -183,7 +204,7 @@ public class RulesetSaver {
     /* ============================================================================================ */
     /*                                      ADJUST BLOCK SIZE                                       */
     /*                                                                                              */
-    /* This is our "Filler Bank" implementation. For the file to remain valid, every section      */
+    /* This is our "Filler Bank" implementation. For the file to remain valid, every section        */
     /* must be exactly the same size (in bytes) as it was when we read it.                          */
     /*                                                                                              */
     /* Logic is split into 'padBlock' and 'trimBlock' for better readability.                       */
@@ -224,7 +245,7 @@ public class RulesetSaver {
         return padded.toString();
     }
 
-    /* COOL TRICK HERE */
+    /*                                   COOL TRICK HERE 
     /* ============================================================================================ */
     /*          Removes unnecessary whitespace to shrink the block to the original size             */
     /*                                                                                              */

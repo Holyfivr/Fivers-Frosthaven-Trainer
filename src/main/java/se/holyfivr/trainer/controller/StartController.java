@@ -4,7 +4,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import org.springframework.web.bind.annotation.RequestParam;
+
 import se.holyfivr.trainer.service.RulesetLoader;
+import se.holyfivr.trainer.service.RulesetParser;
 import se.holyfivr.trainer.service.ActiveSessionData;
 
 import javafx.application.Platform;
@@ -12,46 +15,51 @@ import javafx.application.Platform;
 @Controller
 public class StartController {
 
-    private final ActiveSessionData state;
-    private final RulesetLoader ruleserLoader;
+    private final ActiveSessionData activeSessionData;
+    private final RulesetLoader rulesetLoader;
+    private final RulesetParser rulesetParser;
 
-    public StartController(ActiveSessionData state, RulesetLoader ruleserLoader) {
-        this.state = state;
-        this.ruleserLoader = ruleserLoader;
+   
+
+
+    public StartController(ActiveSessionData activeSessionData, RulesetLoader rulesetLoader,
+            RulesetParser rulesetParser) {
+        this.activeSessionData = activeSessionData;
+        this.rulesetLoader = rulesetLoader;
+        this.rulesetParser = rulesetParser;
     }
 
-
     @GetMapping("/start")
-    public String getStart(Model model) {
-        // Filter out tutorial characters for the UI to keep it clean
-        java.util.Map<String, se.holyfivr.trainer.model.PlayerCharacter> allChars = state.getCharacters();
-        java.util.Map<String, se.holyfivr.trainer.model.PlayerCharacter> uiCharacters = new java.util.LinkedHashMap<>();
+    public String getStart(Model model, @RequestParam(required = false) boolean loaded) {
         
-        for (var entry : allChars.entrySet()) {
-            if (!entry.getKey().toLowerCase().contains("tutorial")) {
-                uiCharacters.put(entry.getKey(), entry.getValue());
-            }
+        // loads the character map into the model
+        model.addAttribute("characterMap", activeSessionData.getCharacters());
+        
+        // Sends info to frontend on whether a file is loaded or not
+        // if not, appropriate menu-options are disabled
+        model.addAttribute("rulesetLoaded", activeSessionData.getRulesetPath() != null);
+        
+        // If the file was just loaded, we show the success modal
+        if (loaded) {
+            model.addAttribute("showSuccessModal", true);
         }
-
-        model.addAttribute("characterMap", uiCharacters);
 
         return "start";
     }
     
     @GetMapping("/save")
     public String saveRuleset() {
-        ruleserLoader.saveRuleset();
+        rulesetLoader.saveRuleset();
         return "redirect:/start";
     }
     
-
-
     @GetMapping("/exit")
-    public void exitProgram() {
+    public String exitProgram() {
         Platform.runLater(() -> {
             Platform.exit();
             System.exit(0);
         });
+        return "redirect:/start";
     }
 
 }

@@ -4,7 +4,7 @@ public class PlayerCharacter {
 
     private String name;
     private String displayName;
-  
+    private boolean isAvailableFromStart;
 
     private String cardAmount;
     private String hpLvlOne;
@@ -18,17 +18,17 @@ public class PlayerCharacter {
     private String hpLvlNine;
 
     public PlayerCharacter(
-    String name,
-    String cardAmount,
-    String hpLvlOne,
-    String hpLvlTwo,
-    String hpLvlThree,
-    String hpLvlFour,
-    String hpLvlFive,
-    String hpLvlSix,
-    String hpLvlSeven,
-    String hpLvlEight,
-    String hpLvlNine) {
+            String name,
+            String cardAmount,
+            String hpLvlOne,
+            String hpLvlTwo,
+            String hpLvlThree,
+            String hpLvlFour,
+            String hpLvlFive,
+            String hpLvlSix,
+            String hpLvlSeven,
+            String hpLvlEight,
+            String hpLvlNine) {
 
         this.name = name;
         this.cardAmount = cardAmount;
@@ -40,14 +40,14 @@ public class PlayerCharacter {
         this.hpLvlSix = hpLvlSix;
         this.hpLvlSeven = hpLvlSeven;
         this.hpLvlEight = hpLvlEight;
-        this.hpLvlNine = hpLvlNine;       
+        this.hpLvlNine = hpLvlNine;
     }
 
     public String getDisplayName() {
 
         // cuts out the "ID" part from the name
-        if (name != null){
-            displayName = name.substring(0, name.length() -2);
+        if (name != null) {
+            displayName = name.substring(0, name.length() - 2);
         }
         return displayName;
     }
@@ -138,6 +138,14 @@ public class PlayerCharacter {
 
     public void setHpLvlNine(String hpLvlNine) {
         this.hpLvlNine = hpLvlNine;
+    }
+
+    public boolean isAvailableFromStart() {
+        return isAvailableFromStart;
+    }
+
+    public void setAvailableFromStart(boolean isAvailableFromStart) {
+        this.isAvailableFromStart = isAvailableFromStart;
     }
 
 }

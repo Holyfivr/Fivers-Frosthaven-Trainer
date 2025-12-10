@@ -10,10 +10,10 @@ So please be patient if updates are slow, as I am balancing this with my studies
 <hr>
 
 ## Features
-*   **Character Editing:** Change HP for all levels (1-9) for all characters.
+*   **Character Editing:** Change HP for all levels (1-9) for all characters, as well as available cards on hand.
 *   **Unlock Characters:** Simple interface to unlock starting characters and hidden classes.
 *   **Max Stats:** "Max All Values" button to quickly set HP to 99.
-*   **Max Cards:** Cheat mode to set hand size to 20 cards.
+*   **Max Cards:** Set hand size to 20 cards for all characters.
 
 ## Upcoming Features
 *   **Item Editing:** Modify item stats and properties.

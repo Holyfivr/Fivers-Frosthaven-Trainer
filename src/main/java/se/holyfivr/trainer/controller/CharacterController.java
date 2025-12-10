@@ -12,17 +12,27 @@ import se.holyfivr.trainer.model.PlayerCharacter;
 import se.holyfivr.trainer.service.ActiveSessionData;
 import org.springframework.web.bind.annotation.RequestParam;
 
+/*
+LIST OF CHARACTERS THAT CAN BE ADDED SAFELY: Pyroclast, Snowdancer, Frozen fist, Trapper, Hive
+LIST OF CHARACTERS THAT CAN BE ADDED BUT DO NOT SHOW UP: Crashing tide, Shattersong, Deepwraith, Infuser, MetalMosaic, PainConduit
+LIST OF CHARACTERS THAT BREAK THE GAME: 
+
+
+*/
+
 @Controller
 public class CharacterController {
+    private final String REDIRECT_START = "redirect:/start";
 
     private final String[] STARTING_CHARACTERS = {
-        "BannerSpearID",
-        "BoneshaperID",
-        "DrifterID",
-        "DeathwalkerID",
-        "BlinkbladeID",
-        "GeminateID"
+            "BannerSpearID",
+            "BoneshaperID",
+            "DrifterID",
+            "DeathwalkerID",
+            "BlinkbladeID",
+            "GeminateID"
     };
+    private final String[] ALLOWED_CHARACTERS = { "PyroclastID", "SnowdancerID", "FrozenFistID", "TrapperID", "HIVEID" };
 
     private final ActiveSessionData state;
 
@@ -31,20 +41,30 @@ public class CharacterController {
     }
 
     @GetMapping("/character/{characterName}")
-    public String getCharacter(@PathVariable("characterName") String characterName, Model model) {
+    public String getCharacter(@PathVariable("characterName") String characterName, @RequestParam(required = false) boolean saved, Model model) {
 
         PlayerCharacter selectedCharacter = state.getCharacters().get(characterName);
 
         model.addAttribute("character", selectedCharacter);
-        
+        model.addAttribute("saved", saved);
+
         boolean isUnlocked = false;
-        for (String character : state.getUnlockedCharacterList()){
+        for (String character : state.getUnlockedCharacterList()) {
             if (character.trim().equals(characterName)) {
                 isUnlocked = true;
                 break;
             }
         }
         model.addAttribute("isUnlockedFromStart", isUnlocked);
+
+        boolean isAllowed = false;
+        for (String allowedCharacter : ALLOWED_CHARACTERS) {
+            if (allowedCharacter.equals(characterName)){
+                isAllowed = true;
+                break;
+            }
+        }
+        model.addAttribute("allowedCharacter", isAllowed);
 
         return "character";
     }
@@ -61,7 +81,7 @@ public class CharacterController {
             @RequestParam("hpFieldSeven") String hpFieldSeven,
             @RequestParam("hpFieldEight") String hpFieldEight,
             @RequestParam("hpFieldNine") String hpFieldNine,
-            @RequestParam("isUnlockedFromStart") boolean isUnlockedFromStart) {
+            @RequestParam(value = "isUnlockedFromStart", defaultValue = "false") boolean isUnlockedFromStart) {
         PlayerCharacter selectedCharacter = state.getCharacters().get(characterName);
         if (selectedCharacter != null) {
 
@@ -90,7 +110,7 @@ public class CharacterController {
         }
         // makes sure you cannot remove starting characters from the unlocked list
         boolean isStartingCharacter = Arrays.asList(STARTING_CHARACTERS).contains(characterName);
-        
+
         // Add or remove from unlocked list based on the checkbox
         if (isUnlockedFromStart && !isUnlocked) {
             unlockedList.add(characterName);
@@ -99,7 +119,22 @@ public class CharacterController {
             unlockedList.removeIf(s -> s.trim().equals(characterName));
         }
 
-        return "redirect:/character/" + characterName;
+        return "redirect:/character/" + characterName + "?saved=true";
+    }
+
+    @GetMapping("/enablecharacters")
+    public String enableCharacters() {
+
+        List<String> unlockedList = state.getUnlockedCharacterList();
+
+
+        for (String character : ALLOWED_CHARACTERS) {
+            if (!unlockedList.contains(character)) {
+                unlockedList.add(character);
+            }
+        }
+
+        return REDIRECT_START;
     }
 
     @GetMapping("/maxcards")
@@ -123,7 +158,7 @@ public class CharacterController {
             character.setHpLvlNine("99");
         }
         model.addAttribute("maxcards", true);
-        return "redirect:/start";
+        return REDIRECT_START;
     }
 
     @GetMapping("/maxhp")
@@ -140,7 +175,7 @@ public class CharacterController {
             character.setHpLvlNine("99");
         }
         model.addAttribute("maxhp", true);
-        return "redirect:/start";
+        return REDIRECT_START;
     }
 
 }

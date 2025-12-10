@@ -22,9 +22,9 @@
 
                 <form th:action="@{/character/submit}">
                         <hr>
-                        <div style="display: flex; align-items: center; justify-content: center;">
-                                <input type="checkbox" th:checked="${isUnlockedFromStart}" name="isUnlockedFromStart">
-                                Enable Character from start
+                        <div style="display: flex; align-items: center; justify-content: center;" th:if="${allowedCharacter}">
+                                <input type="checkbox" th:checked="${isUnlockedFromStart}" name="isUnlockedFromStart" id="enableFromStartCheckbox">
+                                Enable Character from start &nbsp;  <span style="color: red;"> (Experimental)</span>
                         </div>
                         <input type="hidden" name="characterName" th:value="${character.getName()}">
                         Amount of cards in battle: <input id="maxAbilityCard" type="number" name="maxAbilityCard"
@@ -64,14 +64,20 @@
                                                         th:value="${character.getHpLvlNine}" maxlength="2"></td>
                                 </tr>
                         </table>
+                        Min value 6 | Max value 99 <br><br>
                         <button class="btn" onClick="maxAllValues(event)">Max All Values</button>
                         <hr>
-                        <input class="btn" type="submit" value="Save">
+                        <input class="btn" type="submit" value="Save" id="saveBtn">
                 </form>
 
         </div>
 
-
+        <!-- Show success message if character was saved -->
+        <script th:if="${saved}">
+            if (window.parent && typeof window.parent.showSuccessMessage === 'function') {
+                window.parent.showSuccessMessage('characterSaved');
+            }
+        </script>
 
 </body>
 

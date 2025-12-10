@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
+import se.holyfivr.trainer.model.Item;
 import se.holyfivr.trainer.model.PlayerCharacter;
 
 @Component
@@ -52,7 +53,9 @@ public class ActiveSessionData {
     }
 
     
-    /* === */
+    /* =============================== */
+    /*  STORE ALL UNLOCKED CHARACTERS  */
+    /* =============================== */
     private final List<String> unlockedCharacters = new ArrayList<>();
 
     public List<String> getUnlockedCharacterList(){
@@ -67,6 +70,24 @@ public class ActiveSessionData {
        for (int i = unlockedCharacters.size() - 1; i >= 0; i--) {
             unlockedCharacters.remove(i);
         }
+    }
+
+    /* ================= */
+    /*  STORE ALL ITEMS  */
+    /* ================= */
+    private final Map<String, Item> items = new LinkedHashMap<>();
+    public Map<String, Item> getItems() {
+        return items;
+    }
+    public void addItem(Item item) {
+        if (item.getStringId() != null){
+            //removes the "ID" part from the stringId to get the actual item name
+            String itemName = item.getStringId().substring(0, (item.getStringId().length() -2));
+            items.putIfAbsent(itemName, item);
+        }
+    }
+    public void clearItems() {
+        items.clear();
     }
 
 }

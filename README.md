@@ -44,7 +44,7 @@ Adding characters work, but may have unexpected side effects in the campaign. Do
 <hr>
 
 ## Installation
-1.  Download the latest release from the [Releases] *(none created yet - coming soon)*
+1.  Download the latest release from the [Releases](https://github.com/Holyfivr/Fivers-Frosthaven-Trainer/releases)
 2.  Extract the ZIP file to a folder of your choice.
 3.  Run the `FrosthavenTrainer.exe` file to start the application.
    

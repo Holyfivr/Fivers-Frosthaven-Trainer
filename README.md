@@ -10,10 +10,10 @@ So please be patient if updates are slow, as I am balancing this with my studies
 <hr>
 
 ## Features
-*   **Character Editing:** Change HP for all levels (1-9) for all characters.
-*   **Unlock Characters:** Simple interface to unlock starting characters and hidden classes.
-*   **Max Stats:** "Max All Values" button to quickly set HP to 99.
-*   **Max Cards:** Cheat mode to set hand size to 20 cards.
+*   **Character Editing:** Change HP for all levels (1-9) for all characters, as well as available cards on hand.
+*   **Unlock Characters:** Unlock starting classes (currently Snowflake, Fist, Meteor, Prism, Trap)
+*   **Max Stats:** "Max All Values" button to quickly set HP to 99 for all characters.
+*   **Max Cards:** Set hand size to 20 cards for all characters.
 
 ## Upcoming Features
 *   **Item Editing:** Modify item stats and properties.
@@ -44,7 +44,7 @@ Adding characters work, but may have unexpected side effects in the campaign. Do
 <hr>
 
 ## Installation
-1.  Download the latest release from the [Releases] *(none created yet - coming soon)*
+1.  Download the latest release from the [Releases](https://github.com/Holyfivr/Fivers-Frosthaven-Trainer/releases)
 2.  Extract the ZIP file to a folder of your choice.
 3.  Run the `FrosthavenTrainer.exe` file to start the application.
    

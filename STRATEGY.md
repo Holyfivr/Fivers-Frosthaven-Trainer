@@ -34,7 +34,6 @@ Because every block perfectly compensates for any change in its content's length
 ## Architecture & Services
 
 ### 1. Object Classes (POJOs)
-*   **Goal:** Define Java classes that represent the various objects found in the ruleset file.
 *   **Classes:** `PlayerCharacter.java`, `Item.java`, `AbilityCard.java`, etc.
 
 ### 2. Service Layer
@@ -47,14 +46,14 @@ The application logic is split into specialized services:
 
 ### 3. Spring Boot & Thymeleaf UI
 *   **Structure:**
-    *   **Web Interface:** The application runs as a local web server.
+    *   **JavaFX:** The application uses Spring Boot to create a desktop application with a web-based UI.
     *   **Thymeleaf Templates:** HTML files in `src/main/resources/templates` render the UI.
     *   **Controllers:** Spring MVC controllers handle user interactions (saving, editing) and communicate with the Service layer.
 
 <hr>
 
 ## <center>Project Structure</center>
-This structure reflects the current state of the project.
+This structure reflects the current state of the project. (obviously subject to change)
 
 <pre>
 ┐<u><b>src</b></u>

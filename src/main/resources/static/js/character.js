@@ -1,4 +1,4 @@
-
+// Max all HP fields and ability card amount to their maximum values
 const hpFields = document.querySelectorAll(".hp-field");
 const abilityCardAmount = document.getElementById("maxAbilityCard");
 function maxAllValues(event){
@@ -8,4 +8,3 @@ function maxAllValues(event){
     }
     abilityCardAmount.value = "20";
 }
-

@@ -1,6 +1,7 @@
 const confirmationModal = document.getElementById("confirmationModal");
 
 // Function to handle pending actions (save to storage)
+// this is used when redirecting after an action to show a success message
 function registerPendingAction(actionName) {
     sessionStorage.setItem("pendingAction", actionName);
 }
@@ -28,6 +29,18 @@ function showSuccessMessage(action) {
         case "linkCopied":
             message = "Link Copied to Clipboard!";
             break;
+        case "hpMaxed":
+            message = "All Characters Max HP Set to 99!";
+            break;
+        case "cardsMaxed":
+            message = "All Characters Max Cards Set to 20!";
+            break;
+        case "charactersEnabled":
+            message = "Characters Enabled from Start!";
+            break;
+        case "characterSaved":
+            message = "Character Saved Successfully!";
+            break;
     }
 
     // Display the message in the modal
@@ -36,7 +49,7 @@ function showSuccessMessage(action) {
         confirmationModal.style.opacity = "1";
         setTimeout(() => {
             confirmationModal.style.opacity = "0";
-        }, 3000);
+        }, 2000);
     }
 }
 
@@ -65,9 +78,9 @@ function closeModal() {
     }
 }
 
-// On Load: Check for pending actions
-const pending = sessionStorage.getItem("pendingAction");
-if (pending) {
-    showSuccessMessage(pending);
+// On Load: Check for pending actions and show success messages if there are any
+const pendingAction = sessionStorage.getItem("pendingAction");
+if (pendingAction) {
+    showSuccessMessage(pendingAction);
     sessionStorage.removeItem("pendingAction");
 }

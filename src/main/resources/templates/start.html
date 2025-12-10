@@ -40,6 +40,7 @@
                             <div>Save Ruleset</div>
                         </a></li>
                     <!-------------------------------------------------------->
+                    <hr>
                     <li><a th:href="@{/exit}">
                             <div>Exit Program</div>
                         </a></li>
@@ -62,6 +63,10 @@
                     <li th:classappend="${!rulesetLoaded} ? 'inactive'"><a id="openMaxHp"
                             onclick="openModal('maxHpTemplate')">
                             <div>Max HP</div>
+                        </a></li>
+                    <li th:classappend="${!rulesetLoaded} ? 'inactive'"><a id="enableAll"
+                            onclick="openModal('enableAllTemplate')">
+                            <div>Enable All*</div>
                         </a></li>
                     <!--------------------------------->
                 </ul>
@@ -88,7 +93,7 @@
                     <li><a th:href="@{/html/how.html}" target="contentFrame">
                             <div>How it works</div>
                         </a></li>
-                          <li><a th:href="@{/html/why.html}" target="contentFrame">
+                    <li><a th:href="@{/html/why.html}" target="contentFrame">
                             <div>Why</div>
                         </a></li>
 
@@ -130,17 +135,40 @@
     <template id="maxHpTemplate">
         <h2>Are you sure?</h2>
         <span>This will set all characters HP to 99</span><br><br>
-        <a class="btn" th:href="@{/maxhp}" onclick="closeModal()">I am sure</a>
+        <a class="btn" th:href="@{/maxhp}" onclick="closeModal();registerPendingAction('hpMaxed')">I am sure</a>
         <a class="btn" href="#" onclick="closeModal()">Nevermind</a>
     </template>
 
     <template id="maxCardsTemplate">
         <h2>Are you sure?</h2>
         <span>This will set all characters max <br>ability cards in battle to 20.</span><br><br>
-        <a class="btn" th:href="@{/maxcards}" onclick="closeModal()">I am sure</a>
+        <a class="btn" th:href="@{/maxcards}" onclick="closeModal();registerPendingAction('cardsMaxed')">I am sure</a>
         <a class="btn" href="#" onclick="closeModal()">Nevermind</a>
     </template>
-    <div id="footer">If you encounter any errors or the program doesn't work, place an issue on <a href="#" class="btn" style="border: none;" onclick="copyToClipboard('https://github.com/Holyfivr/Fivers-Frosthaven-Trainer/')">https://github.com/Holyfivr/Fivers-Frosthaven-Trainer/</a></div>.
+
+    <template id="enableAllTemplate">
+        <i>*not all characters can be enabled safely yet</i><br>
+        <b>Make the following characters available from start:</b>
+        <div style="text-align: left; width: 400px; margin: 0 auto;">
+            <ul>
+                <li>Pyroclast</li>
+                <li>Snowdancer</li>
+                <li>Frozen Fist</li>
+                <li>Trapper</li>
+                <li>Hive</li>
+            </ul>
+        </div>
+
+        <span style="color: red; font-size: 14px;"><b>Warning</b><br>This is experimental and not extensively tested.
+            Enabling new starting characters may cause the game to behave in unexpected ways, or lock you out of quests
+            in the game. Use at your own discretion.</span><br><br>
+        <a class="warning-btn btn" th:href="@{/enablecharacters}" onclick="closeModal();registerPendingAction('charactersEnabled')">I understand</a>
+        <a class="btn" href="#" onclick="closeModal()">Nevermind</a>
+    </template>
+    <div id="footer">If you encounter any errors or the program doesn't work, place an issue on <a href="#" class="btn"
+            style="border: none;"
+            onclick="copyToClipboard('https://github.com/Holyfivr/Fivers-Frosthaven-Trainer/')">https://github.com/Holyfivr/Fivers-Frosthaven-Trainer/</a>
+    </div>.
     </div>
     <iframe id="contentFrame" name="contentFrame" title="contentFrame" th:src="@{/html/how.html}">
 

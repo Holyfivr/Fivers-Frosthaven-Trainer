@@ -1,3 +1,5 @@
+/* Contains function to copy text to clipboard */
+
 function copyToClipboard(text) {
     // Create a temporary textarea element
     const textArea = document.createElement("textarea");

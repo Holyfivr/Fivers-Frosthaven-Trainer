@@ -22,9 +22,9 @@ LIST OF CHARACTERS THAT BREAK THE GAME:
 
 @Controller
 public class CharacterController {
-    private final String REDIRECT_START = "redirect:/start";
+    private static  final String REDIRECT_START = "redirect:/start";
 
-    private final String[] STARTING_CHARACTERS = {
+    private static final String[] STARTING_CHARACTERS = {
             "BannerSpearID",
             "BoneshaperID",
             "DrifterID",
@@ -32,7 +32,7 @@ public class CharacterController {
             "BlinkbladeID",
             "GeminateID"
     };
-    private final String[] ALLOWED_CHARACTERS = { "PyroclastID", "SnowdancerID", "FrozenFistID", "TrapperID", "HIVEID" };
+    private static final String[] ALLOWED_CHARACTERS = { "PyroclastID", "SnowdancerID", "FrozenFistID", "TrapperID", "HIVEID" };
 
     private final ActiveSessionData state;
 
@@ -41,7 +41,7 @@ public class CharacterController {
     }
 
     @GetMapping("/character/{characterName}")
-    public String getCharacter(@PathVariable("characterName") String characterName, @RequestParam(required = false) boolean saved, Model model) {
+    public String getCharacter(@PathVariable("characterName") String characterName, @RequestParam(required = false) Boolean saved, Model model) {
 
         PlayerCharacter selectedCharacter = state.getCharacters().get(characterName);
 

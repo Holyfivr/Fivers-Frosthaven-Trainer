@@ -108,9 +108,19 @@
 
 .inactive {
     pointer-events: none;
+    background-color: var(--color-light-blue);
+    color: rgba(109, 147, 157, 0.596);
+    
+}
+.inactive-dropdown {
+    pointer-events: none;
     background-color: var(--color-cream);
     color: rgba(109, 147, 157, 0.596);
+    
 }
 .inactive a {
     color: rgba(109, 147, 157, 0.596);
+}
+.inactive-dropdown a {
+    color: rgba(129, 154, 161, 0.326);
 }

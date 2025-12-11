@@ -10,6 +10,7 @@ package se.holyfivr.trainer.model;
 public class Item {
 
     // General item info
+    public String itemName;
     public String stringId;             // "nameID"
     public String totalInGame;          // integer
     public String cost;                 // integer
@@ -56,6 +57,14 @@ public class Item {
     public String toString() {
         return "";
     }
+
+    public String getItemName() {
+
+        this.itemName = stringId.substring(0, (stringId.length() -2)).replaceAll("([A-Z])", " $1" );
+        
+        return itemName;
+    }
+
 
     public String getStringId() {
         return stringId;

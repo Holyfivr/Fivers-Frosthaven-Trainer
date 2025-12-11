@@ -27,15 +27,15 @@
                         </a></li>
                     <hr>
                     <!-- These options are inactive unless a file is loaded -->
-                    <li th:classappend="${!rulesetLoaded} ? 'inactive'"><a id="newBackup"
+                    <li th:classappend="${!rulesetLoaded} ? 'inactive-dropdown'"><a id="newBackup"
                             onclick="openModal('backupTemplate')">
                             <div>Create Backup</div>
                         </a></li>
-                    <li th:classappend="${!rulesetLoaded} ? 'inactive'"><a id="restoreBackupLink"
+                    <li th:classappend="${!rulesetLoaded} ? 'inactive-dropdown'"><a id="restoreBackupLink"
                             th:href="@{/restore-backup}" onclick="registerPendingAction('backupRestored')">
                             <div>Restore Original</div>
                         </a></li>
-                    <li th:classappend="${!rulesetLoaded} ? 'inactive'"><a id="saveRuleset"
+                    <li th:classappend="${!rulesetLoaded} ? 'inactive-dropdown'"><a id="saveRuleset"
                             onclick="openModal('saveTemplate')">
                             <div>Save Ruleset</div>
                         </a></li>
@@ -46,7 +46,7 @@
                         </a></li>
                 </ul>
             </li>
-            <li>
+            <li th:classappend="${!rulesetLoaded} ? 'inactive'">
                 Characters
                 <ul class="dropdown">
                     <!-- Scans the provided map-model from the start controller-->
@@ -72,10 +72,49 @@
                 </ul>
             </li>
             <!-- inactive unless opened file -->
-            <li class="inactive">
+            <li th:classappend="${!rulesetLoaded} ? 'inactive'">
                 Items
                 <ul class="dropdown">
-
+                    <li>
+                        <a th:href="@{/items/all}" target="contentFrame">
+                            <div>All Items</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/items/OneHand}" target="contentFrame">
+                            <div>One-Handed</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/items/TwoHand}" target="contentFrame">
+                            <div>Two-Handed</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/items/Head}" target="contentFrame">
+                            <div>Head</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/items/Body}" target="contentFrame">
+                            <div>Body</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/items/Legs}" target="contentFrame">
+                            <div>Legs</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/items/SmallItem}" target="contentFrame">
+                            <div>Small Items</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/items/QuestItem}" target="contentFrame">
+                            <div>Quest Items</div>
+                        </a>
+                    </li>
                 </ul>
             </li>
             <li class="inactive">
@@ -162,7 +201,8 @@
         <span style="color: red; font-size: 14px;"><b>Warning</b><br>This is experimental and not extensively tested.
             Enabling new starting characters may cause the game to behave in unexpected ways, or lock you out of quests
             in the game. Use at your own discretion.</span><br><br>
-        <a class="warning-btn btn" th:href="@{/enablecharacters}" onclick="closeModal();registerPendingAction('charactersEnabled')">I understand</a>
+        <a class="warning-btn btn" th:href="@{/enablecharacters}"
+            onclick="closeModal();registerPendingAction('charactersEnabled')">I understand</a>
         <a class="btn" href="#" onclick="closeModal()">Nevermind</a>
     </template>
     <div id="footer">If you encounter any errors or the program doesn't work, place an issue on <a href="#" class="btn"

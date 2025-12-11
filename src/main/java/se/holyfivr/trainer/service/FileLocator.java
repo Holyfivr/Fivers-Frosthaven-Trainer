@@ -100,7 +100,6 @@ public class FileLocator {
                 try {
                     Files.createDirectories(backupDir);
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }
@@ -109,7 +108,6 @@ public class FileLocator {
                 try {
                     Files.copy(original, backupFile);
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }

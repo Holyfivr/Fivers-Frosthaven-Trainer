@@ -148,3 +148,38 @@ html, body {
     color: var(--color-mid-blue);
 
 }
+.X {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 20px;
+    color: var(--color-light-blue);
+    text-decoration: none;
+}
+.item-modal-value-input {
+    width: 70px;
+    padding: 5px;
+    font-size: 16px;
+    border: 1px solid var(--color-light-blue);
+    border-radius: 4px;
+    text-align: center;
+}
+#itemModal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--color-cream);
+    color: var(--color-mid-blue);
+    padding: 20px 40px;
+    border: 2px solid var(--color-light-blue);
+    border-radius: 8px;
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.459);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease-in-out;
+    z-index: 200;
+    text-align: center;
+}

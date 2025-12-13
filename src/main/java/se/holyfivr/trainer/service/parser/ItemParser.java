@@ -31,6 +31,8 @@ public class ItemParser {
 
             switch (attribute){
                 case "StringID"             -> item.setStringId                 (value);
+                case "ID"                   -> item.setId                       (value);
+                case "Cost"                 -> item.setCost                     (value);
                 case "TotalInGame"          -> item.setTotalInGame              (value);
                 case "Slot"                 -> item.setSlot                     (value);
                 case "Rarity"               -> item.setRarity                   (value);
@@ -47,6 +49,7 @@ public class ItemParser {
                 case "Pull"                 -> item.setPull                     (value);
                 case "Push"                 -> item.setPush                     (value);
                 case "Jump"                 -> item.setJump                     (value);
+                case "Conditions"           -> item.setConditions               (value);
                 default                     -> {/* ignore unknown attributes */}
             }
         }

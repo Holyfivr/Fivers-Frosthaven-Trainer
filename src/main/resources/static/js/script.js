@@ -1,4 +1,5 @@
 const confirmationModal = document.getElementById("confirmationModal");
+const itemModalInput = document.getElementById("itemModalInput");
 
 // Function to handle pending actions (save to storage)
 // this is used when redirecting after an action to show a success message
@@ -41,6 +42,9 @@ function showSuccessMessage(action) {
         case "characterSaved":
             message = "Character Saved Successfully!";
             break;
+        case "itemUpdated":
+            message = "Items Updated Successfully!";
+            break;
     }
 
     // Display the message in the modal
@@ -75,6 +79,8 @@ function closeModal() {
         confirmationModal.style.opacity = "0";
         confirmationModal.style.pointerEvents = "none";
         confirmationModal.dataset.activeTemplate = "";
+        itemModal.style.opacity = "0";
+        itemModal.style.pointerEvents = "none";
     }
 }
 
@@ -83,4 +89,29 @@ const pendingAction = sessionStorage.getItem("pendingAction");
 if (pendingAction) {
     showSuccessMessage(pendingAction);
     sessionStorage.removeItem("pendingAction");
+}
+
+const itemModal = document.getElementById("itemModal");
+const itemModalTitle = document.getElementById("itemModalTitle");
+const actionInput = document.getElementById("actionInput");
+
+function openItemModal(action, type){
+    
+    itemModal.style.opacity = "1";
+    itemModal.style.pointerEvents = "all";
+    itemModalTitle.innerText = `Set ${type} for all items`;
+    actionInput.value = action;
+    itemModalInput.value = "";
+}
+
+// Handle item modal submission
+const itemModalForm = itemModal.querySelector("form");
+if (itemModalForm) {
+    itemModalForm.addEventListener('submit', function() {
+        // The submit event only fires if the form is valid.
+        // We close the modal immediately so the user sees the result in the iframe.
+
+        closeModal();
+        showSuccessMessage('itemUpdated')
+    });
 }

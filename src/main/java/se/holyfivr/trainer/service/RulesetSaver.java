@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Service;
 
+import se.holyfivr.trainer.model.Item;
 import se.holyfivr.trainer.model.PlayerCharacter;
 
 /* ====================================== RULESET SAVER ======================================== */
@@ -34,9 +35,33 @@ public class RulesetSaver {
     
 
     // Regex patterns for finding character attributes
-    private static final Pattern CARD_AMOUNT_PATTERN = Pattern.compile("NumberAbilityCardsInBattle:\\s*\\d+");
-    private static final Pattern HEALTH_TABLE_PATTERN = Pattern.compile("HealthTable:\\s*\\[.*?\\]");
-    private static final Pattern UNLOCKED_CHARACTER_PATTERN = Pattern.compile("UnlockedClasses:\\s*\\[.*?\\]");
+    private static final Pattern CARD_AMOUNT_PATTERN = Pattern.compile("\\bNumberAbilityCardsInBattle:\\s*\\d+");
+    private static final Pattern HEALTH_TABLE_PATTERN = Pattern.compile("\\bHealthTable:\\s*\\[.*?\\]");
+    private static final Pattern UNLOCKED_CHARACTER_PATTERN = Pattern.compile("\\bUnlockedClasses:\\s*\\[.*?\\]");
+
+    // Item Patterns
+    private static final Pattern TOTAL_IN_GAME_PATTERN = Pattern.compile("\\bTotalInGame:\\s*\\d+");
+    private static final Pattern COST_PATTERN = Pattern.compile("\\bCost:\\s*\\d+");
+    private static final Pattern USAGE_PATTERN = Pattern.compile("\\bUsage:\\s*\\w+");
+    private static final Pattern PROSPERITY_PATTERN = Pattern.compile("\\bProsperityRequirement:\\s*\\d+");
+    private static final Pattern CONSUMES_PATTERN = Pattern.compile("\\bConsumes:\\s*\\w+");
+    
+    // Item Data Patterns
+    private static final Pattern HEAL_PATTERN = Pattern.compile("\\bHeal:\\s*\\d+");
+    private static final Pattern ATTACK_PATTERN = Pattern.compile("\\bAttack:\\s*\\d+");
+    private static final Pattern RANGE_PATTERN = Pattern.compile("\\bRange:\\s*\\d+");
+    private static final Pattern TARGET_PATTERN = Pattern.compile("\\bTarget:\\s*-?\\d+");
+    private static final Pattern SHIELD_PATTERN = Pattern.compile("\\bShield:\\s*\\d+");
+    private static final Pattern RETALIATE_PATTERN = Pattern.compile("\\bRetaliate:\\s*\\d+");
+    private static final Pattern MOVE_PATTERN = Pattern.compile("\\bMove:\\s*\\d+");
+    private static final Pattern PULL_PATTERN = Pattern.compile("\\bPull:\\s*\\d+");
+    private static final Pattern PUSH_PATTERN = Pattern.compile("\\bPush:\\s*\\d+");
+    private static final Pattern JUMP_PATTERN = Pattern.compile("\\bJump:\\s*(True|False)");
+    private static final Pattern CONDITIONS_PATTERN = Pattern.compile("\\bConditions:\\s*(\\[.*?\\]|\\w+)");
+
+    // FHItem Patterns
+    private static final Pattern GOLD_COST_PATTERN = Pattern.compile("\\bGoldCost:\\s*\\d+");
+    private static final Pattern QUANTITY_PATTERN = Pattern.compile("\\bQuantity:\\s*\\d+");
 
     RulesetSaver(ActiveSessionData activeSessionData) {
         this.activeSessionData = activeSessionData;
@@ -177,6 +202,28 @@ public class RulesetSaver {
                 stringBuilder.append("]");
                 currentBlock = UNLOCKED_CHARACTER_PATTERN.matcher(currentBlock).replaceAll(stringBuilder.toString());
             }
+            if (currentBlock.trim().startsWith("ItemCard")){
+                String stringId = extractStringIdFromBlock(currentBlock);
+                if (stringId != null) {
+                    Item item = activeSessionData.getItems().get(stringId);
+                    if (item != null) {
+                        currentBlock = updateItemBlockString(currentBlock, item);
+                    }
+                }
+            }
+            if (currentBlock.trim().startsWith("FHItem")) {
+                String scenarioItemId = extractScenarioItemIdFromBlock(currentBlock);
+                if (scenarioItemId != null) {
+                    Item item = activeSessionData.getItems().values().stream()
+                            .filter(itm -> scenarioItemId.equals(itm.getId()))
+                            .findFirst()
+                            .orElse(null);
+                    
+                    if (item != null) {
+                        currentBlock = updateFHItemBlockString(currentBlock, item);
+                    }
+                }
+            }
 
             /* ============================================================================= */
             /*                              FILLER BANK STRATEGY                             */
@@ -188,7 +235,6 @@ public class RulesetSaver {
             builtContent.append("Parser: ");
             builtContent.append(currentBlock);
         }
-
         return builtContent.toString();
     }
 
@@ -218,6 +264,55 @@ public class RulesetSaver {
 
         // Regex looks for "HealthTable:" followed by whitespace and anything inside brackets [...]
         block = HEALTH_TABLE_PATTERN.matcher(block).replaceAll("HealthTable: " + newHealthTable);
+
+        return block;
+    }
+
+    /* ============================================================================== */
+    /* This method handles updating item blocks in the ruleset file. It replaces      */
+    /* specific attributes of an item with new values from the provided Item object.  */
+    /* The method takes the current block of text representing an item and the Item   */
+    /* object containing updated values. It uses regex patterns to find and replace   */
+    /* each attribute in the block with the new values.                               */
+    /* ============================================================================== */
+
+    private String updateItemBlockString(String block, Item item) {
+
+        if (item.getTotalInGame() != null)
+            block = TOTAL_IN_GAME_PATTERN.matcher(block).replaceAll("TotalInGame: " + item.getTotalInGame());
+        if (item.getCost() != null)
+            block = COST_PATTERN.matcher(block).replaceAll("Cost: " + item.getCost());
+        if (item.getUsage() != null)
+            block = USAGE_PATTERN.matcher(block).replaceAll("Usage: " + item.getUsage());
+        if (item.getProsperityRequirement() != null)
+            block = PROSPERITY_PATTERN.matcher(block)
+                    .replaceAll("ProsperityRequirement: " + item.getProsperityRequirement());
+        if (item.getConsumes() != null)
+            block = CONSUMES_PATTERN.matcher(block).replaceAll("Consumes: " + item.getConsumes());
+        if (item.getHeal() != null)
+            block = HEAL_PATTERN.matcher(block).replaceAll("Heal: " + item.getHeal());
+        if (item.getAttack() != null)
+            block = ATTACK_PATTERN.matcher(block).replaceAll("Attack: " + item.getAttack());
+        if (item.getRange() != null)
+            block = RANGE_PATTERN.matcher(block).replaceAll("Range: " + item.getRange());
+        if (item.getTarget() != null)
+            block = TARGET_PATTERN.matcher(block).replaceAll("Target: " + item.getTarget());
+        if (item.getShield() != null)
+            block = SHIELD_PATTERN.matcher(block).replaceAll("Shield: " + item.getShield());
+        if (item.getRetaliate() != null)
+            block = RETALIATE_PATTERN.matcher(block).replaceAll("Retaliate: " + item.getRetaliate());
+        if (item.getMove() != null)
+            block = MOVE_PATTERN.matcher(block).replaceAll("Move: " + item.getMove());
+        if (item.getPull() != null)
+            block = PULL_PATTERN.matcher(block).replaceAll("Pull: " + item.getPull());
+        if (item.getPush() != null)
+            block = PUSH_PATTERN.matcher(block).replaceAll("Push: " + item.getPush());
+        if (item.getJump() != null)
+            block = JUMP_PATTERN.matcher(block).replaceAll("Jump: " + item.getJump());
+
+        if (item.getConditions() != null) {
+             block = CONDITIONS_PATTERN.matcher(block).replaceAll("Conditions: " + item.getConditions());
+        }
 
         return block;
     }
@@ -340,5 +435,51 @@ public class RulesetSaver {
             }
         }
         return null;
+    }
+
+    /* ============================================================================================ */
+    /* EXTRACT STRING ID FROM BLOCK                                                                 */
+    /*                                                                                              */
+    /* A simple helper method to quickly fish out the "StringID:" value from a raw text block.      */
+    /* We need this to know which Item in our ActiveSessionData matches this specific block.        */
+    /* ============================================================================================ */
+    private String extractStringIdFromBlock(String block) {
+        String[] lines = block.split("\n");
+        for (String line : lines) {
+            if (line.trim().startsWith("StringID:")) {
+                return line.replace("StringID:", "").trim();
+            }
+        }
+        return null;
+    }
+
+    /* ============================================================================================ */
+    /* EXTRACT SCENARIO ITEM ID FROM BLOCK                                                          */
+    /*                                                                                              */
+    /* A simple helper method to quickly fish out the "ScenarioItemID:" value from a raw text block.*/
+    /* We need this to know which Item in our ActiveSessionData matches this specific FHItem block. */
+    /* ============================================================================================ */
+    private String extractScenarioItemIdFromBlock(String block) {
+        String[] lines = block.split("\n");
+        for (String line : lines) {
+            if (line.trim().startsWith("ScenarioItemID:")) {
+                return line.replace("ScenarioItemID:", "").trim();
+            }
+        }
+        return null;
+    }
+
+    /* ============================================================================== */
+    /* This method handles updating FHItem blocks in the ruleset file.                */
+    /* It replaces GoldCost and Quantity with values from the provided Item object.   */
+    /* ============================================================================== */
+    private String updateFHItemBlockString(String block, Item item) {
+        if (item.getCost() != null) {
+            block = GOLD_COST_PATTERN.matcher(block).replaceAll("GoldCost: " + item.getCost());
+        }
+        if (item.getTotalInGame() != null) {
+            block = QUANTITY_PATTERN.matcher(block).replaceAll("Quantity: " + item.getTotalInGame());
+        }
+        return block;
     }
 }

@@ -56,16 +56,13 @@
                         </a></li>
                     <hr>
                     <!-- inactive unless opened file -->
-                    <li th:classappend="${!rulesetLoaded} ? 'inactive'"><a id="openMaxCards"
-                            onclick="openModal('maxCardsTemplate')">
+                    <li><a id="openMaxCards" onclick="openModal('maxCardsTemplate')">
                             <div>Max Cards</div>
                         </a></li>
-                    <li th:classappend="${!rulesetLoaded} ? 'inactive'"><a id="openMaxHp"
-                            onclick="openModal('maxHpTemplate')">
+                    <li><a id="openMaxHp" onclick="openModal('maxHpTemplate')">
                             <div>Max HP</div>
                         </a></li>
-                    <li th:classappend="${!rulesetLoaded} ? 'inactive'"><a id="enableAll"
-                            onclick="openModal('enableAllTemplate')">
+                    <li><a id="enableAll" onclick="openModal('enableAllTemplate')">
                             <div>Enable All*</div>
                         </a></li>
                     <!--------------------------------->
@@ -115,6 +112,46 @@
                             <div>Quest Items</div>
                         </a>
                     </li>
+                    <hr>
+                    <!---------------------------------------->
+                    <li id="allItemsSeparator">
+                        <div>All Items</div>
+                    </li>
+                    <li>
+                        <a id="setGoldCost" onclick="openItemModal('setGoldCost', 'gold cost')">
+                            <div>Set Goldcost</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a id="setDamage" onclick="openItemModal('setDamage', 'damage')">
+                            <div>Set Damage</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a id="setShield" onclick="openItemModal('setShield', 'shield')">
+                            <div>Set Shield</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a id="setHeal" onclick="openItemModal('setHeal', 'heal')">
+                            <div>Set Heal</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a id="setRetaliate" onclick="openItemModal('setRetaliate', 'retaliate')">
+                            <div>Set Retaliate</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a id="setMove" onclick="openItemModal('setMovement', 'movement')">
+                            <div>Set Movement</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a id="setProsperityReq" onclick="openItemModal('setProsperityReq', 'prosperity requirement')">
+                            <div>Set Prosperity Req</div>
+                        </a>
+                    </li>
                 </ul>
             </li>
             <li class="inactive">
@@ -144,7 +181,7 @@
     <!-- Generic Confirmation Modal -->
     <div id="confirmationModal" style="opacity: 0;"></div>
 
-    <!-- Templates for Modal Content -->
+<!------------------------------------------------------ FILE MODALS------------------------------------------------------------->
     <template id="backupTemplate">
         <form id="createBackupForm" th:action="@{/create-backup}" onsubmit="registerPendingAction('backupCreated')">
             <br>
@@ -171,6 +208,7 @@
         <a class="btn" href="#" onclick="closeModal()">Close</a>
     </template>
 
+<!------------------------------------------------------ CHARACTER MODALS ------------------------------------------------------------->
     <template id="maxHpTemplate">
         <h2>Are you sure?</h2>
         <span>This will set all characters HP to 99</span><br><br>
@@ -184,6 +222,22 @@
         <a class="btn" th:href="@{/maxcards}" onclick="closeModal();registerPendingAction('cardsMaxed')">I am sure</a>
         <a class="btn" href="#" onclick="closeModal()">Nevermind</a>
     </template>
+
+<!------------------------------------------------------ ITEM MODALS ------------------------------------------------------------->
+
+    <div id="itemModal" style="opacity: 0;">
+        <a class="X" onclick="closeModal()">X</a>
+        <div id="itemModalTitle"></div>
+        <form th:action="@{/set-item-value}" target="contentFrame" method="get">
+            <input type="hidden" id="actionInput" name="action">
+            <input id="itemModalInput" name="value" type="number" style="width: 30px;" max="99" min="1" maxlength="2" placeholder="1-99" required>
+            <hr>
+            <input id="itemModalSubmitBtn" type="submit" value="Apply">
+        </form>
+        <div id="itemModalContent"></div>
+    </div>
+
+<!------------------------------------------------------ ENABLE STARTERS ------------------------------------------------------------->
 
     <template id="enableAllTemplate">
         <i>*not all characters can be enabled safely yet</i><br>

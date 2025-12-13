@@ -27,7 +27,7 @@ public class TrainerApplication {
 	public static void main(String[] args) {
 		// Starts Spring Boot application, retrieves the local server port, and pass it to the JavaFX WebContainer
 		ConfigurableApplicationContext context = SpringApplication.run(TrainerApplication.class, args);
-		WebContainer.PORT = Integer.parseInt(context.getEnvironment().getProperty("local.server.port"));
+		WebContainer.port = Integer.parseInt(context.getEnvironment().getProperty("local.server.port"));
 		Application.launch(WebContainer.class, args);
 	}
 

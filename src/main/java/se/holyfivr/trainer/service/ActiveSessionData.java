@@ -76,18 +76,62 @@ public class ActiveSessionData {
     /*  STORE ALL ITEMS  */
     /* ================= */
     private final Map<String, Item> items = new LinkedHashMap<>();
+
     public Map<String, Item> getItems() {
         return items;
     }
+
     public void addItem(Item item) {
-        if (item.getStringId() != null){
-            //removes the "ID" part from the stringId to get the actual item name
-            String itemName = item.getStringId().substring(0, (item.getStringId().length() -2));
-            items.putIfAbsent(itemName, item);
+        if (item.getStringId() != null) {
+            items.putIfAbsent(item.getStringId(), item);
         }
     }
+
     public void clearItems() {
         items.clear();
     }
 
+    public void setGold(String itemCost) {
+        System.err.println("Setting gold to: " + itemCost);
+        for (Item item : items.values()) {
+            item.setCost(itemCost);
+        }
+    }
+
+    public void setProsperity(String prosperityRequirement) {
+        for (Item item : items.values()) {
+            item.setProsperityRequirement(prosperityRequirement);
+        }
+    }
+
+    public void setHeal(String heal) {
+        for (Item item : items.values()) {
+            item.setHeal(heal);
+        }
+    }
+
+    public void setRetaliate(String retaliate) {
+        for (Item item : items.values()) {
+            item.setRetaliate(retaliate);
+        }
+    }
+
+    public void setMovement(String movement) {
+        for (Item item : items.values()) {
+            item.setMove(movement);
+        }
+    }
+
+    public void setAttack(String attack) {
+        for (Item item : items.values()) {
+            item.setAttack(attack);
+        }
+    }
+
+    public void setShield(String shield) {
+        for (Item item : items.values()) {
+            item.setShield(shield);
+        }
+
+    }
 }

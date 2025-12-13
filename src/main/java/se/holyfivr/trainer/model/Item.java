@@ -4,34 +4,38 @@ package se.holyfivr.trainer.model;
  * Represents an Item parsed from the ruleset file.
  * This is a POJO designed to hold all possible fields of interest found in the
  * item definitions.
- * All fields are nullable, so we can handle all items, no matter what fields they
+ * All fields are nullable, so we can handle all items, no matter what fields
+ * they
  * use.
  */
 public class Item {
-
+    public static final String UPPERCASE_LETTER = "([A-Z])";
     // General item info
     public String itemName;
-    public String stringId;             // "nameID"
-    public String totalInGame;          // integer
-    public String cost;                 // integer
-    public String slot;                 // Head/Body/Legs/SmallItem/OneHand/TwoHand/QuestItem
-    public String rarity;               // Rare/Relic
-    public String usage;                //Spent/Unrestricted/Consumed/Flip
+    public String id; // numeric ID - used to identify the FHItem version of the item when rewriting
+    public String stringId; // "nameID"
+    public String totalInGame; // integer
+    public String cost; // integer
+    public String slot; // Head/Body/Legs/SmallItem/OneHand/TwoHand/QuestItem
+    public String rarity; // Rare/Relic
+    public String usage; // Spent/Unrestricted/Consumed/Flip
     public String prosperityRequirement;
     public String consumes;
 
     // Effects (from each "Data" block)
-    public String heal;         // integer
-    public String attack;       // integer
-    public String range;        // integer
-    public String target;       // integer (-1 = adjacent(or rather aoe, depending on range))
-    public String shield;       // integer
-    public String retaliate;    // integer
-    public String move;         // integer
-    public String pull;         // integer
-    public String push;         // integer
-    public String jump;         // bool
-    public String isMelee;      // bool
+    public String heal; // integer
+    public String attack; // integer
+    public String range; // integer
+    public String target; // integer (-1 = adjacent(or rather aoe, depending on range))
+    public String shield; // integer
+    public String retaliate; // integer
+    public String move; // integer
+    public String pull; // integer
+    public String push; // integer
+    public String jump; // bool
+    public String isMelee; // bool
+    public String conditions; // (Muddle, Stun, Poison, Immobilize, Disarm, Stun, Curse, Bless, Strengthen,
+                              // Invisible, Brittle, Bane, Impair)
 
     // Conditions & Status Effects ... We're leaving these out for now
     /*
@@ -59,12 +63,23 @@ public class Item {
     }
 
     public String getItemName() {
+        itemName = stringId.substring(0, (stringId.length() - 2)).replaceAll(UPPERCASE_LETTER, " $1");
 
-        this.itemName = stringId.substring(0, (stringId.length() -2)).replaceAll("([A-Z])", " $1" );
-        
+        if (itemName.endsWith("2")) {
+            itemName = stringId.substring(0, (stringId.length() - 3)).replaceAll(UPPERCASE_LETTER, " $1");
+            itemName = itemName + " (Back)";
+        }
+
         return itemName;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getStringId() {
         return stringId;
@@ -202,7 +217,6 @@ public class Item {
         this.push = push;
     }
 
-
     public String getJump() {
         return jump;
     }
@@ -211,13 +225,20 @@ public class Item {
         this.jump = jump;
     }
 
-
     public String getIsMelee() {
         return isMelee;
     }
 
     public void setIsMelee(String isMelee) {
         this.isMelee = isMelee;
+    }
+
+    public String getConditions() {
+        return conditions;
+    }
+
+    public void setConditions(String conditions) {
+        this.conditions = conditions;
     }
 
 }

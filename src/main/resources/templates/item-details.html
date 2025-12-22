@@ -25,9 +25,9 @@
                 <input type="hidden" name="stringId" th:value="${item.stringId}">
                 
                 <table id="selected-item-table">
-                    <tr th:if="${item.cost != null and item.cost != '0'}">
+                    <tr th:if="${item.cost != null}">
                         <td class="item-attribute-td">Cost: </td>
-                        <td><input type="number" name="cost" th:value="${item.cost}" max="200" min="1"></td>
+                        <td><input type="number" name="cost" th:value="${item.cost}" max="200" min="0"></td>
                     </tr>
                     <tr>
                         <td class="item-attribute-td">Total in game: </td>
@@ -90,7 +90,7 @@
                         <td class="item-attribute-td">Attack: </td>
                         <td><input type="number" name="attack" th:value="${item.attack}" max="99" min="1"></td>
                     </tr>
-                    <tr th:if="${item.range != null and item.range != '0' and item.range != '-1'}">
+                    <tr th:if="${item.range != null and item.range != '0'}">
                         <td class="item-attribute-td">Range: </td>
                         <td><input type="number" name="range" th:value="${item.range}" max="99" min="1"></td>
                     </tr>

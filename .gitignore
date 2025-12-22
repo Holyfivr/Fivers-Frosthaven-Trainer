@@ -1,11 +1,12 @@
 HELP.md
 target/
+docs/
 empty_dir/
 temp_empty_folder/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-##src/main/resources/ruleset/
+src/main/resources/ruleset/
 src/test
 
 ### STS ###
@@ -39,10 +40,6 @@ src/main/java/se/holyfivr/trainer/DevFilePrinter.java
 src/main/java/se/holyfivr/trainer/TestDataRunner.java
 src/main/resources/ruleset/Base.ruleset
 src/main/resources/ruleset/Base.ruleset.bak
-FILLER_STRATEGY.md
-FINAL_STRATEGY.md
-AI_IMPLEMENTATION_GUIDE.md
 old/
-OLD_PROJECT_ANALYSIS.md
 last_path.txt
 src/main/resources/ruleset/itemblocks.txt

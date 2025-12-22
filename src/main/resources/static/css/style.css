@@ -133,6 +133,7 @@ html, body {
     color: var(--color-cream);
 }
 #aboutContainer {
+    background-color: var(--color-cream);
     display: flex;
     margin: 0 auto;
     width: 800px;
@@ -158,8 +159,8 @@ html, body {
     color: var(--color-light-blue);
     text-decoration: none;
 }
-.item-modal-value-input {
-    width: 70px;
+#itemModalInput {
+    width: 40px;
     padding: 5px;
     font-size: 16px;
     border: 1px solid var(--color-light-blue);

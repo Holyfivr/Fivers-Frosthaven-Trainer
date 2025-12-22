@@ -148,6 +148,16 @@
                         </a>
                     </li>
                     <li>
+                        <a id="setUsage" onclick="openItemModal('setUsage', 'usage to \'unrestricted\' ')">
+                            <div>Set Usage</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a id="setTotalInGame" onclick="openItemModal('setTotalInGame', 'total available amount')">
+                            <div>Set Total In Game</div>
+                        </a>
+                    </li>
+                    <li>
                         <a id="setProsperityReq" onclick="openItemModal('setProsperityReq', 'prosperity requirement')">
                             <div>Set Prosperity Req</div>
                         </a>
@@ -230,7 +240,7 @@
         <div id="itemModalTitle"></div>
         <form th:action="@{/set-item-value}" target="contentFrame" method="get">
             <input type="hidden" id="actionInput" name="action">
-            <input id="itemModalInput" name="value" type="number" style="width: 30px;" max="99" min="1" maxlength="2" placeholder="1-99" required>
+            <input id="itemModalInput" name="value" type="number" required>
             <hr>
             <input id="itemModalSubmitBtn" type="submit" value="Apply">
         </form>

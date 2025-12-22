@@ -10,14 +10,16 @@ function registerPendingAction(actionName) {
 // Function to handle what to show in the confirmation modal (Success messages)
 function showSuccessMessage(action) {
     let message = "";
-    switch(action) {
+    switch (action) {
         case "fileLoaded":
-            { const rulesetLoadedCheck = document.getElementById("rulesetLoadedCheck");
-            
-            // Check rulesetLoadedCheck if needed, or just trust the action
-            // Set message based on rulesetLoadedCheck value
-            if (rulesetLoadedCheck?.value === "true") message = "Ruleset Loaded Successfully!";
-            break; }
+            {
+                const rulesetLoadedCheck = document.getElementById("rulesetLoadedCheck");
+
+                // Check rulesetLoadedCheck if needed, or just trust the action
+                // Set message based on rulesetLoadedCheck value
+                if (rulesetLoadedCheck?.value === "true") message = "Ruleset Loaded Successfully!";
+                break;
+            }
         case "backupCreated":
             message = "Backup Created Successfully!";
             break;
@@ -95,19 +97,53 @@ const itemModal = document.getElementById("itemModal");
 const itemModalTitle = document.getElementById("itemModalTitle");
 const actionInput = document.getElementById("actionInput");
 
-function openItemModal(action, type){
-    
+function openItemModal(action, type) {
+
     itemModal.style.opacity = "1";
     itemModal.style.pointerEvents = "all";
     itemModalTitle.innerText = `Set ${type} for all items`;
     actionInput.value = action;
+    itemModalInput.type = "number";
+    itemModalInput.style.opacity = "1";
+    itemModalInput.style.pointerEvents = "all";
     itemModalInput.value = "";
+    if (action === "setProsperityReq") {
+        itemModalInput.placeholder = "0-9";
+        itemModalInput.max = "9";
+        itemModalInput.min = "0";
+    } else if (action === "setTotalInGame"){
+        itemModalInput.placeholder = "1-9";
+        itemModalInput.max = "9";
+        itemModalInput.min = "1";
+    }
+    else if (action === "setGoldCost") {
+        itemModalInput.placeholder = "1-200";
+        itemModalInput.max = "200";
+        itemModalInput.min = "1";
+    } else if (action === "setUsage") {
+        itemModalInput.type = "text";
+        itemModalInput.value = "Unrestricted";
+        itemModalInput.style.opacity = "0";
+        itemModalInput.style.pointerEvents = "none";
+    }
+    else {
+        itemModalInput.placeholder = "1-99";
+        itemModalInput.max = "99";
+        itemModalInput.min = "1";
+    }
+
+    // Prevent typing negative numbers or 'e'
+    itemModalInput.onkeydown = function (e) {
+        if (e.key === '-' || e.key === 'e') {
+            e.preventDefault();
+        }
+    }
 }
 
 // Handle item modal submission
 const itemModalForm = itemModal.querySelector("form");
 if (itemModalForm) {
-    itemModalForm.addEventListener('submit', function() {
+    itemModalForm.addEventListener('submit', function () {
         // The submit event only fires if the form is valid.
         // We close the modal immediately so the user sees the result in the iframe.
 

@@ -16,8 +16,8 @@ function addConditionField() {
     
     // counts how many condition input fields are already present (to enforce max limit)
     const currentConditions = tableBody.querySelectorAll('.condition-row').length;
-    if (currentConditions >= 12) {
-        alert("Maximum of 12 conditions allowed.");
+    if (currentConditions >= 5) {
+        alert("Maximum of 5 conditions allowed.");
         return;
     }
 

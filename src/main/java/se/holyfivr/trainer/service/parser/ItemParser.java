@@ -7,7 +7,6 @@ import se.holyfivr.trainer.service.ActiveSessionData;
 
 @Component
 public class ItemParser {
-
     private final ActiveSessionData activeSessionData;
 
     public ItemParser(ActiveSessionData activeSessionData) {
@@ -17,17 +16,30 @@ public class ItemParser {
 
         Item item = new Item();
         String[] lines = currentBlock.split("\n");
+        String lastAttribute = "";
         
         for(String line : lines){
         
-            String[] itemInfo = line.split(":"); // separates the attribute from the value
+            String[] itemInfo = line.split(":", 2); 
 
-            if (itemInfo.length < 2) {
-                continue; // skip lines that don't have a value (prevents ArrayIndexOutOfBoundsException)
+            if (itemInfo.length < 1) { 
+                continue; 
             }
              
             String attribute = itemInfo[0].trim();
-            String value = itemInfo[1].trim();
+            String value = (itemInfo.length > 1) ? itemInfo[1].trim() : "";
+
+            if (attribute.equals("Amount") || attribute.equals("Strength")) {
+                if (!lastAttribute.isEmpty()) {
+                    attribute = lastAttribute;
+                }
+            } else if (value.isEmpty()) {
+                lastAttribute = attribute;
+                continue;
+            } else {
+                lastAttribute = attribute;
+            }
+
 
             switch (attribute){
                 case "StringID"             -> item.setStringId                 (value);
@@ -44,8 +56,11 @@ public class ItemParser {
                 case "Range"                -> item.setRange                    (value);
                 case "Target"               -> item.setTarget                   (value);
                 case "Shield"               -> item.setShield                   (value);
+                case "ShieldValue"          -> item.setShieldValue              (value);
                 case "Retaliate"            -> item.setRetaliate                (value);
                 case "Move"                 -> item.setMove                     (value);
+                case "OMove"                -> item.setOMove                    (value);
+                case "AMove"                -> item.setAMove                    (value);
                 case "Pull"                 -> item.setPull                     (value);
                 case "Push"                 -> item.setPush                     (value);
                 case "Jump"                 -> item.setJump                     (value);
@@ -53,13 +68,11 @@ public class ItemParser {
                 default                     -> {/* ignore unknown attributes */}
             }
         }
-
         // Store the parsed item in the active session data
         activeSessionData.addItem(item);
-
         System.out.printf(" Slot: %s --- StringId: %s %n", item.getSlot(), item.getStringId()); // debug print
-
-
     }
+
+
 
 }

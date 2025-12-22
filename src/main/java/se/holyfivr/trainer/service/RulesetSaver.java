@@ -9,6 +9,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 import org.springframework.stereotype.Service;
 
@@ -47,15 +48,6 @@ public class RulesetSaver {
     private static final Pattern CONSUMES_PATTERN = Pattern.compile("\\bConsumes:\\s*\\w+");
     
     // Item Data Patterns
-    private static final Pattern HEAL_PATTERN = Pattern.compile("\\bHeal:\\s*\\d+");
-    private static final Pattern ATTACK_PATTERN = Pattern.compile("\\bAttack:\\s*\\d+");
-    private static final Pattern RANGE_PATTERN = Pattern.compile("\\bRange:\\s*\\d+");
-    private static final Pattern TARGET_PATTERN = Pattern.compile("\\bTarget:\\s*-?\\d+");
-    private static final Pattern SHIELD_PATTERN = Pattern.compile("\\bShield:\\s*\\d+");
-    private static final Pattern RETALIATE_PATTERN = Pattern.compile("\\bRetaliate:\\s*\\d+");
-    private static final Pattern MOVE_PATTERN = Pattern.compile("\\bMove:\\s*\\d+");
-    private static final Pattern PULL_PATTERN = Pattern.compile("\\bPull:\\s*\\d+");
-    private static final Pattern PUSH_PATTERN = Pattern.compile("\\bPush:\\s*\\d+");
     private static final Pattern JUMP_PATTERN = Pattern.compile("\\bJump:\\s*(True|False)");
     private static final Pattern CONDITIONS_PATTERN = Pattern.compile("\\bConditions:\\s*(\\[.*?\\]|\\w+)");
 
@@ -289,24 +281,33 @@ public class RulesetSaver {
                     .replaceAll("ProsperityRequirement: " + item.getProsperityRequirement());
         if (item.getConsumes() != null)
             block = CONSUMES_PATTERN.matcher(block).replaceAll("Consumes: " + item.getConsumes());
+        
+        // Complex attributes that might be nested (e.g. Move: 3 OR Move: \n Amount: 3)
         if (item.getHeal() != null)
-            block = HEAL_PATTERN.matcher(block).replaceAll("Heal: " + item.getHeal());
+            block = updateAttribute(block, "Heal", item.getHeal());
         if (item.getAttack() != null)
-            block = ATTACK_PATTERN.matcher(block).replaceAll("Attack: " + item.getAttack());
+            block = updateAttribute(block, "Attack", item.getAttack());
         if (item.getRange() != null)
-            block = RANGE_PATTERN.matcher(block).replaceAll("Range: " + item.getRange());
+            block = updateAttribute(block, "Range", item.getRange());
         if (item.getTarget() != null)
-            block = TARGET_PATTERN.matcher(block).replaceAll("Target: " + item.getTarget());
+            block = updateAttribute(block, "Target", item.getTarget());
         if (item.getShield() != null)
-            block = SHIELD_PATTERN.matcher(block).replaceAll("Shield: " + item.getShield());
+            block = updateAttribute(block, "Shield", item.getShield());
+        if (item.getShieldValue() != null)
+            block = updateAttribute(block, "ShieldValue", item.getShieldValue());
         if (item.getRetaliate() != null)
-            block = RETALIATE_PATTERN.matcher(block).replaceAll("Retaliate: " + item.getRetaliate());
+            block = updateAttribute(block, "Retaliate", item.getRetaliate());
         if (item.getMove() != null)
-            block = MOVE_PATTERN.matcher(block).replaceAll("Move: " + item.getMove());
+            block = updateAttribute(block, "Move", item.getMove());
+        if (item.getOMove() != null)
+            block = updateAttribute(block, "OMove", item.getOMove());
+        if (item.getAMove() != null)
+            block = updateAttribute(block, "AMove", item.getAMove());
         if (item.getPull() != null)
-            block = PULL_PATTERN.matcher(block).replaceAll("Pull: " + item.getPull());
+            block = updateAttribute(block, "Pull", item.getPull());
         if (item.getPush() != null)
-            block = PUSH_PATTERN.matcher(block).replaceAll("Push: " + item.getPush());
+            block = updateAttribute(block, "Push", item.getPush());
+
         if (item.getJump() != null)
             block = JUMP_PATTERN.matcher(block).replaceAll("Jump: " + item.getJump());
 
@@ -315,6 +316,37 @@ public class RulesetSaver {
         }
 
         return block;
+    }
+
+    /* ============================================================================================ */
+    /*                                      UPDATE ATTRIBUTE HELPER                                 */
+    /*                                                                                              */
+    /* Handles updating attributes that can appear in multiple formats:                             */
+    /* 1. Key: Value                                                                                */
+    /* 2. Key: \n Amount: Value                                                                     */
+    /* 3. Key: \n Strength: Value                                                                   */
+    /* ============================================================================================ */
+    private String updateAttribute(String block, String key, String value) {
+        // Matches "Key: Value" OR "Key:\n...Amount: Value" OR "Key:\n...Strength: Value"
+        // Handles variable whitespace and newlines.
+        Pattern pattern = Pattern.compile("\\b" + key + ":\\s*(?:(?:\\r?\\n\\s*)+(?:Amount|Strength):\\s*)?(-?\\d+)");
+        Matcher matcher = pattern.matcher(block);
+        
+        StringBuffer sb = new StringBuffer();
+        while (matcher.find()) {
+            String fullMatch = matcher.group(0);
+            String oldValue = matcher.group(1);
+            
+            // Replace the last occurrence of oldValue in fullMatch with newValue
+            // This preserves the prefix (Key: \n Amount: )
+            int lastIndex = fullMatch.lastIndexOf(oldValue);
+            if (lastIndex != -1) {
+                String newMatch = fullMatch.substring(0, lastIndex) + value + fullMatch.substring(lastIndex + oldValue.length());
+                matcher.appendReplacement(sb, Matcher.quoteReplacement(newMatch));
+            }
+        }
+        matcher.appendTail(sb);
+        return sb.toString();
     }
 
 

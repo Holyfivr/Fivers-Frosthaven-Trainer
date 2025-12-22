@@ -14,7 +14,6 @@ import se.holyfivr.trainer.model.PlayerCharacter;
 @Component
 public class ActiveSessionData {
 
-
     private Path rulesetPath;
 
     public Path getRulesetPath() {
@@ -26,7 +25,7 @@ public class ActiveSessionData {
     }
 
     /* =========================== */
-    /*  STORE ALL GAME CHARACTERS  */
+    /* STORE ALL GAME CHARACTERS */
     /* =========================== */
 
     private final Map<String, PlayerCharacter> characters = new LinkedHashMap<>();
@@ -34,16 +33,16 @@ public class ActiveSessionData {
     public Map<String, PlayerCharacter> getCharacters() {
         return characters;
     }
-    
+
     /* ==================================================================== */
-    /*      This filters out the tutorial versions of bannerspear.          */
-    /*      It basically says "if there is no match of the received name    */
-    /*      add it to the map". There is already a check like this one      */
-    /*      in the RulesetParser, but having it here as well adds an        */
-    /*      extra layer of safety.                                          */
+    /* This filters out the tutorial versions of bannerspear. */
+    /* It basically says "if there is no match of the received name */
+    /* add it to the map". There is already a check like this one */
+    /* in the RulesetParser, but having it here as well adds an */
+    /* extra layer of safety. */
     /* ==================================================================== */
     public void addCharacter(PlayerCharacter character) {
-        if (character.getName() != null){
+        if (character.getName() != null) {
             characters.putIfAbsent(character.getName(), character);
         }
     }
@@ -52,28 +51,27 @@ public class ActiveSessionData {
         characters.clear();
     }
 
-    
     /* =============================== */
-    /*  STORE ALL UNLOCKED CHARACTERS  */
+    /* STORE ALL UNLOCKED CHARACTERS */
     /* =============================== */
     private final List<String> unlockedCharacters = new ArrayList<>();
 
-    public List<String> getUnlockedCharacterList(){
+    public List<String> getUnlockedCharacterList() {
         return unlockedCharacters;
     }
 
-    public void addUnlockedCharacter(String character){
+    public void addUnlockedCharacter(String character) {
         unlockedCharacters.add(character);
     }
 
     public void clearUnlockedCharacters() {
-       for (int i = unlockedCharacters.size() - 1; i >= 0; i--) {
+        for (int i = unlockedCharacters.size() - 1; i >= 0; i--) {
             unlockedCharacters.remove(i);
         }
     }
 
     /* ================= */
-    /*  STORE ALL ITEMS  */
+    /* STORE ALL ITEMS */
     /* ================= */
     private final Map<String, Item> items = new LinkedHashMap<>();
 
@@ -122,6 +120,18 @@ public class ActiveSessionData {
         }
     }
 
+    public void setOMove(String oMove) {
+        for (Item item : items.values()) {
+            item.setOMove(oMove);
+        }
+    }
+     
+    public void setAMove(String aMove) {
+        for (Item item : items.values()) {
+            item.setAMove(aMove);
+        }
+    }
+
     public void setAttack(String attack) {
         for (Item item : items.values()) {
             item.setAttack(attack);
@@ -132,6 +142,23 @@ public class ActiveSessionData {
         for (Item item : items.values()) {
             item.setShield(shield);
         }
+    }
 
+    public void setShieldValue(String shieldValue) {
+        for (Item item : items.values()) {
+            item.setShieldValue(shieldValue);
+        }
+    }
+
+    public void setUsage(String usage) {
+        for (Item item : items.values()) {
+            item.setUsage(usage);
+        }
+    }
+
+    public void setTotalInGame(String totalInGame) {
+        for (Item item : items.values()) {
+            item.setTotalInGame(totalInGame);
+        }
     }
 }

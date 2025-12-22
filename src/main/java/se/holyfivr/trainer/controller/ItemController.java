@@ -72,9 +72,12 @@ public class ItemController {
             existingItem.setShield                  (item.getShield());
             existingItem.setRetaliate               (item.getRetaliate());
             existingItem.setMove                    (item.getMove());
+            existingItem.setOMove                   (item.getOMove());
+            existingItem.setAMove                   (item.getAMove());
             existingItem.setPull                    (item.getPull());
             existingItem.setPush                    (item.getPush());
             existingItem.setJump                    (item.getJump());
+            existingItem.setShieldValue             (item.getShieldValue());
             
             if (conditions != null && !conditions.isEmpty()) {
                 existingItem.setConditions(conditions.toString());
@@ -99,6 +102,7 @@ public class ItemController {
                 break;
             case "setShield":
                 activeSessionData.setShield(value);
+                activeSessionData.setShieldValue(value);
                 break;
             case "setHeal":
                 activeSessionData.setHeal(value);
@@ -108,10 +112,19 @@ public class ItemController {
                 break;
             case "setMovement":
                 activeSessionData.setMovement(value);
+                activeSessionData.setOMove(value);
+                activeSessionData.setAMove(value);
                 break;
             case "setProsperityReq":
                 activeSessionData.setProsperity(value);
                 break;
+            case "setUsage":
+                activeSessionData.setUsage(value);
+                break;
+            case "setTotalInGame":
+                activeSessionData.setTotalInGame(value);
+                break;
+
             default:
                 break;
         }
@@ -121,3 +134,4 @@ public class ItemController {
     
 
 }
+

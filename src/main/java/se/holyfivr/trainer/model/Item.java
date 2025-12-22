@@ -28,8 +28,11 @@ public class Item {
     public String range; // integer
     public String target; // integer (-1 = adjacent(or rather aoe, depending on range))
     public String shield; // integer
+    public String shieldValue;
     public String retaliate; // integer
     public String move; // integer
+    public String oMove;
+    public String aMove;
     public String pull; // integer
     public String push; // integer
     public String jump; // bool
@@ -185,6 +188,14 @@ public class Item {
         this.shield = shield;
     }
 
+    public String getShieldValue() {
+        return shieldValue;
+    }
+
+    public void setShieldValue(String shieldValue) {
+        this.shieldValue = shieldValue;
+    }
+
     public String getRetaliate() {
         return retaliate;
     }
@@ -199,6 +210,22 @@ public class Item {
 
     public void setMove(String move) {
         this.move = move;
+    }
+
+    public String getOMove() {
+        return oMove;
+    }
+
+    public void setOMove(String oMove) {
+        this.oMove = oMove;
+    }
+
+    public String getAMove() {
+        return aMove;
+    }
+
+    public void setAMove(String aMove) {
+        this.aMove = aMove;
     }
 
     public String getPull() {

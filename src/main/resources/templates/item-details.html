@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" style="overflow: auto !important;">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/items.css}">
+    <script th:src="@{/js/items.js}" type="text/javascript" defer></script>
+</head>
+
+<body style="overflow: auto !important;">
+    <div id="itemDetailsPane">
+        <center>
+            <h1 th:text="${item.itemName}"></h1>
+            <div>Type: <span type="text" th:text="${item.slot}"></span>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Rarity: <span type="text"
+                    th:text="${item.rarity}"></span></div>
+        </center>
+        <hr>
+
+        <div>
+            <form th:action="@{/save-item}" method="post">
+                <input type="hidden" name="stringId" th:value="${item.stringId}">
+
+                <table id="selected-item-table">
+                    <tr th:if="${item.cost != null and item.cost != '0'}">
+                        <td class="item-attribute-td">Cost: </td>
+                        <td><input type="number" name="cost" th:value="${item.cost}" max="200" min="1"></td>
+                    </tr>
+                    <tr>
+                        <td class="item-attribute-td">Total in game: </td>
+                        <td>
+                            <select name="totalInGame">
+                                <option value="1" th:selected="${item.totalInGame == '1'}">1</option>
+                                <option value="2" th:selected="${item.totalInGame == '2'}">2</option>
+                                <option value="3" th:selected="${item.totalInGame == '3'}">3</option>
+                                <option value="4" th:selected="${item.totalInGame == '4'}">4</option>
+                                <option value="5" th:selected="${item.totalInGame == '5'}">5</option>
+                                <option value="6" th:selected="${item.totalInGame == '6'}">6</option>
+                                <option value="7" th:selected="${item.totalInGame == '7'}">7</option>
+                                <option value="8" th:selected="${item.totalInGame == '8'}">8</option>
+                                <option value="9" th:selected="${item.totalInGame == '9'}">9</option>
+                            </select>
+                    </tr>
+                    <tr th:if="${item.usage != 'Flip'}">
+                        <td class="item-attribute-td">Usage: </td>
+                        <td> <select name="usage">
+                                <option value="Spent" th:selected="${item.usage == 'Spent'}">Spent</option>
+                                <option value="Consumed" th:selected="${item.usage == 'Consumed'}">Consumed</option>
+                                <option value="Unrestricted" th:selected="${item.usage == 'Unrestricted'}">Unrestricted
+                                </option>
+                            </select></td>
+                    </tr>
+                    <tr th:if="${item.prosperityRequirement != null}">
+                        <td class="item-attribute-td">Prosperity Requirement: </td>
+                        <td>
+                            <select name="prosperityRequirement">
+                                <option value="0" th:selected="${item.prosperityRequirement == '0'}">0</option>
+                                <option value="1" th:selected="${item.prosperityRequirement == '1'}">1</option>
+                                <option value="2" th:selected="${item.prosperityRequirement == '2'}">2</option>
+                                <option value="3" th:selected="${item.prosperityRequirement == '3'}">3</option>
+                                <option value="4" th:selected="${item.prosperityRequirement == '4'}">4</option>
+                                <option value="5" th:selected="${item.prosperityRequirement == '5'}">5</option>
+                                <option value="6" th:selected="${item.prosperityRequirement == '6'}">6</option>
+                                <option value="7" th:selected="${item.prosperityRequirement == '7'}">7</option>
+                                <option value="8" th:selected="${item.prosperityRequirement == '8'}">8</option>
+                                <option value="9" th:selected="${item.prosperityRequirement == '9'}">9</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr th:if="${item.infuses != null}">
+                        <td class="item-attribute-td">Infuses: </td>
+                        <td>
+                            <select name="infuses" id="infusion">
+                                <option th:selected="${item.infuses == 'Any'}" value="Any">Any</option>
+                                <option th:selected="${item.infuses == 'Air'}" value="Air">Air</option>
+                                <option th:selected="${item.infuses == 'Dark'}" value="Dark">Dark</option>
+                                <option th:selected="${item.infuses == 'Earth'}" value="Earth">Earth</option>
+                                <option th:selected="${item.infuses == 'Fire'}" value="Fire">Fire</option>
+                                <option th:selected="${item.infuses == 'Ice'}" value="Ice">Ice</option>
+                                <option th:selected="${item.infuses == 'Light'}" value="Light">Light</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr th:if="${item.consumes != null}">
+                        <td class="item-attribute-td">Consumes: </td>
+                        <td>
+                            <select name="consumes" id="consume">
+                                <option th:selected="${item.consumes == 'Any'}" value="Any">Any</option>
+                                <option th:selected="${item.consumes == 'Air'}" value="Air">Air</option>
+                                <option th:selected="${item.consumes == 'Dark'}" value="Dark">Dark</option>
+                                <option th:selected="${item.consumes == 'Earth'}" value="Earth">Earth</option>
+                                <option th:selected="${item.consumes == 'Fire'}" value="Fire">Fire</option>
+                                <option th:selected="${item.consumes == 'Ice'}" value="Ice">Ice</option>
+                                <option th:selected="${item.consumes == 'Light'}" value="Light">Light</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr th:if="${item.heal != null and item.heal != '0'}">
+                        <td class="item-attribute-td">Heal: </td>
+                        <td><input type="number" name="heal" th:value="${item.heal}" max="99" min="1"></td>
+                    </tr>
+                    <tr th:if="${item.attack != null and item.attack != '0'}">
+                        <td class="item-attribute-td">Attack: </td>
+                        <td><input type="number" name="attack" th:value="${item.attack}" max="99" min="1"></td>
+                    </tr>
+                    <tr th:if="${item.range != null and item.range != '0' and item.range != '-1'}">
+                        <td class="item-attribute-td">Range: </td>
+                        <td><input type="number" name="range" th:value="${item.range}" max="99" min="1"></td>
+                    </tr>
+                    <tr th:if="${item.target != null}">
+                        <td class="item-attribute-td">Target: </td>
+
+                        <td>
+                            <select name="target">
+                                <option value="-1" th:selected="${item.target == '-1'}">AoE</option>
+                                <option value="1" th:selected="${item.target == '1'}">1</option>
+                                <option value="2" th:selected="${item.target == '2'}">2</option>
+                                <option value="3" th:selected="${item.target == '3'}">3</option>
+                                <option value="4" th:selected="${item.target == '4'}">4</option>
+                                <option value="5" th:selected="${item.target == '5'}">5</option>
+                                <option value="6" th:selected="${item.target == '6'}">6</option>
+                                <option value="7" th:selected="${item.target == '7'}">7</option>
+                                <option value="8" th:selected="${item.target == '8'}">8</option>
+                                <option value="9" th:selected="${item.target == '9'}">9</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr th:if="${item.shield != null}">
+                        <td class="item-attribute-td">Shield: </td>
+                        <td><input type="number" name="shield" th:value="${item.shield}" max="99" min="1"></td>
+                    </tr>
+                    <tr th:if="${item.shieldValue != null}">
+                        <td class="item-attribute-td">Shield Value: </td>
+                        <td><input type="number" name="shieldValue" th:value="${item.shieldValue}" max="99" min="0">
+                        </td>
+                    </tr>
+                    <tr th:if="${item.retaliate != null}">
+                        <td class="item-attribute-td">Retaliate: </td>
+                        <td><input type="number" name="retaliate" th:value="${item.retaliate}" max="99" min="1">
+                        </td>
+                    </tr>
+                    <tr th:if="${item.move != null}">
+                        <td class="item-attribute-td">Move: </td>
+                        <td><input type="number" name="move" th:value="${item.move}" max="99" min="1"></td>
+                    </tr>
+                    <tr th:if="${item.oMove != null}">
+                        <td class="item-attribute-td">oMove: </td>
+                        <td><input type="number" name="oMove" th:value="${item.oMove}" max="99" min="0"></td>
+                    </tr>
+                    <tr th:if="${item.aMove != null}">
+                        <td class="item-attribute-td">aMove: </td>
+                        <td><input type="number" name="aMove" th:value="${item.aMove}" max="99" min="1"></td>
+                    </tr>
+                    <tr th:if="${item.pull != null}">
+                        <td class="item-attribute-td">Pull: </td>
+                        <td><input type="number" name="pull" th:value="${item.pull}" max="99" min="1"></td>
+                    </tr>
+                    <tr th:if="${item.push != null}">
+                        <td class="item-attribute-td">Push: </td>
+                        <td><input type="number" name="push" th:value="${item.push}" max="99" min="1"></td>
+                    </tr>
+                    <tr th:if="${item.jump != null}">
+                        <td class="item-attribute-td">Jump: </td>
+                        <td><select name="jump">
+                                <option value="True" th:selected="${item.jump == 'True'}">True</option>
+                                <option value="False" th:selected="${item.jump == 'False'}">False</option>
+
+                            </select></td>
+                    </tr>
+                    <th:block th:if="${item.conditions != null}">
+                        <tr th:each="cond, iterStat : ${#strings.arraySplit(item.conditions.replace('[', '').replace(']', ''), ',')}"
+                            class="condition-row">
+                            <td class="item-attribute-td" th:text="${iterStat.index == 0 ? 'Conditions: ' : ''}"></td>
+                            <td>
+                                <select name="conditions" disabled>
+                                    <option value="Muddle" th:selected="${cond.trim() == 'Muddle'}">Muddle</option>
+                                    <option value="Stun" th:selected="${cond.trim() == 'Stun'}">Stun</option>
+                                    <option value="Poison" th:selected="${cond.trim() == 'Poison'}">Poison</option>
+                                    <option value="Immobilize" th:selected="${cond.trim() == 'Immobilize'}">Immobilize
+                                    </option>
+                                    <option value="Disarm" th:selected="${cond.trim() == 'Disarm'}">Disarm</option>
+                                    <option value="Curse" th:selected="${cond.trim() == 'Curse'}">Curse</option>
+                                    <option value="Bless" th:selected="${cond.trim() == 'Bless'}">Bless</option>
+                                    <option value="Strengthen" th:selected="${cond.trim() == 'Strengthen'}">Strengthen
+                                    </option>
+                                    <option value="Invisible" th:selected="${cond.trim() == 'Invisible'}">Invisible
+                                    </option>
+                                    <option value="Brittle" th:selected="${cond.trim() == 'Brittle'}">Brittle</option>
+                                    <option value="Bane" th:selected="${cond.trim() == 'Bane'}">Bane</option>
+                                    <option value="Impair" th:selected="${cond.trim() == 'Impair'}">Impair</option>
+                                </select>
+                                <!--   <span style="cursor: pointer; color: red; font-weight: bold;" onclick="removeConditionRow(this)"> - </span> -->
+                            </td>
+                        </tr>
+                        <tr class="condition-row">
+                            <td></td>
+                            <td>
+                                <!-- <b><span id="addCondition" class="addCondition" style="cursor: pointer;">+</span></b> -->
+                                <i><span style="color: #9c9b9b; font-size: 12px;">(disabled for now)</span></i>
+                            </td>
+                        </tr>
+                    </th:block>
+
+                </table>
+                <br>
+
+                <div id="buttonContainer"><button type="submit" class="btn">Save Changes</button></div>
+            </form>
+        </div>
+
+        <div> <img id="itemImage" alt="${item.itemName}"
+                th:src="@{/img/{name}.jpg(name=${item.getItemName().toLowerCase().replace(' ', '')})}"
+                onerror="this.style.display='none'"></div>
+
+
+
+
+
+
+    </div>
+    <p id="limitWarning">Limits on attributes are placed to prevent breaking the ruleset file.</p>
+</body>
+
+</html>

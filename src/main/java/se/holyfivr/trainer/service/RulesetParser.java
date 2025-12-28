@@ -1,8 +1,8 @@
 package se.holyfivr.trainer.service;
 
 import org.springframework.stereotype.Service;
-import se.holyfivr.trainer.model.PlayerCharacter;
 import se.holyfivr.trainer.service.parser.CharacterParser;
+import se.holyfivr.trainer.service.parser.ItemParser;
 import se.holyfivr.trainer.service.parser.UnlockedCharacterParser;
 
 //====================================== RULESET PARSER =======================================//
@@ -17,11 +17,17 @@ public class RulesetParser {
     private final ActiveSessionData activeSession;
     private final CharacterParser characterParser;
     private final UnlockedCharacterParser unlockedCharacterParser;
+    private final ItemParser itemParser;
 
-    public RulesetParser(ActiveSessionData activeSession, CharacterParser characterParser, UnlockedCharacterParser unlockedCharacterParser) {
+    public RulesetParser(
+            ActiveSessionData activeSession,
+            CharacterParser characterParser,
+            UnlockedCharacterParser unlockedCharacterParser,
+            ItemParser itemParser) {
         this.activeSession = activeSession;
         this.characterParser = characterParser;
         this.unlockedCharacterParser = unlockedCharacterParser;
+        this.itemParser = itemParser;
     }
 
     /* ============================================================================================ */
@@ -44,11 +50,13 @@ public class RulesetParser {
         // Clear any existing unlocked characters
         activeSession.clearUnlockedCharacters();
 
+        // Clear any existing items
+        activeSession.clearItems();
+
         // Splits up the content block into smaller blocks based on parser tags
         String[] allBlocks = contentString.split("Parser: ");
 
         // Debug variables just to check how many of each entity we found
-        int characterCount = 0; // should be 20 (but we will only use 17 of them)
         int itemCount = 0;      // should be 264
         int abilityCount = 0;   // should be 531
 
@@ -57,43 +65,31 @@ public class RulesetParser {
             String currentBlock = allBlocks[i].trim();
 
             // Check the type of block and process accordingly
-            if (currentBlock.startsWith("Character")) {
-                characterCount++;   //debug
 
-                // this method extracts the relevant data from the character block
-                // and stores it in a PlayerCharacter POJO.
+            if (currentBlock.startsWith("Character")) {
+
                 characterParser.parseCharacterBlock(currentBlock);
 
-            } else if (currentBlock.startsWith("GameMode")) {
-                
+            } else if (currentBlock.startsWith("GameMode")) {                
+
                 unlockedCharacterParser.parseGameModeBlock(currentBlock);
-            }
-            else if (currentBlock.startsWith("Item")) {
+
+            } else if (currentBlock.startsWith("ItemCard")) {
+
+                itemParser.parseItemBlock(currentBlock);
                 itemCount++;        //debug
 
             } else if (currentBlock.startsWith("AbilityCard")) {
+
                 abilityCount++;     //debug
+                
             }
         }
 
 
-        // DEBUG: Print summary of loaded characters
-        for (PlayerCharacter character : activeSession.getCharacters().values()) {
-            System.out.println("Character Loaded: " + character.getName()); 
-            System.out.println("  Card Amount: " + character.getCardAmount()); 
-            System.out.println("  Max HP Levels: " + character.getHpLvlOne() + ", " +
-                    character.getHpLvlTwo() + ", " +
-                    character.getHpLvlThree() + ", " +
-                    character.getHpLvlFour() + ", " +
-                    character.getHpLvlFive() + ", " +
-                    character.getHpLvlSix() + ", " +
-                    character.getHpLvlSeven() + ", " +
-                    character.getHpLvlEight() + ", " +
-                    character.getHpLvlNine()); 
-        }
 
         // DEBUG: Print totals
-        System.out.println("Total Characters Found: " + characterCount); 
+        System.out.println("Total Characters Parsed: " + activeSession.getCharacters().size()); 
         System.out.println("Total Items Found: " + itemCount); 
         System.out.println("Total Ability Cards Found: " + abilityCount); 
 

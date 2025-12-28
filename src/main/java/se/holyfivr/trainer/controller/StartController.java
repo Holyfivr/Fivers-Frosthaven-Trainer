@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import se.holyfivr.trainer.service.RulesetLoader;
-import se.holyfivr.trainer.service.RulesetParser;
 import se.holyfivr.trainer.service.ActiveSessionData;
 
 import javafx.application.Platform;
@@ -17,16 +16,13 @@ public class StartController {
 
     private final ActiveSessionData activeSessionData;
     private final RulesetLoader rulesetLoader;
-    private final RulesetParser rulesetParser;
 
    
 
 
-    public StartController(ActiveSessionData activeSessionData, RulesetLoader rulesetLoader,
-            RulesetParser rulesetParser) {
+    public StartController(ActiveSessionData activeSessionData, RulesetLoader rulesetLoader) {
         this.activeSessionData = activeSessionData;
         this.rulesetLoader = rulesetLoader;
-        this.rulesetParser = rulesetParser;
     }
 
     @GetMapping("/start")

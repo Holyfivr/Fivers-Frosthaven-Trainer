@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/items.css}">
+    <script th:src="@{/js/items.js}" defer></script>
+</head>
+
+<body>
+
+    <div id="categoryTitle">
+        <h1 th:text="${category}"></h1>
+    </div>
+
+    <input id="searchInput" placeholder="Search" type="text">
+    <div id="itemListContainer">
+        
+        <table>
+            <tr th:each="item : ${itemList.values()}">
+                <td>
+                    <a target="itemFrame" th:href="@{/item-details/{itemId}(itemId = ${item.getStringId()})}">
+                        <div th:text="${item.getItemName()}"></div>
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <iframe id="itemFrame" name="itemFrame" width="600" height="400"></iframe>
+
+
+
+
+
+
+</body>
+
+</html>

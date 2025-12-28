@@ -1,4 +1,12 @@
-document.addEventListener('DOMContentLoaded', function() {
+
+/* ============================================================================================ */
+/*                                 DYNAMIC CONDITION FIELDS                                     */
+/* This is disabled for now, as this cannot be safely used without corrupting the file on many  */
+/* of the items. This will be dealt with in the future, when I update the filler-bank code to   */
+/* use space from other blocks. That might solve the problem, but for now we leave it disabled. */
+/* ============================================================================================ */
+
+/* document.addEventListener('DOMContentLoaded', function() {
     const addConditionBtn = document.getElementById('addCondition');
     
     if (addConditionBtn) {
@@ -83,7 +91,7 @@ function removeConditionRow(element) {
     
     row.remove();
 }
-
+ */
 /* ============================================================================================ */
 /*                                      SEARCH FUNCTIONALITY                                    */
 /* ============================================================================================ */

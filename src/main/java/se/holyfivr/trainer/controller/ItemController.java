@@ -79,11 +79,19 @@ public class ItemController {
             existingItem.setJump                    (item.getJump());
             existingItem.setShieldValue             (item.getShieldValue());
             
+
+
+            /* This is disabled for the forseeable future, until I can implement */
+            /* an "upgraded" version of the filler-banks that can use bytes from */
+            /* other blocks to avoid data corruption.                            */
+            /* 
             if (conditions != null && !conditions.isEmpty()) {
                 existingItem.setConditions(conditions.toString());
             } else {
                 existingItem.setConditions(null);
-            }
+            } */
+
+                
         }
 
         return "redirect:/item-details/" + item.getStringId();

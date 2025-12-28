@@ -158,7 +158,7 @@
                         <tr th:each="cond, iterStat : ${#strings.arraySplit(item.conditions.replace('[', '').replace(']', ''), ',')}" class="condition-row">
                             <td class="item-attribute-td" th:text="${iterStat.index == 0 ? 'Conditions: ' : ''}"></td>
                             <td>
-                                <select name="conditions">
+                                <select name="conditions" disabled>
                                     <option value="Muddle" th:selected="${cond.trim() == 'Muddle'}">Muddle</option>
                                     <option value="Stun" th:selected="${cond.trim() == 'Stun'}">Stun</option>
                                     <option value="Poison" th:selected="${cond.trim() == 'Poison'}">Poison</option>
@@ -172,13 +172,14 @@
                                     <option value="Bane" th:selected="${cond.trim() == 'Bane'}">Bane</option>
                                     <option value="Impair" th:selected="${cond.trim() == 'Impair'}">Impair</option>
                                 </select>
-                                <span style="cursor: pointer; color: red; font-weight: bold;" onclick="removeConditionRow(this)"> - </span>
+                              <!--   <span style="cursor: pointer; color: red; font-weight: bold;" onclick="removeConditionRow(this)"> - </span> -->
                             </td>
                         </tr>
                         <tr class="condition-row">
                             <td></td>
                             <td>
-                                <b><span id="addCondition" class="addCondition" style="cursor: pointer;">+</span></b>
+                                <!-- <b><span id="addCondition" class="addCondition" style="cursor: pointer;">+</span></b> -->
+                                <i><span style="color: #9c9b9b; font-size: 12px;">(disabled for now)</span></i>
                             </td>
                         </tr>
                     </th:block>

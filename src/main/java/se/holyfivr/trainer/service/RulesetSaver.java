@@ -46,6 +46,7 @@ public class RulesetSaver {
     private static final Pattern USAGE_PATTERN = Pattern.compile("\\bUsage:\\s*\\w+");
     private static final Pattern PROSPERITY_PATTERN = Pattern.compile("\\bProsperityRequirement:\\s*\\d+");
     private static final Pattern CONSUMES_PATTERN = Pattern.compile("\\bConsumes:\\s*\\w+");
+    private static final Pattern INFUSE_PATTERN = Pattern.compile("\\bInfuse:\\s*(\\[.*?\\]|\\w+)");
     
     // Item Data Patterns
     private static final Pattern JUMP_PATTERN = Pattern.compile("\\bJump:\\s*(True|False)");
@@ -281,6 +282,8 @@ public class RulesetSaver {
                     .replaceAll("ProsperityRequirement: " + item.getProsperityRequirement());
         if (item.getConsumes() != null)
             block = CONSUMES_PATTERN.matcher(block).replaceAll("Consumes: " + item.getConsumes());
+        if (item.getInfuses() != null)
+            block = INFUSE_PATTERN.matcher(block).replaceAll("Infuse: " + item.getInfuses());
         
         // Complex attributes that might be nested (e.g. Move: 3 OR Move: \n Amount: 3)
         if (item.getHeal() != null)
@@ -307,7 +310,6 @@ public class RulesetSaver {
             block = updateAttribute(block, "Pull", item.getPull());
         if (item.getPush() != null)
             block = updateAttribute(block, "Push", item.getPush());
-
         if (item.getJump() != null)
             block = JUMP_PATTERN.matcher(block).replaceAll("Jump: " + item.getJump());
 

@@ -23,7 +23,7 @@
         <div>
             <form th:action="@{/save-item}" method="post">
                 <input type="hidden" name="stringId" th:value="${item.stringId}">
-                
+
                 <table id="selected-item-table">
                     <tr th:if="${item.cost != null and item.cost != '0'}">
                         <td class="item-attribute-td">Cost: </td>
@@ -70,16 +70,31 @@
                             </select>
                         </td>
                     </tr>
+                    <tr th:if="${item.infuses != null}">
+                        <td class="item-attribute-td">Infuses: </td>
+                        <td>
+                            <select name="infuses" id="infusion">
+                                <option th:selected="${item.infuses == 'Any'}" value="Any">Any</option>
+                                <option th:selected="${item.infuses == 'Air'}" value="Air">Air</option>
+                                <option th:selected="${item.infuses == 'Dark'}" value="Dark">Dark</option>
+                                <option th:selected="${item.infuses == 'Earth'}" value="Earth">Earth</option>
+                                <option th:selected="${item.infuses == 'Fire'}" value="Fire">Fire</option>
+                                <option th:selected="${item.infuses == 'Ice'}" value="Ice">Ice</option>
+                                <option th:selected="${item.infuses == 'Light'}" value="Light">Light</option>
+                            </select>
+                        </td>
+                    </tr>
                     <tr th:if="${item.consumes != null}">
                         <td class="item-attribute-td">Consumes: </td>
                         <td>
-                            <select name="consumes">
-                                <option value="Air">Air</option>
-                                <option value="Dark">Dark</option>
-                                <option value="Earth">Earth</option>
-                                <option value="Fire">Fire</option>
-                                <option value="Ice">Ice</option>
-                                <option value="Light">Light</option>
+                            <select name="consumes" id="consume">
+                                <option th:selected="${item.consumes == 'Any'}" value="Any">Any</option>
+                                <option th:selected="${item.consumes == 'Air'}" value="Air">Air</option>
+                                <option th:selected="${item.consumes == 'Dark'}" value="Dark">Dark</option>
+                                <option th:selected="${item.consumes == 'Earth'}" value="Earth">Earth</option>
+                                <option th:selected="${item.consumes == 'Fire'}" value="Fire">Fire</option>
+                                <option th:selected="${item.consumes == 'Ice'}" value="Ice">Ice</option>
+                                <option th:selected="${item.consumes == 'Light'}" value="Light">Light</option>
                             </select>
                         </td>
                     </tr>
@@ -119,7 +134,8 @@
                     </tr>
                     <tr th:if="${item.shieldValue != null}">
                         <td class="item-attribute-td">Shield Value: </td>
-                        <td><input type="number" name="shieldValue" th:value="${item.shieldValue}" max="99" min="0"></td>
+                        <td><input type="number" name="shieldValue" th:value="${item.shieldValue}" max="99" min="0">
+                        </td>
                     </tr>
                     <tr th:if="${item.retaliate != null}">
                         <td class="item-attribute-td">Retaliate: </td>
@@ -155,24 +171,28 @@
                             </select></td>
                     </tr>
                     <th:block th:if="${item.conditions != null}">
-                        <tr th:each="cond, iterStat : ${#strings.arraySplit(item.conditions.replace('[', '').replace(']', ''), ',')}" class="condition-row">
+                        <tr th:each="cond, iterStat : ${#strings.arraySplit(item.conditions.replace('[', '').replace(']', ''), ',')}"
+                            class="condition-row">
                             <td class="item-attribute-td" th:text="${iterStat.index == 0 ? 'Conditions: ' : ''}"></td>
                             <td>
                                 <select name="conditions" disabled>
                                     <option value="Muddle" th:selected="${cond.trim() == 'Muddle'}">Muddle</option>
                                     <option value="Stun" th:selected="${cond.trim() == 'Stun'}">Stun</option>
                                     <option value="Poison" th:selected="${cond.trim() == 'Poison'}">Poison</option>
-                                    <option value="Immobilize" th:selected="${cond.trim() == 'Immobilize'}">Immobilize</option>
+                                    <option value="Immobilize" th:selected="${cond.trim() == 'Immobilize'}">Immobilize
+                                    </option>
                                     <option value="Disarm" th:selected="${cond.trim() == 'Disarm'}">Disarm</option>
                                     <option value="Curse" th:selected="${cond.trim() == 'Curse'}">Curse</option>
                                     <option value="Bless" th:selected="${cond.trim() == 'Bless'}">Bless</option>
-                                    <option value="Strengthen" th:selected="${cond.trim() == 'Strengthen'}">Strengthen</option>
-                                    <option value="Invisible" th:selected="${cond.trim() == 'Invisible'}">Invisible</option>
+                                    <option value="Strengthen" th:selected="${cond.trim() == 'Strengthen'}">Strengthen
+                                    </option>
+                                    <option value="Invisible" th:selected="${cond.trim() == 'Invisible'}">Invisible
+                                    </option>
                                     <option value="Brittle" th:selected="${cond.trim() == 'Brittle'}">Brittle</option>
                                     <option value="Bane" th:selected="${cond.trim() == 'Bane'}">Bane</option>
                                     <option value="Impair" th:selected="${cond.trim() == 'Impair'}">Impair</option>
                                 </select>
-                              <!--   <span style="cursor: pointer; color: red; font-weight: bold;" onclick="removeConditionRow(this)"> - </span> -->
+                                <!--   <span style="cursor: pointer; color: red; font-weight: bold;" onclick="removeConditionRow(this)"> - </span> -->
                             </td>
                         </tr>
                         <tr class="condition-row">
@@ -183,7 +203,7 @@
                             </td>
                         </tr>
                     </th:block>
-                    
+
                 </table>
                 <br>
 

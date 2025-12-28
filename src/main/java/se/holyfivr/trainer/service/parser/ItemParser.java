@@ -65,6 +65,7 @@ public class ItemParser {
                 case "Push"                 -> item.setPush                     (value);
                 case "Jump"                 -> item.setJump                     (value);
                 case "Conditions"           -> item.setConditions               (value);
+                case "Infuse"               -> item.setInfuses                  (value);
                 default                     -> {/* ignore unknown attributes */}
             }
         }

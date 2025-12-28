@@ -65,6 +65,7 @@ public class ItemController {
             existingItem.setUsage                   (item.getUsage());
             existingItem.setProsperityRequirement   (item.getProsperityRequirement());
             existingItem.setConsumes                (item.getConsumes());
+            existingItem.setInfuses                 (item.getInfuses());
             existingItem.setHeal                    (item.getHeal());
             existingItem.setAttack                  (item.getAttack());
             existingItem.setRange                   (item.getRange());
@@ -78,6 +79,7 @@ public class ItemController {
             existingItem.setPush                    (item.getPush());
             existingItem.setJump                    (item.getJump());
             existingItem.setShieldValue             (item.getShieldValue());
+            
             
 
 

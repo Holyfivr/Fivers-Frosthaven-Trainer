@@ -119,3 +119,25 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// Disable infusion and consume selectors if set to 'Any'
+// If you change from 'Any' to a specific element, the item stops working
+// Also, why would you want to do that?
+const infusionSelector = document.getElementById('infusion');
+if (infusionSelector) {
+    
+        const infuseValue = infusionSelector.value;
+        if (infuseValue === 'Any') {
+            infusionSelector.disabled = true;
+        }
+
+    }
+const consumeSelector = document.getElementById('consume');
+if (consumeSelector) {
+    
+        const consumeValue = consumeSelector.value;
+        if (consumeValue === 'Any') {
+            consumeSelector.disabled = true;
+        }
+
+    }

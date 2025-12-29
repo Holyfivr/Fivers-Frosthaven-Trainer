@@ -28,11 +28,12 @@ So please be patient if updates are slow, as I am balancing this with my studies
 2.  The application will open in its own window (it runs as a desktop application).
 3.  Click on **File -> Open Ruleset** in the top menu bar and select your `Base.ruleset` file. 
 (Default location: `..\Steam\steamapps\common\Frosthaven\Frosthaven_Data\StreamingAssets\Rulesets\Base.ruleset`)
-4.  Select a character from the **Characters** menu, or choose the bottom options that edit all characters at once.
-5.  Make your changes.
-6.  Click on **Save**.
-7.  The application saves the changes directly to the file on your disk.
-8.  Open Frosthaven and enjoy your modified game!
+4.  The first time you open the file, a backup will be created of the original.
+5.  Select an option from the menu that you want to edit.
+6.  Make your changes.
+7.  Click on **Save**.
+8.  The application saves the changes directly to the file on your disk.
+9.  Open Frosthaven and enjoy your modified game!
 
  
 **<b>IMPORTANT: </b>**

@@ -16,5 +16,5 @@ EXCEPTION FOR ASSETS AND ARTWORK:
 The image files located in the "src/main/resources/static/img" 
 directory are NOT covered by this license. 
 These assets are the intellectual property of Cephalofair Games & Snapshot Games(or their respective owners) 
-and are included for personal use/demonstration purposes only. They may not be redistributed, 
+and are included for use in this project only. They may not be redistributed, 
 sold, or used in commercial projects without explicit permission from the copyright holders.

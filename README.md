@@ -14,9 +14,9 @@ So please be patient if updates are slow, as I am balancing this with my studies
 *   **Unlock Characters:** Unlock starting classes (currently Snowflake, Fist, Meteor, Prism, Trap)
 *   **Max Stats:** "Max All Values" button to quickly set HP to 99 for all characters.
 *   **Max Cards:** Set hand size to 20 cards for all characters.
+*   **Item Editing:** Modify item stats and properties.
 
 ## Upcoming Features
-*   **Item Editing:** Modify item stats and properties.
 *   **Ability Card Editing:** Change ability card effects and values.
 *   **Enchantment Editing:** Change enchantment effects and values.
 *   **Town Editing**: Adjust things like prosperity/morale/available buildings.

@@ -43,3 +43,4 @@ src/main/resources/ruleset/Base.ruleset.bak
 old/
 last_path.txt
 src/main/resources/ruleset/itemblocks.txt
+src/main/java/se/holyfivr/trainer/ObjectTransformer.java

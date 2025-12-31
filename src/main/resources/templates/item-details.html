@@ -212,7 +212,7 @@
         </div>
 
         <div> <img id="itemImage" alt="${item.itemName}"
-                th:src="@{/img/{name}.jpg(name=${item.getItemName().toLowerCase().replace(' ', '')})}"
+                th:src="@{/secure-object/{name}(name=${item.getItemName().toLowerCase().replace(' ', '')})}"
                 onerror="this.style.display='none'"></div>
 
 

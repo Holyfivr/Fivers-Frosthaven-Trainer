@@ -12,20 +12,17 @@ The primary challenge with editing `Base.ruleset` is that it is not a simple tex
 The strategy is designed to mitigate this risk entirely by treating the file as a structured binary file and preserving its total size. Here’s how it works in detail:
 
 1.  **Read as Raw Bytes:** The entire file is read into a `byte[]` array. It ensures that every single byte is preserved perfectly.
-<br>
-1.  **Segmentation:** Once in memory, the byte array is divided into three distinct segments:
+2.  **Segmentation:** Once in memory, the byte array is divided into three distinct segments:
     *   **Header:** A small, binary section at the beginning of the file.
     *   **Content:** A large, human-readable section containing the YAML-like game data definitions. This is the only section we intend to modify. It is approximately about 100,000 lines long.
     *   **Footer:** A massive, binary section at the very end of the file. Roughly 150,000 lines long.
-<br>
-1.  **The "Filler Bank" Principle:** We treat every single parsed block (e.g., a Character definition) as its own fixed-size bank.
+3.  **The "Filler Bank" Principle:** We treat every single parsed block (e.g., a Character definition) as its own fixed-size bank.
     *   **Padding:** If the user's edits make a block *shorter* than the original, we add spaces to the end of the block until it matches the original length.
     *   **Trimming:** If the user's edits make a block *longer* than the original (e.g., increasing HP from 9 to 10), we must reclaim space. We do this by removing redundant characters in a prioritized order:
         1.  **Trailing Whitespace:** Removing invisible spaces at the end of lines.
         2.  **Carriage Returns:** Converting Windows line endings (`\r\n`) to Unix line endings (`\n`). This is invisible and saves 1 byte per line.
         3.  **Double Spaces:** Removing extra spaces in indentation (last resort).
-<br>
-1.  **Safe Reassembly and Writing:** After the user's changes are applied and every block has been adjusted to match its original size, the application reassembles the segments (`Header`, `New Content`, `Footer`) back into a single `byte[]` array.
+4.  **Safe Reassembly and Writing:** After the user's changes are applied and every block has been adjusted to match its original size, the application reassembles the segments (`Header`, `New Content`, `Footer`) back into a single `byte[]` array.
 
 Because every block perfectly compensates for any change in its content's length, the final reassembled byte array is **guaranteed to have the exact same size as the original file**. This allows us to modify the game data with maximum confidence.
 

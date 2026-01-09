@@ -25,16 +25,10 @@ So please be patient if updates are slow, as I am balancing this with my studies
 
 *   **Character Editing:** Change HP for all levels (1-9) for all characters, as well as available cards on hand.
 *   **Unlock Characters:** Unlock starting classes (currently Snowflake, Fist, Meteor, Prism, Trap)
-*   **Max Stats:** "Max All Values" button to quickly set HP to 99 for all characters.
-*   **Max Cards:** Set hand size to 20 cards for all characters.
-</div>
-
-<h2 style="max-width: 1000px; margin: auto; text-align: center;"> Upcoming Features
-</h2>
-
-<div style="max-width: 1000px; margin: auto; font-size: 1.1em; line-height: 1.6em;">
-
 *   **Item Editing:** Modify item stats and properties.
+*   **Mass Item/Character Editing** All values can be 'maxed' to their allowed value by single-click menu options.
+
+## Upcoming Features
 *   **Ability Card Editing:** Change ability card effects and values.
 *   **Enchantment Editing:** Change enchantment effects and values.
 *   **Town Editing**: Adjust things like prosperity/morale/available buildings.

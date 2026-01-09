@@ -13,6 +13,8 @@ Under the following terms:
 
 --------------------------------------------------------------------------
 EXCEPTION FOR ASSETS:
-The assets located in the "src/main/resources/static/img" directory are NOT covered by this license. 
+The encrypted image-assets located in the "src/main/resources/static/img" directory are NOT covered by this license. 
 These assets are the intellectual property of Cephalofair Games & Snapshot Games(or their respective owners) 
 and are included for use in this project only.
+
+I have received persmission from the developers to use these assets in this project. They remain the property of their respective owners, and are not to be used outside the context of this project without explicit permission from the original owners.

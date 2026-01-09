@@ -83,9 +83,9 @@ Adding characters work, but may have unexpected side effects in the campaign. Do
 |:---:|:---:|
 | ![Edit Items](/preview/edit-item.png) | ![Edit All Items](/preview/edit-all-item.png) |
 
-| Save Ruleset  | Restore from backup or original backup |
+| Save Ruleset  | If file somehow gets corrupted, restore from backup |
 |:---:|:---:|
-| Even if you are working on an existing backup, the ruleset will always be saved to the original file. | If for some reason your file gets corrupted, you can restore from a backup, or the original backup for a full reset. |
+| ![Save Ruleset](/preview/save-ruleset.png) | ![Restore Backup](/preview/restore-ruleset.png) |
 <hr>
 
 ## Installation

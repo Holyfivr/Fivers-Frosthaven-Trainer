@@ -112,6 +112,7 @@ public class ItemController {
                 break;
             case "setRange":
                 activeSessionData.setRange(value);
+                break;
             case "setShield":
                 activeSessionData.setShield(value);
                 activeSessionData.setShieldValue(value);

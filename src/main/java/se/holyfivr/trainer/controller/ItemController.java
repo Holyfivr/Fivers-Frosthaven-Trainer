@@ -110,6 +110,8 @@ public class ItemController {
             case "setDamage":
                 activeSessionData.setAttack(value);
                 break;
+            case "setRange":
+                activeSessionData.setRange(value);
             case "setShield":
                 activeSessionData.setShield(value);
                 activeSessionData.setShieldValue(value);

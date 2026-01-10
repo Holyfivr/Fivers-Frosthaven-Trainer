@@ -89,76 +89,109 @@ public class ActiveSessionData {
         items.clear();
     }
 
-    public void setGold(String itemCost) {
-        System.err.println("Setting gold to: " + itemCost);
+    public void setGold(String value) {
+        System.err.println("Setting gold to: " + value);
         for (Item item : items.values()) {
-            item.setCost(itemCost);
+            if (item.getCost() != null) {
+                item.setCost(value);
+            }
         }
     }
 
-    public void setProsperity(String prosperityRequirement) {
+    public void setProsperity(String value) {
         for (Item item : items.values()) {
-            item.setProsperityRequirement(prosperityRequirement);
+            if (item.getProsperityRequirement() != null) {
+                item.setProsperityRequirement(value);
+            }
         }
     }
 
-    public void setHeal(String heal) {
+    public void setHeal(String value) {
         for (Item item : items.values()) {
-            item.setHeal(heal);
+            if (item.getHeal() != null) {
+                item.setHeal(value);
+            }
         }
     }
 
-    public void setRetaliate(String retaliate) {
+    public void setRetaliate(String value) {
         for (Item item : items.values()) {
-            item.setRetaliate(retaliate);
+            if (item.getRetaliate() != null) {
+                item.setRetaliate(value);
+            }
         }
     }
 
-    public void setMovement(String movement) {
+    public void setMovement(String value) {
         for (Item item : items.values()) {
-            item.setMove(movement);
+            if (item.getMove() != null) {
+                item.setMove(value);
+            }
         }
     }
 
-    public void setOMove(String oMove) {
+    public void setOMove(String value) {
         for (Item item : items.values()) {
-            item.setOMove(oMove);
-        }
-    }
-     
-    public void setAMove(String aMove) {
-        for (Item item : items.values()) {
-            item.setAMove(aMove);
+            if (item.getOMove() != null) {
+                item.setOMove(value);
+            }
         }
     }
 
-    public void setAttack(String attack) {
+    public void setAMove(String value) {
         for (Item item : items.values()) {
-            item.setAttack(attack);
+            if (item.getAMove() != null) {
+                item.setAMove(value);
+            }
         }
     }
 
-    public void setShield(String shield) {
+    public void setAttack(String value) {
         for (Item item : items.values()) {
-            item.setShield(shield);
+            if (item.getAttack() != null) {
+                item.setAttack(value);
+            }
         }
     }
 
-    public void setShieldValue(String shieldValue) {
+    public void setShield(String value) {
         for (Item item : items.values()) {
-            item.setShieldValue(shieldValue);
+            if (item.getShield() != null) {
+                item.setShield(value);
+            }
         }
     }
 
-    public void setUsage(String usage) {
+    public void setShieldValue(String value) {
         for (Item item : items.values()) {
-            item.setUsage(usage);
+            if (item.getShieldValue() != null) {
+                item.setShieldValue(value);
+            }
         }
     }
 
-    public void setTotalInGame(String totalInGame) {
+    public void setUsage(String value) {
         for (Item item : items.values()) {
-            item.setTotalInGame(totalInGame);
+            if (item.getUsage() != null) {
+                item.setUsage(value);
+            }
         }
     }
+
+    public void setRange(String value){
+        for (Item item : items.values()){
+            if (item.getRange() != null ) {
+                item.setRange(value);
+            }
+        }
+    }
+
+    public void setTotalInGame(String value) {
+        for (Item item : items.values()) {
+            if (item.getTotalInGame() != null) {
+                item.setTotalInGame(value);
+            }
+        }
+    }
+
 }

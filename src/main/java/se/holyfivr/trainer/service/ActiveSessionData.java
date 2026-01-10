@@ -178,9 +178,9 @@ public class ActiveSessionData {
         }
     }
 
-    public void setRange(String value){
-        for (Item item : items.values()){
-            if (item.getRange() != null ) {
+    public void setRange(String value) {
+        for (Item item : items.values()) {
+            if (item.getRange() != null) {
                 item.setRange(value);
             }
         }

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import se.holyfivr.trainer.service.AuthService;
 
-import java.nio.file.Paths;
+
 
 @Controller
 public class AuthController {
@@ -27,8 +27,9 @@ public class AuthController {
                 return ResponseEntity.notFound().build();
             }
 
-            // Decr the object data
-            byte[] objectBytes = authService.decryptObject(Paths.get(objFile.getURI()));
+            // Decr the object data (read as stream for JAR compatibility)
+            byte[] encData = objFile.getInputStream().readAllBytes();
+            byte[] objectBytes = authService.decryptObject(encData);
 
             return ResponseEntity.ok()
                     .contentType(MediaType.IMAGE_JPEG) 

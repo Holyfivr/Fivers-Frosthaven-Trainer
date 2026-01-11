@@ -81,200 +81,225 @@ public class Item {
         return id;
     }
 
-    public void setId(String id) {
+    public Item setId(String id) {
         this.id = id;
+        return this;
     }
 
     public String getStringId() {
         return stringId;
     }
 
-    public void setStringId(String stringId) {
+    public Item setStringId(String stringId) {
         this.stringId = stringId;
+        return this;
     }
 
     public String getTotalInGame() {
         return totalInGame;
     }
 
-    public void setTotalInGame(String totalInGame) {
+    public Item setTotalInGame(String totalInGame) {
         this.totalInGame = totalInGame;
+        return this;
     }
 
     public String getCost() {
         return cost;
     }
 
-    public void setCost(String cost) {
+    public Item setCost(String cost) {
         this.cost = cost;
+        return this;
     }
 
     public String getSlot() {
         return slot;
     }
 
-    public void setSlot(String slot) {
+    public Item setSlot(String slot) {
         this.slot = slot;
+        return this;
     }
 
     public String getRarity() {
         return rarity;
     }
 
-    public void setRarity(String rarity) {
+    public Item setRarity(String rarity) {
         this.rarity = rarity;
+        return this;
     }
 
     public String getUsage() {
         return usage;
     }
 
-    public void setUsage(String usage) {
+    public Item setUsage(String usage) {
         this.usage = usage;
+        return this;
     }
 
     public String getProsperityRequirement() {
         return prosperityRequirement;
     }
 
-    public void setProsperityRequirement(String prosperityRequirement) {
+    public Item setProsperityRequirement(String prosperityRequirement) {
         this.prosperityRequirement = prosperityRequirement;
+        return this;
     }
 
     public String getConsumes() {
         return consumes;
     }
 
-    public void setConsumes(String consumes) {
+    public Item setConsumes(String consumes) {
         this.consumes = consumes;
+        return this;
     }
 
     public String getInfuses() {
         return infuses;
     }
 
-    public void setInfuses(String infuses) {
+    public Item setInfuses(String infuses) {
         this.infuses = infuses;
+        return this;
     }
 
     public String getHeal() {
         return heal;
     }
 
-    public void setHeal(String heal) {
+    public Item setHeal(String heal) {
         this.heal = heal;
+        return this;
     }
 
     public String getAttack() {
         return attack;
     }
 
-    public void setAttack(String attack) {
+    public Item setAttack(String attack) {
         this.attack = attack;
+        return this;
     }
 
     public String getRange() {
         return range;
     }
 
-    public void setRange(String range) {
+    public Item setRange(String range) {
         this.range = range;
+        return this;
     }
 
     public String getTarget() {
         return target;
     }
 
-    public void setTarget(String target) {
+    public Item setTarget(String target) {
         this.target = target;
+        return this;
     }
 
     public String getShield() {
         return shield;
     }
 
-    public void setShield(String shield) {
+    public Item setShield(String shield) {
         this.shield = shield;
+        return this;
     }
 
     public String getShieldValue() {
         return shieldValue;
     }
 
-    public void setShieldValue(String shieldValue) {
+    public Item setShieldValue(String shieldValue) {
         this.shieldValue = shieldValue;
+        return this;
     }
 
     public String getRetaliate() {
         return retaliate;
     }
 
-    public void setRetaliate(String retaliate) {
+    public Item setRetaliate(String retaliate) {
         this.retaliate = retaliate;
+        return this;
     }
 
     public String getMove() {
         return move;
     }
 
-    public void setMove(String move) {
+    public Item setMove(String move) {
         this.move = move;
+        return this;
     }
 
     public String getOMove() {
         return oMove;
     }
 
-    public void setOMove(String oMove) {
+    public Item setOMove(String oMove) {
         this.oMove = oMove;
+        return this;
     }
 
     public String getAMove() {
         return aMove;
     }
 
-    public void setAMove(String aMove) {
+    public Item setAMove(String aMove) {
         this.aMove = aMove;
+        return this;
     }
 
     public String getPull() {
         return pull;
     }
 
-    public void setPull(String pull) {
+    public Item setPull(String pull) {
         this.pull = pull;
+        return this;
     }
 
     public String getPush() {
         return push;
     }
 
-    public void setPush(String push) {
+    public Item setPush(String push) {
         this.push = push;
+        return this;
     }
 
     public String getJump() {
         return jump;
     }
 
-    public void setJump(String jump) {
+    public Item setJump(String jump) {
         this.jump = jump;
+        return this;
     }
 
     public String getIsMelee() {
         return isMelee;
     }
 
-    public void setIsMelee(String isMelee) {
+    public Item setIsMelee(String isMelee) {
         this.isMelee = isMelee;
+        return this;
     }
 
     public String getConditions() {
         return conditions;
     }
 
-    public void setConditions(String conditions) {
+    public Item setConditions(String conditions) {
         this.conditions = conditions;
+        return this;
     }
 
 }

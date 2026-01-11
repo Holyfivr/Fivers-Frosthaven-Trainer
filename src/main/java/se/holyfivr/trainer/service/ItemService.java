@@ -2,6 +2,7 @@ package se.holyfivr.trainer.service;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import se.holyfivr.trainer.model.enums.ItemAction;
 
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,10 @@ public class ItemService {
 
     }
 
+
+    /* =================================================== */
+    /* Retrieves a map of all items of a specific category */
+    /* =================================================== */
     public Map<String, Item> getItemsByType(String itemType) {
         Map<String, Item> itemList = activeSessionData.getItems();
         if ("all".equals(itemType)) {
@@ -32,30 +37,34 @@ public class ItemService {
         return itemTypeList;
     }
 
+    /* ================================================================= */
+    /* Saves the specific item, when edited from it's specific item-page */
+    /* ================================================================= */
     public void saveItem(Item existingItem, Item item) {
 
         if (existingItem != null) {
-            existingItem.setCost(item.getCost());
-            existingItem.setTotalInGame(item.getTotalInGame());
-            existingItem.setUsage(item.getUsage());
-            existingItem.setProsperityRequirement(item.getProsperityRequirement());
-            existingItem.setConsumes(item.getConsumes());
-            existingItem.setInfuses(item.getInfuses());
-            existingItem.setHeal(item.getHeal());
-            existingItem.setAttack(item.getAttack());
-            existingItem.setRange(item.getRange());
-            existingItem.setTarget(item.getTarget());
-            existingItem.setShield(item.getShield());
-            existingItem.setRetaliate(item.getRetaliate());
-            existingItem.setMove(item.getMove());
-            existingItem.setOMove(item.getOMove());
-            existingItem.setAMove(item.getAMove());
-            existingItem.setPull(item.getPull());
-            existingItem.setPush(item.getPush());
-            existingItem.setJump(item.getJump());
-            existingItem.setShieldValue(item.getShieldValue());
+            existingItem.setCost(item.getCost())
+                    .setTotalInGame(item.getTotalInGame())
+                    .setUsage(item.getUsage())
+                    .setProsperityRequirement(item.getProsperityRequirement())
+                    .setConsumes(item.getConsumes())
+                    .setInfuses(item.getInfuses())
+                    .setHeal(item.getHeal())
+                    .setAttack(item.getAttack())
+                    .setRange(item.getRange())
+                    .setTarget(item.getTarget())
+                    .setShield(item.getShield())
+                    .setRetaliate(item.getRetaliate())
+                    .setMove(item.getMove())
+                    .setOMove(item.getOMove())
+                    .setAMove(item.getAMove())
+                    .setPull(item.getPull())
+                    .setPush(item.getPush())
+                    .setJump(item.getJump())
+                    .setShieldValue(item.getShieldValue());
         }
 
+    
         /* This is disabled for the forseeable future, until I can implement */
         /* an "upgraded" version of the filler-banks that can use bytes from */
         /* other blocks to avoid data corruption. */
@@ -69,4 +78,47 @@ public class ItemService {
 
     }
 
+    /* ========================================== */
+    /* Updates all items with the received value. */
+    /* ========================================== */
+    public void updateAllItems(String action, String value){
+        ItemAction itemAction = ItemAction.fromString(action);
+        System.err.println("Action: " + itemAction + " | Value: " + value);
+        switch (itemAction) {
+            case SET_GOLD_COST:
+                activeSessionData.setGold(value);
+                break;
+            case SET_DAMAGE:
+                activeSessionData.setAttack(value);
+                break;
+            case SET_RANGE:
+                activeSessionData.setRange(value);
+                break;
+            case SET_HEAL:
+                activeSessionData.setHeal(value);
+                break;
+            case SET_RETALIATE:
+                activeSessionData.setRetaliate(value);
+                break;
+            case SET_PROSPERITY_REQ:
+                activeSessionData.setProsperity(value);
+                break;
+            case SET_USAGE:
+                activeSessionData.setUsage(value);
+                break;
+            case SET_TOTAL_IN_GAME:
+                activeSessionData.setTotalInGame(value);
+                break;
+            case SET_SHIELD:
+                activeSessionData.setShield(value);
+                activeSessionData.setShieldValue(value);
+                break;
+            case SET_MOVEMENT:
+                activeSessionData.setMovement(value);
+                activeSessionData.setOMove(value);
+                activeSessionData.setAMove(value);
+                break;
+            default: break;
+        }
+    }
 }

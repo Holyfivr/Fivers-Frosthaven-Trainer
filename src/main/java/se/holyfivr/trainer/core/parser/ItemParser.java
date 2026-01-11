@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 import se.holyfivr.trainer.core.ActiveSessionData;
 import se.holyfivr.trainer.model.Item;
+import se.holyfivr.trainer.model.enums.ItemAttribute;
 
 @Component
 public class ItemParser {
@@ -41,33 +42,35 @@ public class ItemParser {
             }
 
 
-            switch (attribute){
-                case "StringID"             -> item.setStringId                 (value);
-                case "ID"                   -> item.setId                       (value);
-                case "Cost"                 -> item.setCost                     (value);
-                case "TotalInGame"          -> item.setTotalInGame              (value);
-                case "Slot"                 -> item.setSlot                     (value);
-                case "Rarity"               -> item.setRarity                   (value);
-                case "Usage"                -> item.setUsage                    (value);
-                case "ProsperityRequirement"-> item.setProsperityRequirement    (value);
-                case "Consumes"             -> item.setConsumes                 (value);
-                case "Heal"                 -> item.setHeal                     (value);
-                case "Attack"               -> item.setAttack                   (value);
-                case "Range"                -> item.setRange                    (value);
-                case "Target"               -> item.setTarget                   (value);
-                case "Shield"               -> item.setShield                   (value);
-                case "ShieldValue"          -> item.setShieldValue              (value);
-                case "Retaliate"            -> item.setRetaliate                (value);
-                case "Move"                 -> item.setMove                     (value);
-                case "OMove"                -> item.setOMove                    (value);
-                case "AMove"                -> item.setAMove                    (value);
-                case "Pull"                 -> item.setPull                     (value);
-                case "Push"                 -> item.setPush                     (value);
-                case "Jump"                 -> item.setJump                     (value);
-                case "Conditions"           -> item.setConditions               (value);
-                case "Infuse"               -> item.setInfuses                  (value);
-                default                     -> {/* ignore unknown attributes */}
-            }
+            ItemAttribute attrEnum = ItemAttribute.fromString(attribute);
+            if (attrEnum != null) {
+                switch (attrEnum) {
+                    case STRING_ID      -> item.setStringId                 (value);
+                    case ID             -> item.setId                       (value);
+                    case COST           -> item.setCost                     (value);
+                    case TOTAL_IN_GAME  -> item.setTotalInGame              (value);
+                    case SLOT           -> item.setSlot                     (value);
+                    case RARITY         -> item.setRarity                   (value);
+                    case USAGE          -> item.setUsage                    (value);
+                    case PROSPERITY_REQ -> item.setProsperityRequirement    (value);
+                    case CONSUMES       -> item.setConsumes                 (value);
+                    case HEAL           -> item.setHeal                     (value);
+                    case ATTACK         -> item.setAttack                   (value);
+                    case RANGE          -> item.setRange                    (value);
+                    case TARGET         -> item.setTarget                   (value);
+                    case SHIELD         -> item.setShield                   (value);
+                    case SHIELD_VALUE   -> item.setShieldValue              (value);
+                    case RETALIATE      -> item.setRetaliate                (value);
+                    case MOVE           -> item.setMove                     (value);
+                    case OMOVE          -> item.setOMove                    (value);
+                    case AMOVE          -> item.setAMove                    (value);
+                    case PULL           -> item.setPull                     (value);
+                    case PUSH           -> item.setPush                     (value);
+                    case JUMP           -> item.setJump                     (value);
+                    case CONDITIONS     -> item.setConditions               (value);
+                    case INFUSE         -> item.setInfuses                  (value);
+                }
+            } // else ignore unknown attributes
         }
         // Store the parsed item in the active session data
         activeSessionData.addItem(item);

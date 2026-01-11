@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import se.holyfivr.trainer.model.enums.RulesetFileName;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -32,8 +33,6 @@ import se.holyfivr.trainer.model.PlayerCharacter;
 public class RulesetSaver {
 
     private final ActiveSessionData activeSessionData;
-
-    private static final String BASE_RULESET = "Base.ruleset";
     
 
     // Regex patterns for finding character attributes
@@ -110,17 +109,16 @@ public class RulesetSaver {
             // This part ensures that no matter what backup is being edited, it will always update the Base.ruleset file
             // when saving, as well as the current file being edited. This way, you don't need to manually rename
             // any backup to Base.ruleset to have it be the file that the game uses.
-            if (filePath.getFileName().toString().equals(BASE_RULESET)){
+            String fileName = filePath.getFileName().toString();
+            if (fileName.equals(RulesetFileName.BASE_RULESET.getFileName())) {
                 Files.write(filePath, finalFileBytes);
-        
-            } else if (filePath.getFileName().toString().equals("ORIGINAL_BACKUP.ruleset")){
+            } else if (fileName.equals(RulesetFileName.ORIGINAL_BACKUP.getFileName())) {
                 // If we are editing the original backup, we DO NOT want to overwrite it.
                 // We only want to apply the changes to the active game file (Base.ruleset).
-                Files.write(filePath.resolveSibling(BASE_RULESET), finalFileBytes);
-                
+                Files.write(filePath.resolveSibling(RulesetFileName.BASE_RULESET.getFileName()), finalFileBytes);
             } else {
                 Files.write(filePath, finalFileBytes);
-                Files.copy(filePath, filePath.resolveSibling(BASE_RULESET), StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(filePath, filePath.resolveSibling(RulesetFileName.BASE_RULESET.getFileName()), StandardCopyOption.REPLACE_EXISTING);
             }
             System.out.println("File saved successfully!"); // debug
 

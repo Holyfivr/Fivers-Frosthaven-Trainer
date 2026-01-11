@@ -177,7 +177,7 @@ function openItemModal(action, labelText) {
             if (valInput.type === "number") {
                 valInput.onkeydown = function(e) {
                     if (e.key === '-' || e.key === 'e') e.preventDefault();
-                }
+                };
             }
         }
 

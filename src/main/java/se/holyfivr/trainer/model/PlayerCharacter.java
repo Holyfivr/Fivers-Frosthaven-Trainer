@@ -56,96 +56,108 @@ public class PlayerCharacter {
         return name;
     }
 
-    public void setName(String name) {
+    public PlayerCharacter setName(String name) {
         this.name = name;
+        return this;
     }
 
     public String getCardAmount() {
         return cardAmount;
     }
 
-    public void setCardAmount(String cardAmount) {
+    public PlayerCharacter setCardAmount(String cardAmount) {
         this.cardAmount = cardAmount;
+        return this;
     }
 
     public String getHpLvlOne() {
         return hpLvlOne;
     }
 
-    public void setHpLvlOne(String hpLvlOne) {
+    public PlayerCharacter setHpLvlOne(String hpLvlOne) {
         this.hpLvlOne = hpLvlOne;
+        return this;
     }
 
     public String getHpLvlTwo() {
         return hpLvlTwo;
     }
 
-    public void setHpLvlTwo(String hpLvlTwo) {
+    public PlayerCharacter setHpLvlTwo(String hpLvlTwo) {
         this.hpLvlTwo = hpLvlTwo;
+        return this;
     }
 
     public String getHpLvlThree() {
         return hpLvlThree;
     }
 
-    public void setHpLvlThree(String hpLvlThree) {
+    public PlayerCharacter setHpLvlThree(String hpLvlThree) {
         this.hpLvlThree = hpLvlThree;
+        return this;
     }
 
     public String getHpLvlFour() {
         return hpLvlFour;
     }
 
-    public void setHpLvlFour(String hpLvlFour) {
+    public PlayerCharacter setHpLvlFour(String hpLvlFour) {
         this.hpLvlFour = hpLvlFour;
+        return this;
     }
 
     public String getHpLvlFive() {
         return hpLvlFive;
     }
 
-    public void setHpLvlFive(String hpLvlFive) {
+    public PlayerCharacter setHpLvlFive(String hpLvlFive) {
         this.hpLvlFive = hpLvlFive;
+        return this;
     }
 
     public String getHpLvlSix() {
         return hpLvlSix;
     }
 
-    public void setHpLvlSix(String hpLvlSix) {
+    public PlayerCharacter setHpLvlSix(String hpLvlSix) {
         this.hpLvlSix = hpLvlSix;
+        return this;
     }
 
     public String getHpLvlSeven() {
         return hpLvlSeven;
     }
 
-    public void setHpLvlSeven(String hpLvlSeven) {
+    public PlayerCharacter setHpLvlSeven(String hpLvlSeven) {
         this.hpLvlSeven = hpLvlSeven;
+        return this;
     }
 
     public String getHpLvlEight() {
         return hpLvlEight;
     }
 
-    public void setHpLvlEight(String hpLvlEight) {
+    public PlayerCharacter setHpLvlEight(String hpLvlEight) {
         this.hpLvlEight = hpLvlEight;
+        return this;
     }
 
     public String getHpLvlNine() {
         return hpLvlNine;
     }
 
-    public void setHpLvlNine(String hpLvlNine) {
+    public PlayerCharacter setHpLvlNine(String hpLvlNine) {
         this.hpLvlNine = hpLvlNine;
+        return this;
     }
 
     public boolean isAvailableFromStart() {
         return isAvailableFromStart;
     }
 
-    public void setAvailableFromStart(boolean isAvailableFromStart) {
+    public PlayerCharacter setAvailableFromStart(boolean isAvailableFromStart) {
         this.isAvailableFromStart = isAvailableFromStart;
+        return this;
     }
 
 }

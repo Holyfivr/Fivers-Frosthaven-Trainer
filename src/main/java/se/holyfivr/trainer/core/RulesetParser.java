@@ -1,9 +1,11 @@
-package se.holyfivr.trainer.service;
+// Flyttad till core-paketet
+package se.holyfivr.trainer.core;
 
 import org.springframework.stereotype.Service;
-import se.holyfivr.trainer.service.parser.CharacterParser;
-import se.holyfivr.trainer.service.parser.ItemParser;
-import se.holyfivr.trainer.service.parser.UnlockedCharacterParser;
+
+import se.holyfivr.trainer.core.parser.CharacterParser;
+import se.holyfivr.trainer.core.parser.ItemParser;
+import se.holyfivr.trainer.core.parser.UnlockedCharacterParser;
 
 //====================================== RULESET PARSER =======================================//
 //  This class is responsible for parsing the text content of the ruleset file.                //

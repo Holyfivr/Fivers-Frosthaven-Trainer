@@ -1,8 +1,10 @@
-package se.holyfivr.trainer.service.parser;
+package se.holyfivr.trainer.core.parser;
 
 import org.springframework.stereotype.Component;
 
-import se.holyfivr.trainer.service.ActiveSessionData;
+import se.holyfivr.trainer.core.ActiveSessionData;
+
+
 
 @Component
 public class UnlockedCharacterParser {

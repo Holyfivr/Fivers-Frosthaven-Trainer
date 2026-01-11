@@ -3,8 +3,6 @@ package se.holyfivr.trainer.service;
 import org.springframework.stereotype.Service;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.security.Key;
 
 @Service
@@ -15,8 +13,7 @@ public class AuthService {
     private static final String ALGORITHM = "AES";
 
     // reverse object transformation for use in the frontend
-    public byte[] decryptObject(Path path) throws Exception {
-        byte[] encData = Files.readAllBytes(path);
+    public byte[] decryptObject(byte[] encData) throws Exception {
         Key k = new SecretKeySpec(OBJ_K.getBytes(), ALGORITHM);
         Cipher ciph = Cipher.getInstance(ALGORITHM);
         ciph.init(Cipher.DECRYPT_MODE, k);

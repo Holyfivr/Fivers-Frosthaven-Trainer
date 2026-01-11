@@ -12,6 +12,9 @@ import javafx.application.Platform;
 import javafx.stage.FileChooser;
 import se.holyfivr.trainer.WebContainer;
 import se.holyfivr.trainer.controller.StartController;
+import se.holyfivr.trainer.core.ActiveSessionData;
+import se.holyfivr.trainer.core.RulesetLoader;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 

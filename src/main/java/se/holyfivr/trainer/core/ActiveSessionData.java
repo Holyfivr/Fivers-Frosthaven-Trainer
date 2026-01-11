@@ -1,4 +1,5 @@
-package se.holyfivr.trainer.service;
+// Flyttad till core-paketet
+package se.holyfivr.trainer.core;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -6,12 +7,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import se.holyfivr.trainer.model.Item;
 import se.holyfivr.trainer.model.PlayerCharacter;
 
-@Component
+@Service
 public class ActiveSessionData {
 
     private Path rulesetPath;

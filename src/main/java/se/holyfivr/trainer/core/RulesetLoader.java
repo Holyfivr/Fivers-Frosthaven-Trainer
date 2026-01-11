@@ -1,4 +1,5 @@
-package se.holyfivr.trainer.service;
+// Flyttad till core-paketet
+package se.holyfivr.trainer.core;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -8,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import se.holyfivr.trainer.model.PlayerCharacter;
@@ -21,7 +21,6 @@ import se.holyfivr.trainer.model.PlayerCharacter;
 /*                                                                                               */
 /* ============================================================================================= */
 
-@Component
 @Service
 public class RulesetLoader {
 

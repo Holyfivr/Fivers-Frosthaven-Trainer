@@ -7,6 +7,7 @@
     <title>Document</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/css/menu.css}">
+    <link rel="stylesheet" th:href="@{/css/modal.css}">
     <script th:src="@{/js/script.js}" type="text/javascript" defer></script>
     <script th:src="@{/js/copy.js}" type="text/javascript" defer></script>
 </head>
@@ -193,87 +194,10 @@
             </li>
         </ul>
     </nav>
-    <!-- Generic Confirmation Modal -->
-    <div id="confirmationModal" style="opacity: 0;"></div>
 
-<!------------------------------------------------------ FILE MODALS------------------------------------------------------------->
-    <template id="backupTemplate">
-        <form id="createBackupForm" th:action="@{/create-backup}" onsubmit="registerPendingAction('backupCreated')">
-            <br>
-            <div class="modal-text">Name your backup-file</div>
-            <br>
-            <div class="sidenote">(Any existing file with the same name will be replaced)</div>
-            <hr>
-            <div class="modal-content-div">
-                <input type="text" placeholder="filename" name="name">
-            </div>
-            <hr>
-            <div class="modal-content-div">
-                <input class="btn" type="submit" value="Create Backup">
-                <a class="btn" href="#" onclick="closeModal()">Close</a>
-            </div>
-        </form>
-    </template>
+    <div th:replace="~{fragments/modal-fragments :: modalFragments}"></div>
 
-    <template id="saveTemplate">
-        This will override the existing <b>Base.ruleset</b> file,<br>
-        even if you are currently working on a backup-file<br><br>
-        <br>
-        <a class="btn" id="confirmSaveLink" th:href="@{/save}" onclick="registerPendingAction('rulesetSaved')">Save</a>
-        <a class="btn" href="#" onclick="closeModal()">Close</a>
-    </template>
 
-<!------------------------------------------------------ CHARACTER MODALS ------------------------------------------------------------->
-    <template id="maxHpTemplate">
-        <h2>Are you sure?</h2>
-        <span>This will set all characters HP to 99</span><br><br>
-        <a class="btn" th:href="@{/maxhp}" onclick="closeModal();registerPendingAction('hpMaxed')">I am sure</a>
-        <a class="btn" href="#" onclick="closeModal()">Nevermind</a>
-    </template>
-
-    <template id="maxCardsTemplate">
-        <h2>Are you sure?</h2>
-        <span>This will set all characters max <br>ability cards in battle to 20.</span><br><br>
-        <a class="btn" th:href="@{/maxcards}" onclick="closeModal();registerPendingAction('cardsMaxed')">I am sure</a>
-        <a class="btn" href="#" onclick="closeModal()">Nevermind</a>
-    </template>
-
-<!------------------------------------------------------ ITEM MODALS ------------------------------------------------------------->
-
-    <div id="itemModal" style="opacity: 0;">
-        <a class="X" onclick="closeModal()">X</a>
-        <div id="itemModalTitle"></div>
-        <form th:action="@{/set-item-value}" target="contentFrame" method="get">
-            <input type="hidden" id="actionInput" name="action">
-            <input id="itemModalInput" name="value" type="number" required>
-            <hr>
-            <input id="itemModalSubmitBtn" type="submit" value="Apply">
-        </form>
-        <div id="itemModalContent"></div>
-    </div>
-
-<!------------------------------------------------------ ENABLE STARTERS ------------------------------------------------------------->
-
-    <template id="enableAllTemplate">
-        <i>*not all characters can be enabled safely yet</i><br>
-        <b>Make the following characters available from start:</b>
-        <div style="text-align: left; width: 400px; margin: 0 auto;">
-            <ul>
-                <li>Pyroclast</li>
-                <li>Snowdancer</li>
-                <li>Frozen Fist</li>
-                <li>Trapper</li>
-                <li>Hive</li>
-            </ul>
-        </div>
-
-        <span style="color: red; font-size: 14px;"><b>Warning</b><br>This is experimental and not extensively tested.
-            Enabling new starting characters may cause the game to behave in unexpected ways, or lock you out of quests
-            in the game. Use at your own discretion.</span><br><br>
-        <a class="warning-btn btn" th:href="@{/enablecharacters}"
-            onclick="closeModal();registerPendingAction('charactersEnabled')">I understand</a>
-        <a class="btn" href="#" onclick="closeModal()">Nevermind</a>
-    </template>
     <div id="footer">If you encounter any errors or the program doesn't work, place an issue on <a href="#" class="btn"
             style="border: none;"
             onclick="copyToClipboard('https://github.com/Holyfivr/Fivers-Frosthaven-Trainer/')">https://github.com/Holyfivr/Fivers-Frosthaven-Trainer/</a>

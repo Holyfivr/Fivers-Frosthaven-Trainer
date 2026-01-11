@@ -118,6 +118,20 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    /* Makes sure clicked items stay selected */
+    const itemListContainer = document.getElementById('itemListContainer');
+    if (itemListContainer) {
+        itemListContainer.addEventListener('click', function(e) {
+            const td = e.target.closest('td');
+            if (td) {
+                // Clear previous selection
+                itemListContainer.querySelectorAll('.selected').forEach(element => element.classList.remove('selected'));
+                // Set new selection
+                td.classList.add('selected');
+            }
+        });
+    }
 });
 
 // Disable infusion and consume selectors if set to 'Any'

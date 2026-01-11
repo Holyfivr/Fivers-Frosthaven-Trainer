@@ -1,4 +1,5 @@
-package se.holyfivr.trainer.service;
+// Flyttad till core-paketet
+package se.holyfivr.trainer.core;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

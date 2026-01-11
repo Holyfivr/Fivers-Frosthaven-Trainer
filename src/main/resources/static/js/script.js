@@ -1,153 +1,193 @@
-const confirmationModal = document.getElementById("confirmationModal");
-const itemModalInput = document.getElementById("itemModalInput");
+// ==========================================
+//  TOAST NOTIFICATIONS
+// ==========================================
 
-// Function to handle pending actions (save to storage)
-// this is used when redirecting after an action to show a success message
+let toastTimeout;
+
+function showToast(message, isError = false) {
+    const toast = document.getElementById("toastNotification");
+    if (!toast) return;
+
+    // Clear existing timer if a new toast is shown immediately
+    if (toastTimeout) clearTimeout(toastTimeout);
+
+    toast.innerText = message;
+    
+    // Style adjustments for error vs success
+    if (isError) {
+        toast.style.backgroundColor = "#d32f2f"; // Red
+    } else {
+        toast.style.backgroundColor = "#234C6A"; // Default Blue
+    }
+
+    // Show
+    toast.style.opacity = "1";
+    
+    // Hide after 3 seconds
+    toastTimeout = setTimeout(() => {
+        toast.style.opacity = "0";
+    }, 3000);
+}
+
 function registerPendingAction(actionName) {
     sessionStorage.setItem("pendingAction", actionName);
 }
 
-// Function to handle what to show in the confirmation modal (Success messages)
 function showSuccessMessage(action) {
     let message = "";
     switch (action) {
         case "fileLoaded":
-            {
-                const rulesetLoadedCheck = document.getElementById("rulesetLoadedCheck");
-
-                // Check rulesetLoadedCheck if needed, or just trust the action
-                // Set message based on rulesetLoadedCheck value
-                if (rulesetLoadedCheck?.value === "true") message = "Ruleset Loaded Successfully!";
-                break;
-            }
-        case "backupCreated":
-            message = "Backup Created Successfully!";
+            const rulesetLoadedCheck = document.getElementById("rulesetLoadedCheck");
+            if (rulesetLoadedCheck?.value === "true") message = "Ruleset Loaded Successfully!";
             break;
-        case "backupRestored":
-            message = "Original Backup Restored!";
-            break;
-        case "rulesetSaved":
-            message = "Ruleset Saved Successfully!";
-            break;
-        case "linkCopied":
-            message = "Link Copied to Clipboard!";
-            break;
-        case "hpMaxed":
-            message = "All Characters Max HP Set to 99!";
-            break;
-        case "cardsMaxed":
-            message = "All Characters Max Cards Set to 20!";
-            break;
-        case "charactersEnabled":
-            message = "Characters Enabled from Start!";
-            break;
-        case "characterSaved":
-            message = "Character Saved Successfully!";
-            break;
-        case "itemUpdated":
-            message = "Items Updated Successfully!";
-            break;
+        case "backupCreated": message = "Backup Created Successfully!"; break;
+        case "backupRestored": message = "Original Backup Restored!"; break;
+        case "rulesetSaved": message = "Ruleset Saved Successfully!"; break;
+        case "linkCopied": message = "Link Copied to Clipboard!"; break;
+        case "hpMaxed": message = "All Characters Max HP Set to 99!"; break;
+        case "cardsMaxed": message = "All Characters Max Cards Set to 20!"; break;
+        case "charactersEnabled": message = "Characters Enabled from Start!"; break;
+        case "characterSaved": message = "Character Saved Successfully!"; break;
+        case "itemUpdated": message = "Items Updated Successfully!"; break;
     }
 
-    // Display the message in the modal
     if (message) {
-        confirmationModal.innerHTML = `<h3>${message}</h3>`;
-        confirmationModal.style.opacity = "1";
-        setTimeout(() => {
-            confirmationModal.style.opacity = "0";
-        }, 2000);
+        showToast(message);
     }
 }
 
-// Function to handle opening input modals (Backup Form / Save Confirm / etc.)
-function openModal(templateId) {
-    const template = document.getElementById(templateId);
-    if (template && confirmationModal) {
-        // If already open with same content, close it
-        if (confirmationModal.style.opacity === "1" && confirmationModal.dataset.activeTemplate === templateId) {
-            closeModal();
-            return;
-        }
-
-        confirmationModal.innerHTML = template.innerHTML;
-        confirmationModal.style.opacity = "1";
-        confirmationModal.style.pointerEvents = "all";
-        confirmationModal.dataset.activeTemplate = templateId;
-    }
-}
-
-function closeModal() {
-    if (confirmationModal) {
-        confirmationModal.style.opacity = "0";
-        confirmationModal.style.pointerEvents = "none";
-        confirmationModal.dataset.activeTemplate = "";
-        itemModal.style.opacity = "0";
-        itemModal.style.pointerEvents = "none";
-    }
-}
-
-// On Load: Check for pending actions and show success messages if there are any
+// Check on load
 const pendingAction = sessionStorage.getItem("pendingAction");
 if (pendingAction) {
     showSuccessMessage(pendingAction);
     sessionStorage.removeItem("pendingAction");
 }
 
-const itemModal = document.getElementById("itemModal");
-const itemModalTitle = document.getElementById("itemModalTitle");
-const actionInput = document.getElementById("actionInput");
+// ==========================================
+//  UNIVERSAL MODAL LOGIC
+// ==========================================
 
-function openItemModal(action, type) {
+const universalModal = document.getElementById("universalModal");
+const injectedContent = document.getElementById("injectedContent");
 
-    itemModal.style.opacity = "1";
-    itemModal.style.pointerEvents = "all";
-    itemModalTitle.innerText = `Set ${type} for all items`;
-    actionInput.value = action;
-    itemModalInput.type = "number";
-    itemModalInput.style.opacity = "1";
-    itemModalInput.style.pointerEvents = "all";
-    itemModalInput.value = "";
-    if (action === "setProsperityReq") {
-        itemModalInput.placeholder = "0-9";
-        itemModalInput.max = "9";
-        itemModalInput.min = "0";
-    } else if (action === "setTotalInGame"){
-        itemModalInput.placeholder = "1-9";
-        itemModalInput.max = "9";
-        itemModalInput.min = "1";
-    }
-    else if (action === "setGoldCost") {
-        itemModalInput.placeholder = "1-200";
-        itemModalInput.max = "200";
-        itemModalInput.min = "1";
-    } else if (action === "setUsage") {
-        itemModalInput.type = "text";
-        itemModalInput.value = "Unrestricted";
-        itemModalInput.style.opacity = "0";
-        itemModalInput.style.pointerEvents = "none";
-    }
-    else {
-        itemModalInput.placeholder = "1-99";
-        itemModalInput.max = "99";
-        itemModalInput.min = "1";
+/**
+ * Opens a modal by cloning a template.
+ * @param {string} templateId - ID of the <template> to use.
+ * @param {function} [setupCallback] - Optional function to run after content is injected (for setting values).
+ */
+function openModal(templateId, setupCallback) {
+    const template = document.getElementById(templateId);
+    if (!template || !universalModal) return;
+
+    // Clear previous content
+    injectedContent.innerHTML = "";
+    
+    // Clone and inject
+    const clone = template.content.cloneNode(true);
+    injectedContent.appendChild(clone);
+
+    // Run custom setup logic (e.g. setting input values)
+    if (typeof setupCallback === 'function') {
+        setupCallback(injectedContent);
     }
 
-    // Prevent typing negative numbers or 'e'
-    itemModalInput.onkeydown = function (e) {
-        if (e.key === '-' || e.key === 'e') {
-            e.preventDefault();
-        }
+    // Show modal
+    universalModal.style.display = "flex";
+    
+    // Use requestAnimationFrame to ensure the browser paints 'display: flex' 
+    // before applying the opacity transition.
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            if (universalModal) universalModal.style.opacity = "1";
+        });
+    });
+}
+
+function closeModal() {
+    if (!universalModal) return;
+    universalModal.style.opacity = "0";
+    setTimeout(() => {
+        universalModal.style.display = "none";
+        injectedContent.innerHTML = ""; // Clean up
+    }, 300);
+}
+
+// Close when clicking outside the content box
+window.onclick = function(event) {
+    if (event.target === universalModal) {
+        closeModal();
     }
 }
 
-// Handle item modal submission
-const itemModalForm = itemModal.querySelector("form");
-if (itemModalForm) {
-    itemModalForm.addEventListener('submit', function () {
-        // The submit event only fires if the form is valid.
-        // We close the modal immediately so the user sees the result in the iframe.
+// ==========================================
+//  ITEM MODAL HELPER
+// ==========================================
 
-        closeModal();
-        showSuccessMessage('itemUpdated')
+/**
+ * Opens the item form with specific configuration.
+ * @param {string} action - The action string (e.g. 'setGoldCost').
+ * @param {string} labelText - Text to display in the header (e.g. 'Gold Cost').
+ */
+function openItemModal(action, labelText) {
+    openModal("itemFormTemplate", (container) => {
+        // Set Title
+        const modalTitle = container.querySelector("#itemModalTitle");
+        if (modalTitle) modalTitle.innerText = `Set ${labelText} for all items`;
+
+        // Set Hidden Action Input (required for controller)
+        const actionInput = container.querySelector("#actionInput");
+        if (actionInput) actionInput.value = action;
+        
+        // Configure Value Input based on action
+        const valInput = container.querySelector("#itemModalInput");
+        if (valInput) {
+            valInput.value = ""; // Reset
+            
+            // Logic for specific attributes
+            if (action === "setProsperityReq") {
+                valInput.placeholder = "0-9";
+                valInput.max = "9";
+                valInput.min = "0";
+            } 
+            else if (action === "setTotalInGame") {
+                valInput.placeholder = "1-9";
+                valInput.max = "9";
+                valInput.min = "1";
+            }
+            else if (action === "setGoldCost") {
+                valInput.placeholder = "1-200";
+                valInput.max = "200";
+                valInput.min = "1";
+            } 
+            else if (action === "setUsage") {
+                // Special case: Usage is text, and we might default to "Unrestricted"
+                valInput.type = "text"; 
+                valInput.value = "Unrestricted";
+                // If we want to hide it completely (since it's just setting to 'Unrestricted'):
+                valInput.style.display = "none";
+            }
+            else {
+                // Default numbers
+                valInput.placeholder = "1-99";
+                valInput.max = "99";
+                valInput.min = "1";
+            }
+
+            // Prevent invalid chars for number inputs
+            if (valInput.type === "number") {
+                valInput.onkeydown = function(e) {
+                    if (e.key === '-' || e.key === 'e') e.preventDefault();
+                }
+            }
+        }
+
+        //  Attach submit listener to close modal automatically
+        const form = container.querySelector("form");
+        if (form) {
+            form.addEventListener("submit", () => {
+                closeModal();
+                showSuccessMessage('itemUpdated');
+            });
+        }
     });
 }

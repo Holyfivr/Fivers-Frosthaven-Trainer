@@ -9,6 +9,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import se.holyfivr.trainer.core.ActiveSessionData;
+import se.holyfivr.trainer.core.RulesetLoader;
+
+
 @Controller
 public class BackupManager {
     private static final String REDIRECT_START = "redirect:/start";

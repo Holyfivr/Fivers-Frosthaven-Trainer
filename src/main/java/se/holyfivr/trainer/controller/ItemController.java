@@ -12,89 +12,47 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import se.holyfivr.trainer.core.ActiveSessionData;
 import se.holyfivr.trainer.model.Item;
-import se.holyfivr.trainer.service.ActiveSessionData;
+import se.holyfivr.trainer.service.ItemService;
 
 
 @Controller
 public class ItemController {
 
-    ActiveSessionData activeSessionData;
+    private ActiveSessionData activeSessionData;
+    private ItemService itemService;
 
-    public ItemController(ActiveSessionData activeSessionData) {
+
+    public ItemController(ActiveSessionData activeSessionData, ItemService itemService) {
         this.activeSessionData = activeSessionData;
+        this.itemService = itemService;
     }
 
     @GetMapping("/items/{itemType}")
     public String showItemPage(Model model, @PathVariable("itemType") String itemType) {
-       Map<String, Item> itemList = activeSessionData.getItems();
-
-        if (itemType.equals("all")) {
-            model.addAttribute("category", "All Items");
-            model.addAttribute("itemList", itemList);
-            return "items";
-        }
-        
-        Map<String, Item> itemTypeList = new LinkedHashMap<>();
-        for (Item item : itemList.values()) {
-            if (item.slot != null && item.slot.equals(itemType)) {
-                itemTypeList.putIfAbsent(item.getItemName(), item);
-            }
-        }
-
+       
+        Map<String, Item> itemTypeList = itemService.getItemsByType(itemType);
         model.addAttribute("category", itemType);
         model.addAttribute("itemList", itemTypeList);
+
         return "items";
     }
 
     @GetMapping("/item-details/{itemId}")
     public String showItemDetails(Model model, @PathVariable("itemId") String itemId) {
-        System.err.println(itemId);
+
         Item item = activeSessionData.getItems().get(itemId);
         model.addAttribute("item", item);
+
         return "item-details";
     }
 
     @PostMapping("/save-item")
     public String saveItem(@ModelAttribute Item item, @RequestParam(value = "conditions", required = false) List<String> conditions) {
+       
         Item existingItem = activeSessionData.getItems().get(item.getStringId());
-
-        if (existingItem != null) {
-            existingItem.setCost                    (item.getCost());
-            existingItem.setTotalInGame             (item.getTotalInGame());
-            existingItem.setUsage                   (item.getUsage());
-            existingItem.setProsperityRequirement   (item.getProsperityRequirement());
-            existingItem.setConsumes                (item.getConsumes());
-            existingItem.setInfuses                 (item.getInfuses());
-            existingItem.setHeal                    (item.getHeal());
-            existingItem.setAttack                  (item.getAttack());
-            existingItem.setRange                   (item.getRange());
-            existingItem.setTarget                  (item.getTarget());
-            existingItem.setShield                  (item.getShield());
-            existingItem.setRetaliate               (item.getRetaliate());
-            existingItem.setMove                    (item.getMove());
-            existingItem.setOMove                   (item.getOMove());
-            existingItem.setAMove                   (item.getAMove());
-            existingItem.setPull                    (item.getPull());
-            existingItem.setPush                    (item.getPush());
-            existingItem.setJump                    (item.getJump());
-            existingItem.setShieldValue             (item.getShieldValue());
-            
-            
-
-
-            /* This is disabled for the forseeable future, until I can implement */
-            /* an "upgraded" version of the filler-banks that can use bytes from */
-            /* other blocks to avoid data corruption.                            */
-            /* 
-            if (conditions != null && !conditions.isEmpty()) {
-                existingItem.setConditions(conditions.toString());
-            } else {
-                existingItem.setConditions(null);
-            } */
-
-                
-        }
+        itemService.saveItem(existingItem, item);
 
         return "redirect:/item-details/" + item.getStringId();
     }

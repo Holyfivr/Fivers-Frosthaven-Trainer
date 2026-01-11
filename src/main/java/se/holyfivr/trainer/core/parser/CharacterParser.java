@@ -1,9 +1,10 @@
-package se.holyfivr.trainer.service.parser;
+package se.holyfivr.trainer.core.parser;
 
 import org.springframework.stereotype.Component;
 
+import se.holyfivr.trainer.core.ActiveSessionData;
 import se.holyfivr.trainer.model.PlayerCharacter;
-import se.holyfivr.trainer.service.ActiveSessionData;
+
 
 @Component
 public class CharacterParser {

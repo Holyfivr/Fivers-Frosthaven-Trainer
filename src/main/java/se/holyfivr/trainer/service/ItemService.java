@@ -30,7 +30,7 @@ public class ItemService {
         }
         Map<String, Item> itemTypeList = new LinkedHashMap<>();
         for (Item item : itemList.values()) {
-            if (item.slot != null && item.slot.equals(itemType)) {
+            if (item.getSlot() != null && item.getSlot().equals(itemType)) {
                 itemTypeList.putIfAbsent((item.getItemName()), item);
             }
         }

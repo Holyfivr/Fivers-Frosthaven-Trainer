@@ -1,0 +1,128 @@
+/* -------- TOP LEVEL ITEM -------- */
+.ability-menu-item {
+    position: relative;
+    padding: 10px 16px;
+    cursor: pointer;
+    text-align: center;
+    color: var(--color-cream);
+}
+
+.ability-menu-item:hover {
+    background-color: var(--color-cream);
+    color: var(--color-light-blue);
+}
+
+/* ------- DROPDOWN -------- */
+.ability-dropdown {
+    list-style: none;
+    margin: 0;
+    padding: 4px 0;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 150px;
+    background: var(--color-cream);
+    border: 1px solid #ccc;
+    display: none;
+    z-index: 200;
+}
+
+.ability-dropdown li {
+    display: flex;
+    cursor: pointer;
+    white-space: nowrap;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+}
+
+.ability-dropdown li a {
+    text-decoration: none;
+    color: var(--color-light-blue);
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s linear, transform 0.2s linear;
+}
+
+.ability-dropdown li:hover {
+    background-color: var(--color-light-blue);
+    color: var(--color-cream);
+    border-radius: 3px;
+    box-shadow: 1px 1px 2px black;
+}
+
+.ability-dropdown li:hover a {
+    color: var(--color-cream);
+}
+
+/* -------- SUB-SUB-DROPDOWN -------- */
+.ability-sub-dropdown {
+    list-style: none;
+    margin: 0;
+    padding: 4px 0;
+    position: absolute;
+    top: 0;
+    left: 100%;
+    min-width: 140px;
+    background: var(--color-cream);
+    border: 1px solid #ccc;
+    display: none;
+    z-index: 300;
+}
+
+.has-submenu:hover > .ability-sub-dropdown {
+    display: block;
+}
+
+.ability-sub-dropdown li {
+    color: var(--color-light-blue);
+    display: flex;
+    cursor: pointer;
+    white-space: nowrap;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+}
+
+.ability-sub-dropdown li a {
+    text-decoration: none;
+    color: var(--color-light-blue);
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s linear, transform 0.2s linear;
+}
+
+.ability-sub-dropdown li:hover {
+    background-color: var(--color-light-blue);
+    color: var(--color-cream);
+    border-radius: 3px;
+    box-shadow: 1px 1px 2px black;
+}
+
+.ability-sub-dropdown li:hover a {
+    color: var(--color-cream);
+}
+
+/* Show dropdown on hover */
+.ability-menu-item:hover > .ability-dropdown {
+    display: block;
+}
+
+/* Inactive states (optional, matches your other inactive styles) */
+.ability-menu-item.inactive {
+    pointer-events: none;
+    background-color: var(--color-light-blue);
+    color: rgba(109, 147, 157, 0.596);
+}
+
+.ability-dropdown li.inactive {
+    pointer-events: none;
+    background-color: var(--color-cream);
+    color: rgba(129, 154, 161, 0.326);
+}

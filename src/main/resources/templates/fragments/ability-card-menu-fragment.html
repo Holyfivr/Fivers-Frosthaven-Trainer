@@ -3,20 +3,26 @@
 
 <body>
 
-    <li th:classappend="${!rulesetLoaded} ? 'inactive'" th:fragment="ability-card-menu">
+    <li th:classappend="${!rulesetLoaded} ? 'inactive'" th:fragment="ability-card-menu" class="ability-menu-item">
         Ability Cards
-        <ul class="dropdown">
-            <li>
+        <ul class="ability-dropdown">
+            <li class="has-submenu">
                 <a th:href="@{/ability-cards/all}" target="contentFrame">All Cards</a>
+                <ul class="ability-sub-dropdown">
+                    <li>1</li>
+                    <li>2</li>
+                    <li>3</li>
+                </ul>
             </li>
-            <li th:each="abilityCard : ${abilityCardClasses}"><a target="contentFrame"
-                    th:href="@{/ability-cards/{abilityCard}(abilityCard = ${abilityCard})}">
-                    <div th:text="${abilityCard}"> </div>
+
+            <li th:each="abilityCard : ${abilityCardClasses}">
+                <a target="contentFrame" th:href="@{/ability-cards/{abilityCard}(abilityCard=${abilityCard})}">
+                    <div th:text="${abilityCard}"></div>
                 </a>
             </li>
         </ul>
-
     </li>
+
 
 </body>
 

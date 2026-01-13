@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+    <li th:fragment="file-menu">
+        File
+        <ul class="dropdown">
+            <!-- sends request to open file endpoint and registers a pending action to notify user when file is loaded -->
+            <li><a id="openRulesetLink" th:href="@{/open-file}" onclick="registerPendingAction('fileLoaded')">
+                    <div>Open Ruleset</div>
+                </a></li>
+            <hr>
+            <!-- These options are inactive unless a file is loaded -->
+            <li th:classappend="${!rulesetLoaded} ? 'inactive-dropdown'"><a id="newBackup"
+                    onclick="openModal('backupTemplate')">
+                    <div>Create Backup</div>
+                </a></li>
+            <li th:classappend="${!rulesetLoaded} ? 'inactive-dropdown'"><a id="restoreBackupLink"
+                    th:href="@{/restore-backup}" onclick="registerPendingAction('backupRestored')">
+                    <div>Restore Original</div>
+                </a></li>
+            <li th:classappend="${!rulesetLoaded} ? 'inactive-dropdown'"><a id="saveRuleset"
+                    onclick="openModal('saveTemplate')">
+                    <div>Save Ruleset</div>
+                </a></li>
+            <!-------------------------------------------------------->
+            <hr>
+            <li><a th:href="@{/exit}">
+                    <div>Exit Program</div>
+                </a></li>
+        </ul>
+    </li>
+
+</body>
+
+</html>

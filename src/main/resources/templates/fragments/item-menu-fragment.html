@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+    <li th:classappend="${!rulesetLoaded} ? 'inactive'" th:fragment="item-menu">
+        Items
+        <ul class="dropdown">
+            <li>
+                <a th:href="@{/items/all}" target="contentFrame">
+                    <div>All Items</div>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/items/OneHand}" target="contentFrame">
+                    <div>One-Handed</div>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/items/TwoHand}" target="contentFrame">
+                    <div>Two-Handed</div>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/items/Head}" target="contentFrame">
+                    <div>Head</div>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/items/Body}" target="contentFrame">
+                    <div>Body</div>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/items/Legs}" target="contentFrame">
+                    <div>Legs</div>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/items/SmallItem}" target="contentFrame">
+                    <div>Small Items</div>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/items/QuestItem}" target="contentFrame">
+                    <div>Quest Items</div>
+                </a>
+            </li>
+            <hr>
+            <!---------------------------------------->
+            <li id="allItemsSeparator">
+                <div>All Items</div>
+            </li>
+            <li>
+                <a id="setGoldCost" onclick="openItemModal('setGoldCost', 'gold cost')">
+                    <div>Set Goldcost</div>
+                </a>
+            </li>
+            <li>
+                <a id="setDamage" onclick="openItemModal('setDamage', 'damage')">
+                    <div>Set Damage</div>
+                </a>
+            </li>
+            <li>
+                <a id="setRange" onclick="openItemModal('setRange', 'range')">
+                    <div>Set Range</div>
+                </a>
+            </li>
+            <li>
+                <a id="setShield" onclick="openItemModal('setShield', 'shield')">
+                    <div>Set Shield</div>
+                </a>
+            </li>
+            <li>
+                <a id="setHeal" onclick="openItemModal('setHeal', 'heal')">
+                    <div>Set Heal</div>
+                </a>
+            </li>
+            <li>
+                <a id="setRetaliate" onclick="openItemModal('setRetaliate', 'retaliate')">
+                    <div>Set Retaliate</div>
+                </a>
+            </li>
+            <li>
+                <a id="setMove" onclick="openItemModal('setMovement', 'movement')">
+                    <div>Set Movement</div>
+                </a>
+            </li>
+            <li>
+                <a id="setUsage" onclick="openItemModal('setUsage', 'usage to \'unrestricted\' ')">
+                    <div>Set Usage</div>
+                </a>
+            </li>
+            <li>
+                <a id="setTotalInGame" onclick="openItemModal('setTotalInGame', 'total available amount')">
+                    <div>Set Total Available</div>
+                </a>
+            </li>
+            <li>
+                <a id="setProsperityReq" onclick="openItemModal('setProsperityReq', 'prosperity requirement')">
+                    <div>Set Prosperity Req</div>
+                </a>
+            </li>
+        </ul>
+    </li>
+
+</body>
+
+</html>

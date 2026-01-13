@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import se.holyfivr.trainer.model.AbilityCard;
 import se.holyfivr.trainer.model.Item;
 import se.holyfivr.trainer.model.PlayerCharacter;
 
@@ -52,9 +53,9 @@ public class ActiveSessionData {
         characters.clear();
     }
 
-    /* =============================== */
+    /* ============================= */
     /* STORE ALL UNLOCKED CHARACTERS */
-    /* =============================== */
+    /* ============================= */
     private final List<String> unlockedCharacters = new ArrayList<>();
 
     public List<String> getUnlockedCharacterList() {
@@ -71,9 +72,9 @@ public class ActiveSessionData {
         }
     }
 
-    /* ================= */
+    /* =============== */
     /* STORE ALL ITEMS */
-    /* ================= */
+    /* =============== */
     private final Map<String, Item> items = new LinkedHashMap<>();
 
     public Map<String, Item> getItems() {
@@ -195,4 +196,178 @@ public class ActiveSessionData {
         }
     }
 
+    /* ====================== */
+    /* STORE ALL ABILITYCARDS */
+    /* ====================== */
+
+    private final Map<String, AbilityCard> abilityCards = new LinkedHashMap<>();
+
+    public Map<String, AbilityCard> getAbilityCards() {
+        return abilityCards;
+    }
+
+    public List<String> getCardClasses() {
+
+        List<String> classList = new ArrayList<>();
+        for (AbilityCard card : abilityCards.values()) {
+            if (!classList.contains(card.getClassName())) {
+                classList.add(card.getClassName());
+            }
+        }
+        return classList;
+    }
+
+    public void addAbilityCard(AbilityCard abilityCard) {
+        if (abilityCard.getName() != null) {
+            abilityCards.putIfAbsent(abilityCard.getName(), abilityCard);
+        }
+    }
+
+    public void clearAbilityCards() {
+        abilityCards.clear();
+    }
+
+    public void setAbilityCardAttack(String value) {
+        for (AbilityCard abilityCard : abilityCards.values()) {
+            if (abilityCard.getAttack() != null) {
+                abilityCard.setAttack(value);
+            }
+        }
+    }
+
+    public void setAbilityCardHeal(String value) {
+        for (AbilityCard abilityCard : abilityCards.values()) {
+            if (abilityCard.getHeal() != null) {
+                abilityCard.setHeal(value);
+            }
+        }
+    }
+
+    public void setAbilityCardHealth(String value) {
+        for (AbilityCard abilityCard : abilityCards.values()) {
+            if (abilityCard.getHealth() != null) {
+                abilityCard.setHealth(value);
+            }
+        }
+    }
+
+    public void setAbilityCardDamage(String value) {
+        for (AbilityCard abilityCard : abilityCards.values()) {
+            if (abilityCard.getDamage() != null) {
+                abilityCard.setDamage(value);
+            }
+        }
+    }
+
+    public void setAbilityCardMove(String value) {
+        for (AbilityCard abilityCard : abilityCards.values()) {
+            if (abilityCard.getMove() != null) {
+                abilityCard.setMove(value);
+            }
+        }
+    }
+
+    public void setAbilityCardRange(String value) {
+        for (AbilityCard abilityCard : abilityCards.values()) {
+            if (abilityCard.getRange() != null) {
+                abilityCard.setRange(value);
+            }
+        }
+    }
+
+    public void setAbilityCardShield(String value) {
+        for (AbilityCard abilityCard : abilityCards.values()) {
+            if (abilityCard.getShield() != null) {
+                abilityCard.setShield(value);
+            }
+        }
+    }
+
+    public void setAbilityCardTarget(String value) {
+        for (AbilityCard abilityCard : abilityCards.values()) {
+            if (abilityCard.getTarget() != null) {
+                abilityCard.setTarget(value);
+            }
+        }
+    }
+
+    public void setAbilityCardPull(String value) {
+        for (AbilityCard abilityCard : abilityCards.values()) {
+            if (abilityCard.getPull() != null) {
+                abilityCard.setPull(value);
+            }
+        }
+    }
+
+    public void setAbilityCardPush(String value) {
+        for (AbilityCard abilityCard : abilityCards.values()) {
+            if (abilityCard.getPush() != null) {
+                abilityCard.setPush(value);
+            }
+        }
+    }
+
+    public void setAbilityCardJump(String value) {
+        for (AbilityCard abilityCard : abilityCards.values()) {
+            if (abilityCard.getJump() != null) {
+                abilityCard.setJump(value);
+            }
+        }
+    }
+
+    public void setAbilityCardRetaliate(String value) {
+        for (AbilityCard abilityCard : abilityCards.values()) {
+            if (abilityCard.getRetaliate() != null) {
+                abilityCard.setRetaliate(value);
+            }
+        }
+    }
+
+    public void setAbilityCardPierce(String value) {
+        for (AbilityCard abilityCard : abilityCards.values()) {
+            if (abilityCard.getPierce() != null) {
+                abilityCard.setPierce(value);
+            }
+        }
+    }
+
+    public void setAbilityCardInitiative(String value) {
+        for (AbilityCard abilityCard : abilityCards.values()) {
+            if (abilityCard.getInitiative() != null) {
+                abilityCard.setInitiative(value);
+            }
+        }
+    }
+
+    public void setAbilityCardDiscard(String value) {
+        for (AbilityCard abilityCard : abilityCards.values()) {
+            if (abilityCard.getDiscard() != null) {
+                abilityCard.setDiscard(value);
+            }
+        }
+    }
+
+    public void setAbilityCardConsumes(String value) {
+        for (AbilityCard abilityCard : abilityCards.values()) {
+            if (abilityCard.getConsumes() != null) {
+                abilityCard.setConsumes(value);
+            }
+        }
+    }
+
+    public void setAbilityCardInfuses(String value) {
+        for (AbilityCard abilityCard : abilityCards.values()) {
+            if (abilityCard.getInfuses() != null) {
+                abilityCard.setInfuses(value);
+            }
+        }
+    }
+
+    public void setAbilityCardXP(String value) {
+        for (AbilityCard abilityCard : abilityCards.values()) {
+            if (abilityCard.getXP() != null) {
+                abilityCard.setXP(value);
+            }
+        }
+    }
 }

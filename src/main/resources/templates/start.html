@@ -19,182 +19,30 @@
 
     <nav class="menu-bar">
         <ul class="menu">
-            <li>
-                File
-                <ul class="dropdown">
-                    <!-- sends request to open file endpoint and registers a pending action to notify user when file is loaded -->
-                    <li><a id="openRulesetLink" th:href="@{/open-file}" onclick="registerPendingAction('fileLoaded')">
-                            <div>Open Ruleset</div>
-                        </a></li>
-                    <hr>
-                    <!-- These options are inactive unless a file is loaded -->
-                    <li th:classappend="${!rulesetLoaded} ? 'inactive-dropdown'"><a id="newBackup"
-                            onclick="openModal('backupTemplate')">
-                            <div>Create Backup</div>
-                        </a></li>
-                    <li th:classappend="${!rulesetLoaded} ? 'inactive-dropdown'"><a id="restoreBackupLink"
-                            th:href="@{/restore-backup}" onclick="registerPendingAction('backupRestored')">
-                            <div>Restore Original</div>
-                        </a></li>
-                    <li th:classappend="${!rulesetLoaded} ? 'inactive-dropdown'"><a id="saveRuleset"
-                            onclick="openModal('saveTemplate')">
-                            <div>Save Ruleset</div>
-                        </a></li>
-                    <!-------------------------------------------------------->
-                    <hr>
-                    <li><a th:href="@{/exit}">
-                            <div>Exit Program</div>
-                        </a></li>
-                </ul>
-            </li>
-            <li th:classappend="${!rulesetLoaded} ? 'inactive'">
-                Characters
-                <ul class="dropdown">
-                    <!-- Scans the provided map-model from the start controller-->
-                    <li th:each="character : ${characterMap.values()}"><a target="contentFrame"
-                            th:href="@{/character/{character}(character = ${character.name})}">
-                            <div th:text="${character.getDisplayName()}"> </div>
-                        </a></li>
-                    <hr>
-                    <!-- inactive unless opened file -->
-                    <li><a id="openMaxCards" onclick="openModal('maxCardsTemplate')">
-                            <div>Max Cards</div>
-                        </a></li>
-                    <li><a id="openMaxHp" onclick="openModal('maxHpTemplate')">
-                            <div>Max HP</div>
-                        </a></li>
-                    <li><a id="enableAll" onclick="openModal('enableAllTemplate')">
-                            <div>Enable All*</div>
-                        </a></li>
-                    <!--------------------------------->
-                </ul>
-            </li>
-            <!-- inactive unless opened file -->
-            <li th:classappend="${!rulesetLoaded} ? 'inactive'">
-                Items
-                <ul class="dropdown">
-                    <li>
-                        <a th:href="@{/items/all}" target="contentFrame">
-                            <div>All Items</div>
-                        </a>
-                    </li>
-                    <li>
-                        <a th:href="@{/items/OneHand}" target="contentFrame">
-                            <div>One-Handed</div>
-                        </a>
-                    </li>
-                    <li>
-                        <a th:href="@{/items/TwoHand}" target="contentFrame">
-                            <div>Two-Handed</div>
-                        </a>
-                    </li>
-                    <li>
-                        <a th:href="@{/items/Head}" target="contentFrame">
-                            <div>Head</div>
-                        </a>
-                    </li>
-                    <li>
-                        <a th:href="@{/items/Body}" target="contentFrame">
-                            <div>Body</div>
-                        </a>
-                    </li>
-                    <li>
-                        <a th:href="@{/items/Legs}" target="contentFrame">
-                            <div>Legs</div>
-                        </a>
-                    </li>
-                    <li>
-                        <a th:href="@{/items/SmallItem}" target="contentFrame">
-                            <div>Small Items</div>
-                        </a>
-                    </li>
-                    <li>
-                        <a th:href="@{/items/QuestItem}" target="contentFrame">
-                            <div>Quest Items</div>
-                        </a>
-                    </li>
-                    <hr>
-                    <!---------------------------------------->
-                    <li id="allItemsSeparator">
-                        <div>All Items</div>
-                    </li>
-                    <li>
-                        <a id="setGoldCost" onclick="openItemModal('setGoldCost', 'gold cost')">
-                            <div>Set Goldcost</div>
-                        </a>
-                    </li>
-                    <li>
-                        <a id="setDamage" onclick="openItemModal('setDamage', 'damage')">
-                            <div>Set Damage</div>
-                        </a>
-                    </li>
-                    <li>
-                        <a id="setRange" onclick="openItemModal('setRange', 'range')">
-                            <div>Set Range</div>
-                        </a>
-                    </li>
-                    <li>
-                        <a id="setShield" onclick="openItemModal('setShield', 'shield')">
-                            <div>Set Shield</div>
-                        </a>
-                    </li>
-                    <li>
-                        <a id="setHeal" onclick="openItemModal('setHeal', 'heal')">
-                            <div>Set Heal</div>
-                        </a>
-                    </li>
-                    <li>
-                        <a id="setRetaliate" onclick="openItemModal('setRetaliate', 'retaliate')">
-                            <div>Set Retaliate</div>
-                        </a>
-                    </li>
-                    <li>
-                        <a id="setMove" onclick="openItemModal('setMovement', 'movement')">
-                            <div>Set Movement</div>
-                        </a>
-                    </li>
-                    <li>
-                        <a id="setUsage" onclick="openItemModal('setUsage', 'usage to \'unrestricted\' ')">
-                            <div>Set Usage</div>
-                        </a>
-                    </li>
-                    <li>
-                        <a id="setTotalInGame" onclick="openItemModal('setTotalInGame', 'total available amount')">
-                            <div>Set Total Available</div>
-                        </a>
-                    </li>
-                    <li>
-                        <a id="setProsperityReq" onclick="openItemModal('setProsperityReq', 'prosperity requirement')">
-                            <div>Set Prosperity Req</div>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            <li class="inactive">
-                Ability Cards
-                <ul class="dropdown">
 
-                </ul>
-            </li>
-            <li>
-                More
-                <ul class="dropdown">
-                    <li><a th:href="@{/html/about.html}" target="contentFrame">
-                            <div>About</div>
-                        </a></li>
-                    <li><a th:href="@{/html/how.html}" target="contentFrame">
-                            <div>How it works</div>
-                        </a></li>
-                    <li><a th:href="@{/html/why.html}" target="contentFrame">
-                            <div>Why</div>
-                        </a></li>
+            <!-------------------------------------------------------------------------------->
+            <!-- Character, item, and ability card menus are inactive unless file is opened -->
+            <!-------------------------------------------------------------------------------->
 
-                    <!--------------------------------->
-                </ul>
-            </li>
+            <!-- File menu fragment -->
+            <li th:replace="fragments/file-menu-fragment :: file-menu"></li>
+
+            <!-- Character menu fragment -->
+            <li th:replace="fragments/character-menu-fragment :: character-menu"></li>
+
+            <!-- Item menu fragment -->
+            <li th:replace="fragments/item-menu-fragment :: item-menu"></li>
+
+            <!-- Ability Card menu fragment -->
+            <li th:replace="fragments/ability-card-menu-fragment :: ability-card-menu"></li>
+
+            <!-- More menu fragment-->
+            <li th:replace="fragments/more-menu-fragment :: more-menu"></li>
+
         </ul>
     </nav>
 
+    <!-- Modal and toast fragments-->
     <div th:replace="~{fragments/modal-fragments :: modalFragments}"></div>
 
 

@@ -6,8 +6,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import org.springframework.web.bind.annotation.RequestParam;
 
-
-
 import javafx.application.Platform;
 import se.holyfivr.trainer.core.ActiveSessionData;
 import se.holyfivr.trainer.core.RulesetLoader;
@@ -18,9 +16,6 @@ public class StartController {
     private final ActiveSessionData activeSessionData;
     private final RulesetLoader rulesetLoader;
 
-   
-
-
     public StartController(ActiveSessionData activeSessionData, RulesetLoader rulesetLoader) {
         this.activeSessionData = activeSessionData;
         this.rulesetLoader = rulesetLoader;
@@ -28,14 +23,17 @@ public class StartController {
 
     @GetMapping("/start")
     public String getStart(Model model, @RequestParam(required = false) boolean loaded) {
-        
+
         // loads the character map into the model
         model.addAttribute("characterMap", activeSessionData.getCharacters());
-        
+
+        // loads card classes to be used in the ability card dropdown
+        model.addAttribute("abilityCardClasses", activeSessionData.getCardClasses());
+
         // Sends info to frontend on whether a file is loaded or not
         // if not, appropriate menu-options are disabled
         model.addAttribute("rulesetLoaded", activeSessionData.getRulesetPath() != null);
-        
+
         // If the file was just loaded, we show the success modal
         if (loaded) {
             model.addAttribute("showSuccessModal", true);
@@ -43,13 +41,13 @@ public class StartController {
 
         return "start";
     }
-    
+
     @GetMapping("/save")
     public String saveRuleset() {
         rulesetLoader.saveRuleset();
         return "redirect:/start";
     }
-    
+
     @GetMapping("/exit")
     public String exitProgram() {
         Platform.runLater(() -> {

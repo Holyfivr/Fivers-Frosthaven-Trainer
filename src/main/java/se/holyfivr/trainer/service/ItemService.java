@@ -24,12 +24,12 @@ public class ItemService {
     /* Retrieves a map of all items of a specific category */
     /* =================================================== */
     public Map<String, Item> getItemsByType(String itemType) {
-        Map<String, Item> itemList = activeSessionData.getItems();
+        Map<String, Item> itemMap = activeSessionData.getItems();
         if ("all".equals(itemType)) {
-            return itemList;
+            return itemMap;
         }
         Map<String, Item> itemTypeList = new LinkedHashMap<>();
-        for (Item item : itemList.values()) {
+        for (Item item : itemMap.values()) {
             if (item.getSlot() != null && item.getSlot().equals(itemType)) {
                 itemTypeList.putIfAbsent((item.getItemName()), item);
             }

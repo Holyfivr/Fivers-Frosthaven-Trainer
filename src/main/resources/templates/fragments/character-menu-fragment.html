@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+    <li th:classappend="${!rulesetLoaded} ? 'inactive'" th:fragment="character-menu">
+        Characters
+        <ul class="dropdown">
+            <!-- Scans the provided map-model from the start controller-->
+            <li th:each="character : ${characterMap.values()}"><a target="contentFrame"
+                    th:href="@{/character/{character}(character = ${character.name})}">
+                    <div th:text="${character.getDisplayName()}"> </div>
+                </a>
+            </li>
+            <hr>
+            <!-- inactive unless opened file -->
+            <li><a id="openMaxCards" onclick="openModal('maxCardsTemplate')">
+                    <div>Max Cards</div>
+                </a></li>
+            <li><a id="openMaxHp" onclick="openModal('maxHpTemplate')">
+                    <div>Max HP</div>
+                </a></li>
+            <li><a id="enableAll" onclick="openModal('enableAllTemplate')">
+                    <div>Enable All*</div>
+                </a></li>
+            <!--------------------------------->
+        </ul>
+    </li>
+
+
+
+</body>
+
+</html>

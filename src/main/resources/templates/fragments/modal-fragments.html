@@ -117,7 +117,7 @@
         -->
         <template id="itemFormTemplate">
             <h3 id="itemModalTitle">Set Value</h3>
-            <form th:action="@{/set-item-value}" target="contentFrame" method="get">
+            <form th:action="@{/set-all-item-values}" target="contentFrame" method="get">
 
                 <!-- Corresponds to @RequestParam String action -->
                 <input type="hidden" id="actionInput" name="action">

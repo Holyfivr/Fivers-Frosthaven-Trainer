@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+    <li th:classappend="${!rulesetLoaded} ? 'inactive'" th:fragment="ability-card-menu">
+        Ability Cards
+        <ul class="dropdown">
+            <li>
+                <a th:href="@{/ability-cards/all}" target="contentFrame">All Cards</a>
+            </li>
+            <li th:each="abilityCard : ${abilityCardClasses}"><a target="contentFrame"
+                    th:href="@{/ability-cards/{abilityCard}(abilityCard = ${abilityCard})}">
+                    <div th:text="${abilityCard}"> </div>
+                </a>
+            </li>
+        </ul>
+
+    </li>
+
+</body>
+
+</html>

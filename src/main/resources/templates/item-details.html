@@ -4,14 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link rel="stylesheet" th:href="@{/css/items.css}">
-    <script th:src="@{/js/items.js}" type="text/javascript" defer></script>
+    <link rel="stylesheet" th:href="@{/css/objects.css}">
+    <script th:src="@{/js/objects.js}" type="text/javascript" defer></script>
 </head>
 
 <body style="overflow: auto !important;">
-    <div id="itemDetailsPane">
+    <div id="objectDetailsPane">
         <center>
             <h1 th:text="${item.itemName}"></h1>
             <div>Type: <span type="text" th:text="${item.slot}"></span>
@@ -24,13 +23,13 @@
             <form th:action="@{/save-item}" method="post">
                 <input type="hidden" name="stringId" th:value="${item.stringId}">
 
-                <table id="selected-item-table">
+                <table id="selected-object-table">
                     <tr th:if="${item.cost != null and item.cost != '0'}">
-                        <td class="item-attribute-td">Cost: </td>
+                        <td class="object-attribute-td">Cost: </td>
                         <td><input type="number" name="cost" th:value="${item.cost}" max="200" min="1"></td>
                     </tr>
                     <tr>
-                        <td class="item-attribute-td">Total in game: </td>
+                        <td class="object-attribute-td">Total in game: </td>
                         <td>
                             <select name="totalInGame">
                                 <option value="1" th:selected="${item.totalInGame == '1'}">1</option>
@@ -45,7 +44,7 @@
                             </select>
                     </tr>
                     <tr th:if="${item.usage != 'Flip'}">
-                        <td class="item-attribute-td">Usage: </td>
+                        <td class="object-attribute-td">Usage: </td>
                         <td> <select name="usage">
                                 <option value="Spent" th:selected="${item.usage == 'Spent'}">Spent</option>
                                 <option value="Consumed" th:selected="${item.usage == 'Consumed'}">Consumed</option>
@@ -54,7 +53,7 @@
                             </select></td>
                     </tr>
                     <tr th:if="${item.prosperityRequirement != null}">
-                        <td class="item-attribute-td">Prosperity Requirement: </td>
+                        <td class="object-attribute-td">Prosperity Requirement: </td>
                         <td>
                             <select name="prosperityRequirement">
                                 <option value="0" th:selected="${item.prosperityRequirement == '0'}">0</option>
@@ -71,7 +70,7 @@
                         </td>
                     </tr>
                     <tr th:if="${item.infuses != null}">
-                        <td class="item-attribute-td">Infuses: </td>
+                        <td class="object-attribute-td">Infuses: </td>
                         <td>
                             <select name="infuses" id="infusion">
                                 <option th:selected="${item.infuses == 'Any'}" value="Any">Any</option>
@@ -85,7 +84,7 @@
                         </td>
                     </tr>
                     <tr th:if="${item.consumes != null}">
-                        <td class="item-attribute-td">Consumes: </td>
+                        <td class="object-attribute-td">Consumes: </td>
                         <td>
                             <select name="consumes" id="consume">
                                 <option th:selected="${item.consumes == 'Any'}" value="Any">Any</option>
@@ -99,71 +98,66 @@
                         </td>
                     </tr>
                     <tr th:if="${item.heal != null and item.heal != '0'}">
-                        <td class="item-attribute-td">Heal: </td>
+                        <td class="object-attribute-td">Heal: </td>
                         <td><input type="number" name="heal" th:value="${item.heal}" max="99" min="1"></td>
                     </tr>
                     <tr th:if="${item.attack != null and item.attack != '0'}">
-                        <td class="item-attribute-td">Attack: </td>
+                        <td class="object-attribute-td">Attack: </td>
                         <td><input type="number" name="attack" th:value="${item.attack}" max="99" min="1"></td>
                     </tr>
                     <tr th:if="${item.range != null and item.range != '0' and item.range != '-1'}">
-                        <td class="item-attribute-td">Range: </td>
+                        <td class="object-attribute-td">Range: </td>
                         <td><input type="number" name="range" th:value="${item.range}" max="99" min="1"></td>
                     </tr>
                     <tr th:if="${item.target != null}">
-                        <td class="item-attribute-td">Target: </td>
+                        <td class="object-attribute-td">Target: </td>
 
                         <td>
-                            <select name="target">
-                                <option value="-1" th:selected="${item.target == '-1'}">AoE</option>
-                                <option value="1" th:selected="${item.target == '1'}">1</option>
-                                <option value="2" th:selected="${item.target == '2'}">2</option>
-                                <option value="3" th:selected="${item.target == '3'}">3</option>
-                                <option value="4" th:selected="${item.target == '4'}">4</option>
-                                <option value="5" th:selected="${item.target == '5'}">5</option>
-                                <option value="6" th:selected="${item.target == '6'}">6</option>
-                                <option value="7" th:selected="${item.target == '7'}">7</option>
-                                <option value="8" th:selected="${item.target == '8'}">8</option>
-                                <option value="9" th:selected="${item.target == '9'}">9</option>
-                            </select>
+                            <div data-target-aoe>
+                                <input type="hidden" name="target" data-target-aoe-hidden th:value="${item.target}">
+                                <input type="number" data-target-aoe-number th:value="${item.target == '-1' ? '1' : item.target}" max="99" min="1">
+                                <label>
+                                    <input type="checkbox" data-target-aoe-checkbox th:checked="${item.target == '-1'}"> AoE
+                                </label>
+                            </div>
                         </td>
                     </tr>
                     <tr th:if="${item.shield != null}">
-                        <td class="item-attribute-td">Shield: </td>
+                        <td class="object-attribute-td">Shield: </td>
                         <td><input type="number" name="shield" th:value="${item.shield}" max="99" min="1"></td>
                     </tr>
                     <tr th:if="${item.shieldValue != null}">
-                        <td class="item-attribute-td">Shield Value: </td>
+                        <td class="object-attribute-td">Shield Value: </td>
                         <td><input type="number" name="shieldValue" th:value="${item.shieldValue}" max="99" min="0">
                         </td>
                     </tr>
                     <tr th:if="${item.retaliate != null}">
-                        <td class="item-attribute-td">Retaliate: </td>
+                        <td class="object-attribute-td">Retaliate: </td>
                         <td><input type="number" name="retaliate" th:value="${item.retaliate}" max="99" min="1">
                         </td>
                     </tr>
                     <tr th:if="${item.move != null}">
-                        <td class="item-attribute-td">Move: </td>
+                        <td class="object-attribute-td">Move: </td>
                         <td><input type="number" name="move" th:value="${item.move}" max="99" min="1"></td>
                     </tr>
                     <tr th:if="${item.oMove != null}">
-                        <td class="item-attribute-td">oMove: </td>
+                        <td class="object-attribute-td">oMove: </td>
                         <td><input type="number" name="oMove" th:value="${item.oMove}" max="99" min="0"></td>
                     </tr>
                     <tr th:if="${item.aMove != null}">
-                        <td class="item-attribute-td">aMove: </td>
+                        <td class="object-attribute-td">aMove: </td>
                         <td><input type="number" name="aMove" th:value="${item.aMove}" max="99" min="1"></td>
                     </tr>
                     <tr th:if="${item.pull != null}">
-                        <td class="item-attribute-td">Pull: </td>
+                        <td class="object-attribute-td">Pull: </td>
                         <td><input type="number" name="pull" th:value="${item.pull}" max="99" min="1"></td>
                     </tr>
                     <tr th:if="${item.push != null}">
-                        <td class="item-attribute-td">Push: </td>
+                        <td class="object-attribute-td">Push: </td>
                         <td><input type="number" name="push" th:value="${item.push}" max="99" min="1"></td>
                     </tr>
                     <tr th:if="${item.jump != null}">
-                        <td class="item-attribute-td">Jump: </td>
+                        <td class="object-attribute-td">Jump: </td>
                         <td><select name="jump">
                                 <option value="True" th:selected="${item.jump == 'True'}">True</option>
                                 <option value="False" th:selected="${item.jump == 'False'}">False</option>
@@ -173,7 +167,7 @@
                     <th:block th:if="${item.conditions != null}">
                         <tr th:each="cond, iterStat : ${#strings.arraySplit(item.conditions.replace('[', '').replace(']', ''), ',')}"
                             class="condition-row">
-                            <td class="item-attribute-td" th:text="${iterStat.index == 0 ? 'Conditions: ' : ''}"></td>
+                            <td class="object-attribute-td" th:text="${iterStat.index == 0 ? 'Conditions: ' : ''}"></td>
                             <td>
                                 <select name="conditions" disabled>
                                     <option value="Muddle" th:selected="${cond.trim() == 'Muddle'}">Muddle</option>
@@ -211,8 +205,8 @@
             </form>
         </div>
 
-        <div> <img id="itemImage" alt="${item.itemName}"
-                th:src="@{/secure-object/{name}(name=${item.getItemName().toLowerCase().replace(' ', '')})}"
+        <div> <img id="objectImage" alt="${item.itemName}"
+                th:src="@{/secure-object/items/{name}(name=${item.getItemName().toLowerCase().replace(' ', '')})}"
                 onerror="this.style.display='none'"></div>
 
 

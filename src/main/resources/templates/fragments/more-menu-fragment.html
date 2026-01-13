@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+    <li th:fragment="more-menu">
+        More
+        <ul class="dropdown">
+            <li>
+                <a th:href="@{/html/about.html}" target="contentFrame">
+                    <div>About</div>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/html/how.html}" target="contentFrame">
+                    <div>How it works</div>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/html/why.html}" target="contentFrame">
+                    <div>Why</div>
+                </a>
+            </li>
+        </ul>
+    </li>
+
+</body>
+
+</html>

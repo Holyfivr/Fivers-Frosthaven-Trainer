@@ -3,6 +3,7 @@ package se.holyfivr.trainer.core;
 
 import org.springframework.stereotype.Service;
 
+import se.holyfivr.trainer.core.parser.AbilityCardParser;
 import se.holyfivr.trainer.core.parser.CharacterParser;
 import se.holyfivr.trainer.core.parser.ItemParser;
 import se.holyfivr.trainer.core.parser.UnlockedCharacterParser;
@@ -20,16 +21,19 @@ public class RulesetParser {
     private final CharacterParser characterParser;
     private final UnlockedCharacterParser unlockedCharacterParser;
     private final ItemParser itemParser;
+    private final AbilityCardParser abilityCardParser;
 
     public RulesetParser(
             ActiveSessionData activeSession,
             CharacterParser characterParser,
             UnlockedCharacterParser unlockedCharacterParser,
-            ItemParser itemParser) {
+            ItemParser itemParser,
+            AbilityCardParser abilityCardParser) {
         this.activeSession = activeSession;
         this.characterParser = characterParser;
         this.unlockedCharacterParser = unlockedCharacterParser;
         this.itemParser = itemParser;
+        this.abilityCardParser = abilityCardParser;
     }
 
     /* ============================================================================================ */
@@ -54,6 +58,9 @@ public class RulesetParser {
 
         // Clear any existing items
         activeSession.clearItems();
+
+        // Clear any existing cards
+        activeSession.clearAbilityCards();
 
         // Splits up the content block into smaller blocks based on parser tags
         String[] allBlocks = contentString.split("Parser: ");
@@ -82,7 +89,7 @@ public class RulesetParser {
                 itemCount++;        //debug
 
             } else if (currentBlock.startsWith("AbilityCard")) {
-
+                abilityCardParser.parseAbilityCardBlock(currentBlock);
                 abilityCount++;     //debug
                 
             }

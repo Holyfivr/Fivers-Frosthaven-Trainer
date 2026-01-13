@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" style="overflow: auto !important;">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/objects.css}">
+    <script th:src="@{/js/objects.js}" type="text/javascript" defer></script>
+</head>
+
+<body style="overflow: auto !important;">
+    <div id="objectDetailsPane">
+        <center>
+            <h1 th:text="${abilityCard.cardName}"></h1>
+            <div>Class: <span type="text" th:text="${abilityCard.className}"></span></div>
+        </center>
+        <hr>
+
+        <div>
+            <form th:action="@{/save-ability-card}" method="post">
+                <input type="hidden" name="name" th:value="${abilityCard.name}">
+                <input type="hidden" name="className" th:value="${abilityCard.className}">
+                <input type="hidden" name="cardName" th:value="${abilityCard.cardName}">
+
+                <table id="selected-object-table">
+                    <tr th:if="${abilityCard.initiative != null and abilityCard.initiative != '0'}">
+                        <td class="object-attribute-td">Initiative: </td>
+                        <td><input required type="number" name="initiative" th:value="${abilityCard.initiative}"
+                                max="99" min="1"></td>
+                    </tr>
+                    <tr th:each="val,iter : ${abilityCard.healValues}">
+                        <td class="object-attribute-td">Heal <span th:text="${iter.index + 1}"></span>:</td>
+                        <td><input required type="number" th:name="|healValues[${iter.index}]|" th:value="${val}"
+                                max="99" min="1"></td>
+                    </tr>
+                    <tr th:each="val,iter : ${abilityCard.attackValues}">
+                        <td class="object-attribute-td">Attack <span th:text="${iter.index + 1}"></span>:</td>
+                        <td><input required type="number" th:name="|attackValues[${iter.index}]|" th:value="${val}"
+                                max="99" min="1"></td>
+                    </tr>
+                    <tr th:each="val,iter : ${abilityCard.rangeValues}">
+                        <td class="object-attribute-td">Range <span th:text="${iter.index + 1}"></span>:</td>
+                        <td>
+
+                            <span>
+                                <input required type="number" th:name="|rangeValues[${iter.index}]|" th:value="${val}"
+                                    max="99" min="1">
+                            </span>
+                        </td>
+                    </tr>
+
+                    <!-- The target secton below is designed like this to prevent aoe-cards from being changed to x-amount cards.
+                        Letting cards convert from AoE to target amount cards does not work properly, and corrupts the file. -->
+                    <tr th:each="val,iter : ${abilityCard.targetValues}">
+                        <td class="object-attribute-td">
+                            Target <span th:text="${iter.index + 1}"></span>:
+                        </td>
+                        <td>
+                            <!-- AoE -->
+                            <span th:if="${val == '-1'}">
+                                <input type="hidden" th:name="|targetValues[${iter.index}]|" value="-1">
+                                <input type="text" value="AoE" readonly disabled>
+                            </span>
+
+                            <!-- Normal targeting -->
+                            <span th:unless="${val == '-1'}">
+                                <input required type="number" th:name="|targetValues[${iter.index}]|" th:value="${val}"
+                                    min="1" max="99">
+                            </span>
+                        </td>
+                    </tr>
+                    
+                    <tr th:each="val,iter : ${abilityCard.lootValues}">
+                        <td class="object-attribute-td">Loot <span th:text="${iter.index + 1}"></span>:</td>
+                        <td><input required type="number" th:name="|lootValues[${iter.index}]|" th:value="${val}"
+                                max="99" min="0"></td>
+                    </tr>
+                    <tr th:each="val,iter : ${abilityCard.shieldValues}">
+                        <td class="object-attribute-td">Shield <span th:text="${iter.index + 1}"></span>:</td>
+                        <td><input required type="number" th:name="|shieldValues[${iter.index}]|" th:value="${val}"
+                                max="99" min="0"></td>
+                    </tr>
+                    <tr th:each="val,iter : ${abilityCard.retaliateValues}">
+                        <td class="object-attribute-td">Retaliate <span th:text="${iter.index + 1}"></span>:</td>
+                        <td><input required type="number" th:name="|retaliateValues[${iter.index}]|" th:value="${val}"
+                                max="99" min="0"></td>
+                    </tr>
+                    <tr th:each="val,iter : ${abilityCard.moveValues}">
+                        <td class="object-attribute-td">Move <span th:text="${iter.index + 1}"></span>:</td>
+                        <td><input required type="number" th:name="|moveValues[${iter.index}]|" th:value="${val}"
+                                max="99" min="0"></td>
+                    </tr>
+                    <tr th:each="val,iter : ${abilityCard.pierceValues}">
+                        <td class="object-attribute-td">Pierce <span th:text="${iter.index + 1}"></span>:</td>
+                        <td><input required type="number" th:name="|pierceValues[${iter.index}]|" th:value="${val}"
+                                max="99" min="0"></td>
+                    </tr>
+                    <tr th:each="val,iter : ${abilityCard.pullValues}">
+                        <td class="object-attribute-td">Pull <span th:text="${iter.index + 1}"></span>:</td>
+                        <td><input required type="number" th:name="|pullValues[${iter.index}]|" th:value="${val}"
+                                max="99" min="0"></td>
+                    </tr>
+                    <tr th:each="val,iter : ${abilityCard.pushValues}">
+                        <td class="object-attribute-td">Push <span th:text="${iter.index + 1}"></span>:</td>
+                        <td><input required type="number" th:name="|pushValues[${iter.index}]|" th:value="${val}"
+                                max="99" min="0"></td>
+                    </tr>
+                    <tr th:if="${abilityCard.jump != null}">
+                        <td class="object-attribute-td">Jump: </td>
+                        <td>
+                            <select required name="jump">
+                                <option value="True" th:selected="${abilityCard.jump == 'True'}">True</option>
+                                <option value="False" th:selected="${abilityCard.jump == 'False'}">False</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr th:if="${abilityCard.infuses != null}">
+                        <td class="object-attribute-td">Infuses: </td>
+                        <td>
+                            <select required name="infuses" id="infusion">
+                                <option th:selected="${abilityCard.infuses == 'Any'}" value="Any">Any</option>
+                                <option th:selected="${abilityCard.infuses == 'Air'}" value="Air">Air</option>
+                                <option th:selected="${abilityCard.infuses == 'Dark'}" value="Dark">Dark</option>
+                                <option th:selected="${abilityCard.infuses == 'Earth'}" value="Earth">Earth</option>
+                                <option th:selected="${abilityCard.infuses == 'Fire'}" value="Fire">Fire</option>
+                                <option th:selected="${abilityCard.infuses == 'Ice'}" value="Ice">Ice</option>
+                                <option th:selected="${abilityCard.infuses == 'Light'}" value="Light">Light</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr th:if="${abilityCard.consumes != null}">
+                        <td class="object-attribute-td">Consumes: </td>
+                        <td>
+                            <select required name="consumes" id="consume">
+                                <option th:selected="${abilityCard.consumes == 'Any'}" value="Any">Any</option>
+                                <option th:selected="${abilityCard.consumes == 'Air'}" value="Air">Air</option>
+                                <option th:selected="${abilityCard.consumes == 'Dark'}" value="Dark">Dark</option>
+                                <option th:selected="${abilityCard.consumes == 'Earth'}" value="Earth">Earth</option>
+                                <option th:selected="${abilityCard.consumes == 'Fire'}" value="Fire">Fire</option>
+                                <option th:selected="${abilityCard.consumes == 'Ice'}" value="Ice">Ice</option>
+                                <option th:selected="${abilityCard.consumes == 'Light'}" value="Light">Light</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr th:each="val,iter : ${abilityCard.xpValues}">
+                        <td class="object-attribute-td">XP <span th:text="${iter.index + 1}"></span>:</td>
+                        <td><input required type="number" th:name="|xpValues[${iter.index}]|" th:value="${val}" max="99"
+                                min="0"></td>
+                    </tr>
+                </table>
+
+                <br>
+                <div id="buttonContainer"><button type="submit" class="btn">Save Changes</button></div>
+            </form>
+        </div>
+
+        <div>
+            <img id="objectImage" alt="${abilityCard.getCardName()}"
+                th:src="@{/secure-object/ability-cards/{className}/{name}(className=${abilityCard.getClassName()}, name=${abilityCard.getCardName()})}"
+                onerror="this.style.display='none'">
+        </div>
+    </div>
+
+    <p id="limitWarning">Limits on attributes are placed to prevent breaking the ruleset file.</p>
+</body>
+
+</html>

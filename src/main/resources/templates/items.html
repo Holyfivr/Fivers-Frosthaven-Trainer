@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link rel="stylesheet" th:href="@{/css/items.css}">
-    <script th:src="@{/js/items.js}" defer></script>
+    <link rel="stylesheet" th:href="@{/css/objects.css}">
+    <script th:src="@{/js/objects.js}" defer></script>
 </head>
 
 <body>
@@ -17,12 +17,12 @@
     </div>
 
     <input id="searchInput" placeholder="Search" type="text">
-    <div id="itemListContainer">
-        
+    <div id="objectListContainer">
+
         <table>
             <tr th:each="item : ${itemList.values()}">
                 <td>
-                    <a target="itemFrame" th:href="@{/item-details/{itemId}(itemId = ${item.getStringId()})}">
+                    <a target="objectFrame" th:href="@{/item-details/{itemId}(itemId = ${item.getStringId()})}">
                         <div th:text="${item.getItemName()}"></div>
                     </a>
                 </td>
@@ -30,7 +30,7 @@
         </table>
     </div>
 
-    <iframe id="itemFrame" name="itemFrame" width="600" height="400"></iframe>
+    <iframe id="objectFrame" name="objectFrame" width="600" height="400"></iframe>
 
 
 

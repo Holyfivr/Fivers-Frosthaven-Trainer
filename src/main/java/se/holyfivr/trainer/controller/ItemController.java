@@ -62,7 +62,7 @@ public class ItemController {
     /* ============================================================ */
     /* Handles request to update all items with the received values */
     /* ============================================================ */
-    @GetMapping("/set-item-value")
+    @GetMapping("/set-all-item-values")
     public String setItemValues(@RequestParam String action, @RequestParam String value) {
         itemService.updateAllItems(action, value);
         return "redirect:/items/all";

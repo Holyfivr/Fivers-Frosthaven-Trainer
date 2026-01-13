@@ -15,6 +15,7 @@ import java.util.regex.Matcher;
 
 import org.springframework.stereotype.Service;
 
+import se.holyfivr.trainer.model.AbilityCard;
 import se.holyfivr.trainer.model.Item;
 import se.holyfivr.trainer.model.PlayerCharacter;
 
@@ -55,6 +56,9 @@ public class RulesetSaver {
     // FHItem Patterns
     private static final Pattern GOLD_COST_PATTERN = Pattern.compile("\\bGoldCost:\\s*\\d+");
     private static final Pattern QUANTITY_PATTERN = Pattern.compile("\\bQuantity:\\s*\\d+");
+
+    // Abilitycard Patterns
+
 
     RulesetSaver(ActiveSessionData activeSessionData) {
         this.activeSessionData = activeSessionData;
@@ -170,7 +174,7 @@ public class RulesetSaver {
             if (currentBlock.trim().startsWith("Character")) {
 
                 // Extract name to find the matching object in our ActiveSessionData
-                String name = extractNameFromBlock(currentBlock);
+                String name = extractIdentifier(currentBlock, "ID:");
 
                 // Fetch the corresponding PlayerCharacter from the map
                 PlayerCharacter pc = characters.get(name);
@@ -195,7 +199,7 @@ public class RulesetSaver {
                 currentBlock = UNLOCKED_CHARACTER_PATTERN.matcher(currentBlock).replaceAll(stringBuilder.toString());
             }
             if (currentBlock.trim().startsWith("ItemCard")){
-                String stringId = extractStringIdFromBlock(currentBlock);
+                String stringId = extractIdentifier(currentBlock, "StringID:");
                 if (stringId != null) {
                     Item item = activeSessionData.getItems().get(stringId);
                     if (item != null) {
@@ -204,7 +208,7 @@ public class RulesetSaver {
                 }
             }
             if (currentBlock.trim().startsWith("FHItem")) {
-                String scenarioItemId = extractScenarioItemIdFromBlock(currentBlock);
+                String scenarioItemId = extractIdentifier(currentBlock, "ScenarioItemID:");
                 if (scenarioItemId != null) {
                     Item item = activeSessionData.getItems().values().stream()
                             .filter(itm -> scenarioItemId.equals(itm.getId()))
@@ -216,7 +220,16 @@ public class RulesetSaver {
                     }
                 }
             }
-
+             if (currentBlock.trim().startsWith("AbilityCard")){
+                String cardId = extractIdentifier(currentBlock, "Name:");
+                if (cardId != null) {
+                    AbilityCard abilityCard = activeSessionData.getAbilityCards().get(cardId);
+                    if (abilityCard != null) {
+                        currentBlock = updateAbilityCardBlockString(currentBlock, abilityCard);
+                    }
+                }
+            }
+ 
             /* ============================================================================= */
             /*                              FILLER BANK STRATEGY                             */
             /* ============================================================================= */
@@ -319,18 +332,173 @@ public class RulesetSaver {
         return block;
     }
 
+    private String updateAbilityCardBlockString(String block, AbilityCard abilityCard) {
+        if (abilityCard.getInitiative() != null) {
+            block = updateTopLevelLine(block, "Initiative", abilityCard.getInitiative());
+        }
+        if (abilityCard.getDiscard() != null) {
+            block = updateTopLevelLine(block, "Discard", normalizeBracketList(abilityCard.getDiscard()));
+        }
+
+        if (abilityCard.getAttackValues() != null && !abilityCard.getAttackValues().isEmpty()) {
+            block = updateAttributeList(block, "Attack", abilityCard.getAttackValues());
+        } else if (abilityCard.getAttack() != null) {
+            block = updateAttribute(block, "Attack", abilityCard.getAttack());
+        }
+        if (abilityCard.getDamageValues() != null && !abilityCard.getDamageValues().isEmpty()) {
+            block = updateAttributeList(block, "Damage", abilityCard.getDamageValues());
+        } else if (abilityCard.getDamage() != null) {
+            block = updateAttribute(block, "Damage", abilityCard.getDamage());
+        }
+        if (abilityCard.getHealValues() != null && !abilityCard.getHealValues().isEmpty()) {
+            block = updateAttributeList(block, "Heal", abilityCard.getHealValues());
+        } else if (abilityCard.getHeal() != null) {
+            block = updateAttribute(block, "Heal", abilityCard.getHeal());
+        }
+        if (abilityCard.getMoveValues() != null && !abilityCard.getMoveValues().isEmpty()) {
+            block = updateAttributeList(block, "Move", abilityCard.getMoveValues());
+        } else if (abilityCard.getMove() != null) {
+            block = updateAttribute(block, "Move", abilityCard.getMove());
+        }
+        if (abilityCard.getRangeValues() != null && !abilityCard.getRangeValues().isEmpty()) {
+            block = updateAttributeList(block, "Range", abilityCard.getRangeValues());
+        } else if (abilityCard.getRange() != null) {
+            block = updateAttribute(block, "Range", abilityCard.getRange());
+        }
+        if (abilityCard.getShieldValues() != null && !abilityCard.getShieldValues().isEmpty()) {
+            block = updateAttributeList(block, "Shield", abilityCard.getShieldValues());
+        } else if (abilityCard.getShield() != null) {
+            block = updateAttribute(block, "Shield", abilityCard.getShield());
+        }
+        if (abilityCard.getXpValues() != null && !abilityCard.getXpValues().isEmpty()) {
+            block = updateAttributeList(block, "XP", abilityCard.getXpValues());
+        } else if (abilityCard.getXP() != null) {
+            block = updateAttribute(block, "XP", abilityCard.getXP());
+        }
+
+        // Per-card edits currently exposed in the UI
+        if (abilityCard.getTargetValues() != null && !abilityCard.getTargetValues().isEmpty()) {
+            block = updateAttributeList(block, "Target", abilityCard.getTargetValues());
+        } else if (abilityCard.getTarget() != null) {
+            block = updateAttribute(block, "Target", abilityCard.getTarget());
+        }
+        if (abilityCard.getPullValues() != null && !abilityCard.getPullValues().isEmpty()) {
+            block = updateAttributeList(block, "Pull", abilityCard.getPullValues());
+        } else if (abilityCard.getPull() != null) {
+            block = updateAttribute(block, "Pull", abilityCard.getPull());
+        }
+        if (abilityCard.getPushValues() != null && !abilityCard.getPushValues().isEmpty()) {
+            block = updateAttributeList(block, "Push", abilityCard.getPushValues());
+        } else if (abilityCard.getPush() != null) {
+            block = updateAttribute(block, "Push", abilityCard.getPush());
+        }
+        if (abilityCard.getRetaliateValues() != null && !abilityCard.getRetaliateValues().isEmpty()) {
+            block = updateAttributeList(block, "Retaliate", abilityCard.getRetaliateValues());
+        } else if (abilityCard.getRetaliate() != null) {
+            block = updateAttribute(block, "Retaliate", abilityCard.getRetaliate());
+        }
+        if (abilityCard.getLootValues() != null && !abilityCard.getLootValues().isEmpty()) {
+            block = updateAttributeList(block, "Loot", abilityCard.getLootValues());
+        } else if (abilityCard.getLoot() != null) {
+            block = updateAttribute(block, "Loot", abilityCard.getLoot());
+        }
+        if (abilityCard.getPierceValues() != null && !abilityCard.getPierceValues().isEmpty()) {
+            block = updateAttributeList(block, "Pierce", abilityCard.getPierceValues());
+        } else if (abilityCard.getPierce() != null) {
+            block = updateAttribute(block, "Pierce", abilityCard.getPierce());
+        }
+        if (abilityCard.getJump() != null) {
+            block = updateBooleanAttribute(block, "Jump", abilityCard.getJump());
+        }
+        return block;
+    }
+
+    private String updateTopLevelLine(String block, String key, String value) {
+        Pattern pattern = Pattern.compile("(?m)^" + Pattern.quote(key) + ":\\s*.*?(\\r?)$");
+        Matcher matcher = pattern.matcher(block);
+        if (!matcher.find()) {
+            return block;
+        }
+        String lineEnding = matcher.group(1);
+        String replacement = key + ": " + value + lineEnding;
+        return matcher.replaceFirst(Matcher.quoteReplacement(replacement));
+    }
+
+    private String updateBooleanAttribute(String block, String key, String value) {
+        String normalized = "True";
+        if (value != null && value.equalsIgnoreCase("false")) {
+            normalized = "False";
+        }
+        Pattern pattern = Pattern.compile("\\b" + Pattern.quote(key) + ":\\s*(True|False)\\b");
+        Matcher matcher = pattern.matcher(block);
+        return matcher.replaceAll(Matcher.quoteReplacement(key + ": " + normalized));
+    }
+
+    private String normalizeBracketList(String value) {
+        String trimmed = value.trim();
+        if (trimmed.startsWith("[") && trimmed.endsWith("]")) {
+            return trimmed;
+        }
+        return "[" + trimmed + "]";
+    }
+
     /* ============================================================================================ */
     /*                                      UPDATE ATTRIBUTE HELPER                                 */
     /*                                                                                              */
-    /* Handles updating attributes that can appear in multiple formats:                             */
-    /* 1. Key: Value                                                                                */
-    /* 2. Key: \n Amount: Value                                                                     */
-    /* 3. Key: \n Strength: Value                                                                   */
+    /* Handles updating attributes appear as a list of values (e.g. Attack: 2, Attack: 3).          */
+    /* These are used by the ability cards to allow editing specific attributes, and not just       */
+    /* blanket edit every single attribute of a specific kind.                                      */
+    /* Previously, updating "attack" on a card, would change all attack values on the card. This    */
+    /* allows us to change them individually.                                                       */
     /* ============================================================================================ */
-    private String updateAttribute(String block, String key, String value) {
+
+    private String updateAttributeList(String block, String attributeKey, List<String> values) {
+        Pattern pattern = Pattern.compile("\\b" + Pattern.quote(attributeKey)
+                + ":\\s*(?:(?:\\r?\\n\\s*)+(?:Amount|Strength):\\s*)?([+-]?\\d+)");
+        Matcher matcher = pattern.matcher(block);
+
+        int i = 0;
+        StringBuffer sb = new StringBuffer();
+        while (matcher.find()) {
+            String fullMatch = matcher.group(0);
+            String oldValue = matcher.group(1);
+
+            // If we run out of values, leave remaining occurrences unchanged.
+            if (values == null || i >= values.size()) {
+                matcher.appendReplacement(sb, Matcher.quoteReplacement(fullMatch));
+                continue;
+            }
+            String replacementValue = values.get(i++);
+
+            if (oldValue.startsWith("+") && !replacementValue.startsWith("-") && !replacementValue.startsWith("+")) {
+                replacementValue = "+" + replacementValue;
+            }
+
+            int lastIndex = fullMatch.lastIndexOf(oldValue);
+            String newMatch = fullMatch.substring(0, lastIndex)
+                    + replacementValue
+                    + fullMatch.substring(lastIndex + oldValue.length());
+
+            matcher.appendReplacement(sb, Matcher.quoteReplacement(newMatch));
+        }
+        matcher.appendTail(sb);
+        return sb.toString();
+    }
+
+    /* ============================================================================================ */
+    /*                                      UPDATE ATTRIBUTE HELPER                                 */
+    /*                                                                                              */
+    /* Handles updating attributes that need special logic due to possible nested structure.        */
+    /* For example, there are many cases that looks like this:                                      */
+    /* Attack:  3                                                                                   */ 
+    /*     Amount: X                                                                                */
+    /* Since we are checking for the "Attack:" identifier, these won't be properly updated when we  */
+    /* try to rewrite them into the ruleset. There is similiar logic in the parsers to handle these */
+    /* ============================================================================================ */
+    private String updateAttribute(String block, String attributeKey, String value) {
         // Matches "Key: Value" OR "Key:\n...Amount: Value" OR "Key:\n...Strength: Value"
         // Handles variable whitespace and newlines.
-        Pattern pattern = Pattern.compile("\\b" + key + ":\\s*(?:(?:\\r?\\n\\s*)+(?:Amount|Strength):\\s*)?(-?\\d+)");
+        Pattern pattern = Pattern.compile("\\b" + attributeKey + ":\\s*(?:(?:\\r?\\n\\s*)+(?:Amount|Strength):\\s*)?([+-]?\\d+)");
         Matcher matcher = pattern.matcher(block);
         
         StringBuffer sb = new StringBuffer();
@@ -338,11 +506,24 @@ public class RulesetSaver {
             String fullMatch = matcher.group(0);
             String oldValue = matcher.group(1);
             
+
+            // There are cases in the ruleset where attributes start with +. In order to preserve these, we check for that here
+            // If old value has +, and the new value does not, we need to add it back.
+            // If old value has +, and the new value also has it, we leave it as is.
+            // If old value does not have +, we leave the new value as is.
+            String replacementValue = value;
+            if (oldValue.startsWith("+") && !replacementValue.startsWith("-") && !replacementValue.startsWith("+")) {
+                replacementValue = "+" + replacementValue;
+            }
+            
             // Replace the last occurrence of oldValue in fullMatch with newValue
             // This preserves the prefix (Key: \n Amount: )
             int lastIndex = fullMatch.lastIndexOf(oldValue);
             if (lastIndex != -1) {
-                String newMatch = fullMatch.substring(0, lastIndex) + value + fullMatch.substring(lastIndex + oldValue.length());
+                String newMatch = fullMatch.substring(0, lastIndex) 
+                + replacementValue 
+                + fullMatch.substring(lastIndex + oldValue.length());
+                
                 matcher.appendReplacement(sb, Matcher.quoteReplacement(newMatch));
             }
         }
@@ -366,7 +547,7 @@ public class RulesetSaver {
     /* it will throw an exception and abort the saving process. This is to avoid corrupting         */ 
     /* the file. This will be addressed in the future, by making the fillerbanks more dynamic.      */
     /* It is far too complex to address now, and is not needed in this current version. In a future */
-    /* update I will add the feature to add starting characters, and this must be addressed at      */
+    /* update I will add the feature to add more starting characters, and this must be addressed at */
     /* that point, since those blocks have far too few whitespaces to trim.                         */
     /* ============================================================================================ */
     private String adjustBlockSize(String currentBlock, int originalLength) {
@@ -396,8 +577,8 @@ public class RulesetSaver {
         return padded.toString();
     }
 
-    /*                                   COOL TRICK HERE 
     /* ============================================================================================ */
+    /*                                   COOL TRICK HERE                                            */
     /*          Removes unnecessary whitespace to shrink the block to the original size             */
     /*                                                                                              */
     /* This part was actually pretty cool to figure out. When looking at the HEX-code for the       */
@@ -420,6 +601,8 @@ public class RulesetSaver {
 
         // Strategy 1: Remove spaces before newlines
         // Safest: Removes invisible "trailing whitespace" that serves no purpose.
+        // This strategy, and strategy 3 look very similar, but there is one small difference.
+        // This one only removes spaces on lines that do not have a colon.
         while (charsToRemove > 0 && (block.contains(" \n") || block.contains(" \r\n"))) {
             if (block.contains(" \n")) {
                 block = block.replaceFirst(" \n", "\n");
@@ -435,14 +618,27 @@ public class RulesetSaver {
             charsToRemove--;
         }
 
-        // Strategy 3: Remove double spaces
+        // Strategy 3: Remove any double spaces that exist after a : on a lina
+        while (charsToRemove > 0 &&
+                block.matches("(?m).*:[^\\n]* {2,}.*")) {
+
+            block = block.replaceFirst(
+                    "(?m)(:[^\\n]*?) {2,}",
+                    "$1 ");
+            charsToRemove--;
+        }
+
+        // Strategy 4: Remove double spaces anywhere
         // Least Safe: Affects indentation and visual formatting. Last resort.
         while (charsToRemove > 0 && block.contains("  ")) {
             block = block.replaceFirst("  ", " ");
             charsToRemove--;
         }
 
+
+
         // If we still haven't removed enough characters, we can't save safely.
+        // This will throw an exception and abort the saving process.
         if (charsToRemove > 0) {
             throw new RuntimeException(
                     "Error: Could not trim enough bytes from block to match original size. Overflow by "
@@ -452,56 +648,19 @@ public class RulesetSaver {
         return block;
     }
 
+    /* ============================================= */
+    /* EXTRACT IDENTIFYING ATTRIBUTE FROM THE OBJECT */
+    /* ============================================= */
+    private String extractIdentifier(String block, String phrase) {
+        String[] lines = block.split("\n");
+        for (String line : lines) {
+            if (line.trim().startsWith(phrase)) {
+                return line.replace(phrase, "").trim();
+            }
+        }
+        return null;
+    }
     
-    /* ============================================================================================ */
-    /* EXTRACT NAME FROM BLOCK                                                                      */
-    /*                                                                                              */
-    /* A simple helper method to quickly fish out the "ID:" value from a raw text block.            */
-    /* We need this to know which PlayerCharacter in our ActiveSessionData matches this             */
-    /* specific block.                                                                              */
-    /* ============================================================================================ */
-    private String extractNameFromBlock(String block) {
-        String[] lines = block.split("\n");
-        for (String line : lines) {
-            if (line.trim().startsWith("ID:")) {
-                return line.replace("ID:", "").trim();
-            }
-        }
-        return null;
-    }
-
-    /* ============================================================================================ */
-    /* EXTRACT STRING ID FROM BLOCK                                                                 */
-    /*                                                                                              */
-    /* A simple helper method to quickly fish out the "StringID:" value from a raw text block.      */
-    /* We need this to know which Item in our ActiveSessionData matches this specific block.        */
-    /* ============================================================================================ */
-    private String extractStringIdFromBlock(String block) {
-        String[] lines = block.split("\n");
-        for (String line : lines) {
-            if (line.trim().startsWith("StringID:")) {
-                return line.replace("StringID:", "").trim();
-            }
-        }
-        return null;
-    }
-
-    /* ============================================================================================ */
-    /* EXTRACT SCENARIO ITEM ID FROM BLOCK                                                          */
-    /*                                                                                              */
-    /* A simple helper method to quickly fish out the "ScenarioItemID:" value from a raw text block.*/
-    /* We need this to know which Item in our ActiveSessionData matches this specific FHItem block. */
-    /* ============================================================================================ */
-    private String extractScenarioItemIdFromBlock(String block) {
-        String[] lines = block.split("\n");
-        for (String line : lines) {
-            if (line.trim().startsWith("ScenarioItemID:")) {
-                return line.replace("ScenarioItemID:", "").trim();
-            }
-        }
-        return null;
-    }
-
     /* ============================================================================== */
     /* This method handles updating FHItem blocks in the ruleset file.                */
     /* It replaces GoldCost and Quantity with values from the provided Item object.   */
@@ -515,4 +674,5 @@ public class RulesetSaver {
         }
         return block;
     }
+
 }

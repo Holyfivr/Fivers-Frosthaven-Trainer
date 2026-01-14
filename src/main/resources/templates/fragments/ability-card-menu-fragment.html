@@ -6,13 +6,14 @@
     <li th:classappend="${!rulesetLoaded} ? 'inactive'" th:fragment="ability-card-menu" class="ability-menu-item">
         Ability Cards
         <ul class="ability-dropdown">
+                        <li>
+                <a onclick="openEditAllCardsModal()">
+                    <div style="font-weight: bold;">Mass Edit</div>
+                </a>
+            </li>
+            <hr>
             <li class="has-submenu">
                 <a th:href="@{/ability-cards/all}" target="contentFrame">All Cards</a>
-                <ul class="ability-sub-dropdown">
-                    <li>1</li>
-                    <li>2</li>
-                    <li>3</li>
-                </ul>
             </li>
 
             <li th:each="abilityCard : ${abilityCardClasses}">
@@ -20,6 +21,8 @@
                     <div th:text="${abilityCard}"></div>
                 </a>
             </li>
+
+
         </ul>
     </li>
 

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 
+
 @Controller
 public class AbilityCardController {
 
@@ -30,13 +31,6 @@ public class AbilityCardController {
         Map<String, AbilityCard> allCards = activeSessionData.getAbilityCards();
         model.addAttribute("abilityCards", allCards);
         return "ability-cards";
-    }
-
-    @PostMapping("/set-all-card-values/")
-    public String setAllCards(@RequestParam String attribute, @RequestParam String value) {
-        abilityCardService.updateAllCards(attribute, value);
-        // return "redirect:/ability-cards/all";
-        return "redirect:/start";
     }
 
     @GetMapping("/ability-cards/{className}")
@@ -56,10 +50,21 @@ public class AbilityCardController {
     }
 
     @PostMapping("/save-ability-card")
-    public String setSingleCard(@ModelAttribute AbilityCard abilityCard) {
+    public String saveCard(@ModelAttribute AbilityCard abilityCard) {
         AbilityCard existingAbilityCard = activeSessionData.getAbilityCards().get(abilityCard.getName());
+        
         abilityCardService.saveCard(existingAbilityCard, abilityCard);
+        
         return "redirect:/card-details?id=" + abilityCard.getName();
     }
+
+    @PostMapping("/update-all-cards")
+    public String setCardValues(@RequestParam Map<String, String> allFields) {
+        allFields.forEach((action, value) -> {
+            abilityCardService.updateAllCards(action, value);
+        });
+        return "redirect:/how";
+    }
+    
 
 }

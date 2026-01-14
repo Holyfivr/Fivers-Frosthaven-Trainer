@@ -26,25 +26,28 @@
             <!-------------------------------------------------------------------------------->
 
             <!-- File menu fragment -->
-            <li th:replace="fragments/file-menu-fragment :: file-menu"></li>
+            <li th:replace="~{fragments/file-menu-fragment :: file-menu}"></li>
 
             <!-- Character menu fragment -->
-            <li th:replace="fragments/character-menu-fragment :: character-menu"></li>
+            <li th:replace="~{fragments/character-menu-fragment :: character-menu}"></li>
 
             <!-- Item menu fragment -->
-            <li th:replace="fragments/item-menu-fragment :: item-menu"></li>
+            <li th:replace="~{fragments/item-menu-fragment :: item-menu}"></li>
 
             <!-- Ability Card menu fragment -->
-            <li th:replace="fragments/ability-card-menu-fragment :: ability-card-menu"></li>
+            <li th:replace="~{fragments/ability-card-menu-fragment :: ability-card-menu}"></li>
 
             <!-- More menu fragment-->
-            <li th:replace="fragments/more-menu-fragment :: more-menu"></li>
-
+            <li th:replace="~{fragments/more-menu-fragment :: more-menu}"></li>
         </ul>
     </nav>
 
     <!-- Modal and toast fragments-->
     <div th:replace="~{fragments/modal-fragments :: modalFragments}"></div>
+    <!-- Edit Items Modal -->
+    <div th:replace="~{fragments/edit-items-modal-fragment :: editAllItemsModalFragment}"></div>
+    <!-- Edit Cards Modal -->
+    <div th:replace="~{fragments/edit-cards-modal-fragment :: editAllCardsModalFragment}"></div>
 
 
     <div id="footer">If you encounter any errors or the program doesn't work, place an issue on <a href="#" class="btn"
@@ -52,7 +55,7 @@
             onclick="copyToClipboard('https://github.com/Holyfivr/Fivers-Frosthaven-Trainer/')">https://github.com/Holyfivr/Fivers-Frosthaven-Trainer/</a>
     </div>.
     </div>
-    <iframe id="contentFrame" name="contentFrame" title="contentFrame" th:src="@{/html/how.html}">
+    <iframe id="contentFrame" name="contentFrame" title="contentFrame" th:src="@{/how}">
 
 </body>
 

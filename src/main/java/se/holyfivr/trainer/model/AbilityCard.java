@@ -3,6 +3,8 @@ package se.holyfivr.trainer.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import se.holyfivr.trainer.model.enums.DiscardEnum;
+
 public class AbilityCard {
     public static final String UPPERCASE_LETTER = "([A-Z])";
 
@@ -22,10 +24,10 @@ public class AbilityCard {
     public String push;
     public String retaliate;
     public String loot;
-    public String discard; // format in ruleset: [discard, discard/lost]
+    public DiscardEnum discard; // format in ruleset: [Discard/Lost, Discard/Lost]
     public String initiative;
     public String pierce;
-    public String infuses;
+    public String infuse;
     public String consumes;
     public String XP;
 
@@ -220,11 +222,11 @@ public class AbilityCard {
         return this;
     }
 
-    public String getDiscard() {
+    public DiscardEnum getDiscard() {
         return discard;
     }
 
-    public AbilityCard setDiscard(String discard) {
+    public AbilityCard setDiscard(DiscardEnum discard) {
         this.discard = discard;
         return this;
     }
@@ -247,12 +249,12 @@ public class AbilityCard {
         return this;
     }
 
-    public String getInfuses() {
-        return infuses;
+    public String getInfuse() {
+        return infuse;
     }
 
-    public AbilityCard setInfuses(String infuses) {
-        this.infuses = infuses;
+    public AbilityCard setInfuse(String infuse) {
+        this.infuse = infuse;
         return this;
     }
 
@@ -391,5 +393,4 @@ public class AbilityCard {
         return this;
     }
 
-    
 }

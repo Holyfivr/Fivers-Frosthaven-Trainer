@@ -21,7 +21,7 @@ public class Item {
     public String usage; // Spent/Unrestricted/Consumed/Flip
     public String prosperityRequirement;
     public String consumes;
-    public String infuses;
+    public String infuse;
 
     // Effects (from each "Data" block)
     public String heal; // integer
@@ -158,12 +158,12 @@ public class Item {
         return this;
     }
 
-    public String getInfuses() {
-        return infuses;
+    public String getInfuse() {
+        return infuse;
     }
 
-    public Item setInfuses(String infuses) {
-        this.infuses = infuses;
+    public Item setInfuse(String infuse) {
+        this.infuse = infuse;
         return this;
     }
 

@@ -48,7 +48,7 @@ public class ItemService {
                     .setUsage(item.getUsage())
                     .setProsperityRequirement(item.getProsperityRequirement())
                     .setConsumes(item.getConsumes())
-                    .setInfuses(item.getInfuses())
+                    .setInfuse(item.getInfuse())
                     .setHeal(item.getHeal())
                     .setAttack(item.getAttack())
                     .setRange(item.getRange())
@@ -81,9 +81,15 @@ public class ItemService {
     /* ========================================== */
     /* Updates all items with the received value. */
     /* ========================================== */
-    public void updateAllItems(String action, String value){
+    public void updateAllItems(String action, String value) {
+
+        if (value == null || value.isBlank() || value.equals("0")) {
+            return;
+        }
+
         ItemAction itemAction = ItemAction.fromString(action);
         System.err.println("Action: " + itemAction + " | Value: " + value);
+
         switch (itemAction) {
             case SET_GOLD_COST:
                 activeSessionData.setGold(value);
@@ -118,7 +124,8 @@ public class ItemService {
                 activeSessionData.setOMove(value);
                 activeSessionData.setAMove(value);
                 break;
-            default: break;
+            default:
+                break;
         }
     }
 }

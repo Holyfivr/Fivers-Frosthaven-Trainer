@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+    <template id="editAllCardsTemplate" th:fragment="editAllCardsModalFragment">
+        <h2 id="cardModalTitle">Edit All Cards</h2>
+        <h3>Leave a field blank or enter 0 to ignore</h3>
+        <form id="editAllCardsForm" method="post" th:action="@{/update-all-cards}" target="contentFrame">
+            <div id="cardModalContainer" style="display:flex; flex-direction: row; justify-content: space-between;">
+                <div class="cardModalFrame">
+
+                    <div class="modal-field">
+                        <label for="initiativeInput">Initiative</label>
+                        <input id="initiativeInput" name="setInitiative" type="number" min="0" placeholder="1-99" />
+                    </div>
+                    <div class="modal-field">
+                        <label for="damageInput">Damage</label>
+                        <input id="damageInput" name="setDamage" type="number" min="0" placeholder="1-99" />
+                    </div>
+                    <div class="modal-field">
+                        <label for="healInput">Heal</label>
+                        <input id="healInput" name="setHeal" type="number" min="0" placeholder="1-99" />
+                    </div>
+                    <div class="modal-field">
+                        <label for="moveInput">Move</label>
+                        <input id="moveInput" name="setMove" type="number" min="0" placeholder="1-99" />
+                    </div>
+                    <div class="modal-field">
+                        <label for="rangeInput">Range</label>
+                        <input id="rangeInput" name="setRange" type="number" min="0" placeholder="1-99" />
+                    </div>
+                    <div class="modal-field">
+                        <label for="shieldInput">Shield</label>
+                        <input id="shieldInput" name="setShield" type="number" min="0" placeholder="1-99" />
+                    </div>
+                    <div class="modal-field">
+                        <label for="healthInput">Health</label>
+                        <input id="healthInput" name="setHealth" type="text" placeholder="1-99" />
+                    </div>
+                    <div class="modal-field">
+                        <label for="XPInput">XP</label>
+                        <input id="XPInput" name="setXP" type="number" min="0" placeholder="1-99" />
+                    </div>
+                    <div class="modal-field">
+                        <label for="lootInput">Loot</label>
+                        <input id="lootInput" name="setLoot" type="number" min="0" placeholder="1-99" />
+                    </div>
+                </div>
+
+
+                <div class="cardModalFrame">
+                    <div class="modal-field">
+                        <label for="attackInput">Attack</label>
+                        <input id="attackInput" name="setAttack" type="number" min="0" placeholder="1-99" />
+
+                    </div>
+                    <div class="modal-field">
+                        <label for="targetInput">Target</label>
+                        <input id="targetInput" name="setTarget" type="number" min="0" placeholder="1-99" />
+                        <div class="info-icon">
+                            <div class="info-icon-symbol">?
+                            </div>
+                            <div class="info-icon-text">
+                                Targets are only changed on cards that have a set amount of targets.
+                                <br><br>If the card is AoE, it will remain so.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-field">
+                        <label for="pullInput">Pull</label>
+                        <input id="pullInput" name="setPull" type="number" min="0" placeholder="1-99" />
+                    </div>
+                    <div class="modal-field">
+                        <label for="pushInput">Push</label>
+                        <input id="pushInput" name="setPush" type="number" min="0" placeholder="1-99" />
+                    </div>
+                    <div class="modal-field">
+                        <label for="retaliateInput">Retaliate</label>
+                        <input id="retaliateInput" name="setRetaliate" type="number" min="0" placeholder="1-99" />
+                    </div>
+                    <div class="modal-field">
+                        <label for="pierceInput">Pierce</label>
+                        <input id="pierceInput" name="setPierce" type="number" min="0" placeholder="1-99" />
+                    </div>
+                    <div class="modal-field"
+                        style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <label for="consumesInput">Consumes</label>
+                        </div>
+                        <div>
+                            <select id="consumesInput" name="setConsumes">
+                                <option value="">Default</option>
+                                <option value="Air">Air</option>
+                                <option value="Dark">Dark</option>
+                                <option value="Earth">Earth</option>
+                                <option value="Fire">Fire</option>
+                                <option value="Ice">Ice</option>
+                                <option value="Light">Light</option>
+                            </select>
+                        </div>
+                        <div class="info-icon">
+                            <div class="info-icon-symbol">
+                                ?
+                            </div>
+                            <div class="info-icon-text">
+                                There are limitations to what cards can be consumed. <br><br>For safety reasons, I have
+                                decided
+                                that only effects with a single consumption will be edited.<br><br>If the card has
+                                multiple consumes, or
+                                consumption selected by player, it will be left unchanged.<br><br>
+                                There are also instances of cards where the attribute is nested under multiple
+                                "sub-elements" in the ruleset file. I have decided against editing these, since they
+                                are unpredictable.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-field">
+                        <div>
+                            <label for="infuseInput">Infuse</label>
+                        </div>
+                        <div>
+                            <select id="infuseInput" name="setInfuse">
+                                <option value="">Default</option>
+                                <option value="Air">Air</option>
+                                <option value="Dark">Dark</option>
+                                <option value="Earth">Earth</option>
+                                <option value="Fire">Fire</option>
+                                <option value="Ice">Ice</option>
+                                <option value="Light">Light</option>
+                            </select>
+                        </div>
+                        <div class="info-icon">
+                            <div class="info-icon-symbol">
+                                ?
+                            </div>
+                            <div class="info-icon-text">
+                                There are limitations to what cards can be infused. <br><br>For safety reasons, I have
+                                decided
+                                that only effects with a single infusion will be edited. <br><br>If the card has
+                                multiple infusions, or
+                                infusion selected by player, it will be left unchanged.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-field">
+                        <label for="discardInput">Discard</label>
+                        <select id="discardInput" name="setDiscard">
+                            <option value="NONE">
+                                Default</option>
+                            <option value="DISCARD_DISCARD">
+                                Discard / Discard</option>
+                            <option value="DISCARD_LOST">
+                                Discard / Lost</option>
+                            <option value="LOST_DISCARD">
+                                Lost / Discard</option>
+                            <option value="LOST_LOST">
+                                Lost / Lost</option>
+                        </select>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button type="submit" class="btn">Apply</button>
+                <button type="button" class="btn" onclick="closeModal()">Cancel</button>
+            </div>
+        </form>
+    </template>
+
+
+
+</body>
+
+</html>

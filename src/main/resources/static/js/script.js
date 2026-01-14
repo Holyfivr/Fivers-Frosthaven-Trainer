@@ -119,74 +119,39 @@ window.onclick = function(event) {
     }
 }
 
-// ==========================================
-//  ITEM MODAL HELPER
-// ==========================================
+// TODO: add comment
 
-/**
- * Opens the item form with specific configuration.
- * @param {string} action - The action string (e.g. 'setGoldCost').
- * @param {string} labelText - Text to display in the header (e.g. 'Gold Cost').
- */
-function openItemModal(action, labelText) {
-    openModal("itemFormTemplate", (container) => {
-        // Set Title
-        const modalTitle = container.querySelector("#itemModalTitle");
-        if (modalTitle) modalTitle.innerText = `Set ${labelText} for all items`;
+function openEditAllItemsModal() {
+    openModal("editAllItemsTemplate", (container) => {
+        container.querySelectorAll("input").forEach(input => {
+            if (input.type !== "hidden") {
+                input.value = "";
+            }
+        });
 
-        // Set Hidden Action Input (required for controller)
-        const actionInput = container.querySelector("#actionInput");
-        if (actionInput) actionInput.value = action;
-        
-        // Configure Value Input based on action
-        const valInput = container.querySelector("#itemModalInput");
-        if (valInput) {
-            valInput.value = ""; // Reset
-            
-            // Logic for specific attributes
-            if (action === "setProsperityReq") {
-                valInput.placeholder = "0-9";
-                valInput.max = "9";
-                valInput.min = "0";
-            } 
-            else if (action === "setTotalInGame") {
-                valInput.placeholder = "1-9";
-                valInput.max = "9";
-                valInput.min = "1";
-            }
-            else if (action === "setGoldCost") {
-                valInput.placeholder = "1-200";
-                valInput.max = "200";
-                valInput.min = "1";
-            } 
-            else if (action === "setUsage") {
-                // Special case: Usage is text, and we might default to "Unrestricted"
-                valInput.type = "text"; 
-                valInput.value = "Unrestricted";
-                // If we want to hide it completely (since it's just setting to 'Unrestricted'):
-                valInput.style.display = "none";
-            }
-            else {
-                // Default numbers
-                valInput.placeholder = "1-99";
-                valInput.max = "99";
-                valInput.min = "1";
-            }
-
-            // Prevent invalid chars for number inputs
-            if (valInput.type === "number") {
-                valInput.onkeydown = function(e) {
-                    if (e.key === '-' || e.key === 'e') e.preventDefault();
-                };
-            }
-        }
-
-        //  Attach submit listener to close modal automatically
-        const form = container.querySelector("form");
+        const form = container.querySelector("#editAllItemsForm");
         if (form) {
             form.addEventListener("submit", () => {
                 closeModal();
-                showSuccessMessage('itemUpdated');
+                showToast("Items Updated Successfully!");
+            });
+        }
+    });
+}
+
+function openEditAllCardsModal() {
+    openModal("editAllCardsTemplate", (container) => {
+        container.querySelectorAll("input").forEach(input => {
+            if (input.type !== "hidden") {
+                input.value = "";
+            }
+        });      
+
+        const form = container.querySelector("#editAllCardsForm");
+        if (form) {
+            form.addEventListener("submit", () => {
+                closeModal();
+                showToast("Cards Updated Successfully!");
             });
         }
     });

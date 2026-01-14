@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import se.holyfivr.trainer.core.ActiveSessionData;
 import se.holyfivr.trainer.model.AbilityCard;
 import se.holyfivr.trainer.model.enums.CardAction;
+import se.holyfivr.trainer.model.enums.DiscardEnum;
 
 @Service
 public class AbilityCardService {
@@ -21,8 +22,13 @@ public class AbilityCardService {
 
     public void updateAllCards(String attribute, String value) {
 
+        if (value == null || value.isBlank()){
+            return;
+        }
+
         CardAction cardAttribute = CardAction.fromString(attribute);
-        System.err.println("Attribute: " + attribute + " | Value: " + value);
+        System.err.println("[updateAllCards] Attribute: " + attribute + " | Value: " + value);
+
         switch (cardAttribute) {
             case SET_ATTACK:
                 activeSessionData.setAbilityCardAttack(value);
@@ -67,16 +73,19 @@ public class AbilityCardService {
                 activeSessionData.setAbilityCardInitiative(value);
                 break;
             case SET_DISCARD:
-                activeSessionData.setAbilityCardDiscard(value);
+                activeSessionData.setAbilityCardDiscard(DiscardEnum.fromString(value));
                 break;
             case SET_CONSUMES:
                 activeSessionData.setAbilityCardConsumes(value);
                 break;
-            case SET_INFUSES:
-                activeSessionData.setAbilityCardInfuses(value);
+            case SET_INFUSE:
+                activeSessionData.setAbilityCardInfuse(value);
                 break;
             case SET_XP:
                 activeSessionData.setAbilityCardXP(value);
+                break;
+            case SET_LOOT:
+                activeSessionData.setAbilityCardLoot(value);
                 break;
             default:
                 break;
@@ -93,7 +102,7 @@ public class AbilityCardService {
                     .setInitiative(abilityCard.getInitiative())
                     .setDiscard(abilityCard.getDiscard())
                     .setConsumes(abilityCard.getConsumes())
-                    .setInfuses(abilityCard.getInfuses())
+                    .setInfuse(abilityCard.getInfuse())
                     .setPierce(abilityCard.getPierce())
                     .setXP(abilityCard.getXP())
                     .setHeal(abilityCard.getHeal())
@@ -106,9 +115,7 @@ public class AbilityCardService {
                     .setMove(abilityCard.getMove())
                     .setPull(abilityCard.getPull())
                     .setPush(abilityCard.getPush())
-                    .setJump(abilityCard.getJump());
-
-            existingAbilityCard
+                    .setJump(abilityCard.getJump())
                     .setAttackValues(abilityCard.getAttackValues())
                     .setDamageValues(abilityCard.getDamageValues())
                     .setHealValues(abilityCard.getHealValues())

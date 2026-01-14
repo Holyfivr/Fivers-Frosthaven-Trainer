@@ -68,7 +68,7 @@ public class ItemParser {
                     case PUSH           -> item.setPush                     (value);
                     case JUMP           -> item.setJump                     (value);
                     case CONDITIONS     -> item.setConditions               (value);
-                    case INFUSE         -> item.setInfuses                  (value);
+                    case INFUSE         -> item.setInfuse                  (value);
                 }
             } // else ignore unknown attributes
         }

@@ -35,38 +35,6 @@ html, body {
     padding-top: 10px;
     color: var(--color-cream);
 }
-/* Modals */
-#maxCharacterValuesModal {
-    display: block;
-    position: absolute;
-    opacity: 0;
-    width: 400px;
-    height: 200px;
-    border: 2px solid saddlebrown;
-    top: 200px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1;
-    text-align: center;
-    transition: transform 0.2s linear;
-    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.379);
-    border-radius: 6px;
-    pointer-events: none;
-    background-color: darkgray;
-}
-
-#backupModal {
-    position: absolute;
-    opacity: 0;
-    pointer-events: none;
-    top: 30%;
-    left: 50%;
-    transform: translateX(-50%);
-    border: 1px solid black;
-    height: 200px;
-    width: 400px;
-    background-color: blue;
-}
 .modal-text {
     flex-direction: column;
     justify-content: center;
@@ -88,28 +56,6 @@ html, body {
     text-align: center;
     align-items: center;
     margin: 0 auto;    
-}
-
-
-#confirmationModal {
-    position: absolute;
-    top: 20%;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: var(--color-cream);
-    color: var(--color-light-blue);
-    padding: 20px 40px;
-    border: 2px solid var(--color-light-blue);
-    border-radius: 8px;
-    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.459);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.5s ease-in-out;
-    z-index: 200;
-    text-align: center;
-}
-.confirmation-modal.show {
-    opacity: 1;
 }
 .btn {
     background-color: var(--color-cream);
@@ -149,38 +95,41 @@ html, body {
     color: var(--color-mid-blue);
 
 }
-.X {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 20px;
-    color: var(--color-light-blue);
-    text-decoration: none;
-}
-#itemModalInput {
-    width: 40px;
-    padding: 5px;
-    font-size: 16px;
-    border: 1px solid var(--color-light-blue);
-    border-radius: 4px;
-    text-align: center;
-}
-#itemModal {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: var(--color-cream);
-    color: var(--color-mid-blue);
-    padding: 20px 40px;
+
+.info-icon {
+
+    display: flex;
     border: 2px solid var(--color-light-blue);
-    border-radius: 8px;
-    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.459);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.5s ease-in-out;
-    z-index: 200;
-    text-align: center;
+    width: 15px;
+    height: 15px;
+    right: 1px;
+    justify-content: flex-start;
+    text-align: start;
+    overflow: hidden;
+    border-radius: 15px;
+    color: var(--color-light-blue);
+    font-weight: bold;
+    position: absolute;
+    z-index: 1;
+    cursor:default;
+    
+}
+.info-icon:hover {
+    background-color: var(--color-light-blue);
+    transform: translateX(235px) translateY(40px);
+    font-weight: normal;
+    width: 250px;
+    height: fit-content;
+    z-index: 1000;
+    padding: 10px;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.4);
+    border: 2px solid var(--color-cream);
+}
+
+.info-icon-text {
+    color: var(--color-cream);
+}
+   
+.info-icon-symbol {
+    padding-left: 2.5px;
 }

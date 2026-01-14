@@ -56,7 +56,6 @@
                         <td class="object-attribute-td">Prosperity Requirement: </td>
                         <td>
                             <select name="prosperityRequirement">
-                                <option value="0" th:selected="${item.prosperityRequirement == '0'}">0</option>
                                 <option value="1" th:selected="${item.prosperityRequirement == '1'}">1</option>
                                 <option value="2" th:selected="${item.prosperityRequirement == '2'}">2</option>
                                 <option value="3" th:selected="${item.prosperityRequirement == '3'}">3</option>
@@ -69,17 +68,17 @@
                             </select>
                         </td>
                     </tr>
-                    <tr th:if="${item.infuses != null}">
-                        <td class="object-attribute-td">Infuses: </td>
+                    <tr th:if="${item.infuse != null}">
+                        <td class="object-attribute-td">Infuse: </td>
                         <td>
-                            <select name="infuses" id="infusion">
-                                <option th:selected="${item.infuses == 'Any'}" value="Any">Any</option>
-                                <option th:selected="${item.infuses == 'Air'}" value="Air">Air</option>
-                                <option th:selected="${item.infuses == 'Dark'}" value="Dark">Dark</option>
-                                <option th:selected="${item.infuses == 'Earth'}" value="Earth">Earth</option>
-                                <option th:selected="${item.infuses == 'Fire'}" value="Fire">Fire</option>
-                                <option th:selected="${item.infuses == 'Ice'}" value="Ice">Ice</option>
-                                <option th:selected="${item.infuses == 'Light'}" value="Light">Light</option>
+                            <select name="infuse" id="infusion">
+                                <option th:selected="${item.infuse == 'Any'}" value="Any">Any</option>
+                                <option th:selected="${item.infuse == 'Air'}" value="Air">Air</option>
+                                <option th:selected="${item.infuse == 'Dark'}" value="Dark">Dark</option>
+                                <option th:selected="${item.infuse == 'Earth'}" value="Earth">Earth</option>
+                                <option th:selected="${item.infuse == 'Fire'}" value="Fire">Fire</option>
+                                <option th:selected="${item.infuse == 'Ice'}" value="Ice">Ice</option>
+                                <option th:selected="${item.infuse == 'Light'}" value="Light">Light</option>
                             </select>
                         </td>
                     </tr>

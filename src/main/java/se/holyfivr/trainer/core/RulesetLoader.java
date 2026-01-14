@@ -1,4 +1,3 @@
-// Flyttad till core-paketet
 package se.holyfivr.trainer.core;
 
 import java.io.FileInputStream;

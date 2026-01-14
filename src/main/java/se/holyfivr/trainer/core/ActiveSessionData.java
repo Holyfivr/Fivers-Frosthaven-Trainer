@@ -1,4 +1,3 @@
-// Flyttad till core-paketet
 package se.holyfivr.trainer.core;
 
 import java.nio.file.Path;
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Service;
 import se.holyfivr.trainer.model.AbilityCard;
 import se.holyfivr.trainer.model.Item;
 import se.holyfivr.trainer.model.PlayerCharacter;
+import se.holyfivr.trainer.model.enums.DiscardEnum;
 
 @Service
 public class ActiveSessionData {
@@ -231,6 +231,11 @@ public class ActiveSessionData {
         for (AbilityCard abilityCard : abilityCards.values()) {
             if (abilityCard.getAttack() != null) {
                 abilityCard.setAttack(value);
+                if (abilityCard.getAttackValues() != null && !abilityCard.getAttackValues().isEmpty()) {
+                    for (int i = 0; i < abilityCard.getAttackValues().size(); i++) {
+                        abilityCard.getAttackValues().set(i, value);
+                    }
+                }
             }
         }
     }
@@ -239,6 +244,11 @@ public class ActiveSessionData {
         for (AbilityCard abilityCard : abilityCards.values()) {
             if (abilityCard.getHeal() != null) {
                 abilityCard.setHeal(value);
+                if (abilityCard.getHealValues() != null && !abilityCard.getHealValues().isEmpty()) {
+                    for (int i = 0; i < abilityCard.getHealValues().size(); i++) {
+                        abilityCard.getHealValues().set(i, value);
+                    }
+                }
             }
         }
     }
@@ -255,6 +265,11 @@ public class ActiveSessionData {
         for (AbilityCard abilityCard : abilityCards.values()) {
             if (abilityCard.getDamage() != null) {
                 abilityCard.setDamage(value);
+                if (abilityCard.getDamageValues() != null && !abilityCard.getDamageValues().isEmpty()) {
+                    for (int i = 0; i < abilityCard.getDamageValues().size(); i++) {
+                        abilityCard.getDamageValues().set(i, value);
+                    }
+                }
             }
         }
     }
@@ -263,6 +278,11 @@ public class ActiveSessionData {
         for (AbilityCard abilityCard : abilityCards.values()) {
             if (abilityCard.getMove() != null) {
                 abilityCard.setMove(value);
+                if (abilityCard.getMoveValues() != null && !abilityCard.getMoveValues().isEmpty()) {
+                    for (int i = 0; i < abilityCard.getMoveValues().size(); i++) {
+                        abilityCard.getMoveValues().set(i, value);
+                    }
+                }
             }
         }
     }
@@ -271,6 +291,15 @@ public class ActiveSessionData {
         for (AbilityCard abilityCard : abilityCards.values()) {
             if (abilityCard.getRange() != null) {
                 abilityCard.setRange(value);
+                if (abilityCard.getRangeValues() != null && !abilityCard.getRangeValues().isEmpty()) {
+                    for (int i = 0; i < abilityCard.getRangeValues().size(); i++) {
+                        // Preserve AoE sentinel values
+                        if ("-1".equals(abilityCard.getRangeValues().get(i))) {
+                            continue;
+                        }
+                        abilityCard.getRangeValues().set(i, value);
+                    }
+                }
             }
         }
     }
@@ -279,6 +308,11 @@ public class ActiveSessionData {
         for (AbilityCard abilityCard : abilityCards.values()) {
             if (abilityCard.getShield() != null) {
                 abilityCard.setShield(value);
+                if (abilityCard.getShieldValues() != null && !abilityCard.getShieldValues().isEmpty()) {
+                    for (int i = 0; i < abilityCard.getShieldValues().size(); i++) {
+                        abilityCard.getShieldValues().set(i, value);
+                    }
+                }
             }
         }
     }
@@ -287,6 +321,15 @@ public class ActiveSessionData {
         for (AbilityCard abilityCard : abilityCards.values()) {
             if (abilityCard.getTarget() != null) {
                 abilityCard.setTarget(value);
+                if (abilityCard.getTargetValues() != null && !abilityCard.getTargetValues().isEmpty()) {
+                    for (int i = 0; i < abilityCard.getTargetValues().size(); i++) {
+                        // Preserve AoE sentinel values
+                        if ("-1".equals(abilityCard.getTargetValues().get(i))) {
+                            continue;
+                        }
+                        abilityCard.getTargetValues().set(i, value);
+                    }
+                }
             }
         }
     }
@@ -295,6 +338,11 @@ public class ActiveSessionData {
         for (AbilityCard abilityCard : abilityCards.values()) {
             if (abilityCard.getPull() != null) {
                 abilityCard.setPull(value);
+                if (abilityCard.getPullValues() != null && !abilityCard.getPullValues().isEmpty()) {
+                    for (int i = 0; i < abilityCard.getPullValues().size(); i++) {
+                        abilityCard.getPullValues().set(i, value);
+                    }
+                }
             }
         }
     }
@@ -303,6 +351,11 @@ public class ActiveSessionData {
         for (AbilityCard abilityCard : abilityCards.values()) {
             if (abilityCard.getPush() != null) {
                 abilityCard.setPush(value);
+                if (abilityCard.getPushValues() != null && !abilityCard.getPushValues().isEmpty()) {
+                    for (int i = 0; i < abilityCard.getPushValues().size(); i++) {
+                        abilityCard.getPushValues().set(i, value);
+                    }
+                }
             }
         }
     }
@@ -319,6 +372,11 @@ public class ActiveSessionData {
         for (AbilityCard abilityCard : abilityCards.values()) {
             if (abilityCard.getRetaliate() != null) {
                 abilityCard.setRetaliate(value);
+                if (abilityCard.getRetaliateValues() != null && !abilityCard.getRetaliateValues().isEmpty()) {
+                    for (int i = 0; i < abilityCard.getRetaliateValues().size(); i++) {
+                        abilityCard.getRetaliateValues().set(i, value);
+                    }
+                }
             }
         }
     }
@@ -327,6 +385,11 @@ public class ActiveSessionData {
         for (AbilityCard abilityCard : abilityCards.values()) {
             if (abilityCard.getPierce() != null) {
                 abilityCard.setPierce(value);
+                if (abilityCard.getPierceValues() != null && !abilityCard.getPierceValues().isEmpty()) {
+                    for (int i = 0; i < abilityCard.getPierceValues().size(); i++) {
+                        abilityCard.getPierceValues().set(i, value);
+                    }
+                }
             }
         }
     }
@@ -339,11 +402,9 @@ public class ActiveSessionData {
         }
     }
 
-    public void setAbilityCardDiscard(String value) {
-        for (AbilityCard abilityCard : abilityCards.values()) {
-            if (abilityCard.getDiscard() != null) {
-                abilityCard.setDiscard(value);
-            }
+    public void setAbilityCardDiscard(DiscardEnum value) {
+        for (AbilityCard abilityCard : abilityCards.values()) {      
+            abilityCard.setDiscard(value);
         }
     }
 
@@ -355,10 +416,10 @@ public class ActiveSessionData {
         }
     }
 
-    public void setAbilityCardInfuses(String value) {
+    public void setAbilityCardInfuse(String value) {
         for (AbilityCard abilityCard : abilityCards.values()) {
-            if (abilityCard.getInfuses() != null) {
-                abilityCard.setInfuses(value);
+            if (abilityCard.getInfuse() != null) {
+                abilityCard.setInfuse(value);
             }
         }
     }
@@ -367,6 +428,24 @@ public class ActiveSessionData {
         for (AbilityCard abilityCard : abilityCards.values()) {
             if (abilityCard.getXP() != null) {
                 abilityCard.setXP(value);
+                if (abilityCard.getXpValues() != null && !abilityCard.getXpValues().isEmpty()) {
+                    for (int i = 0; i < abilityCard.getXpValues().size(); i++) {
+                        abilityCard.getXpValues().set(i, value);
+                    }
+                }
+            }
+        }
+    }
+
+    public void setAbilityCardLoot(String value) {
+        for (AbilityCard abilityCard : abilityCards.values()) {
+            if (abilityCard.getLoot() != null) {
+                abilityCard.setLoot(value);
+                if (abilityCard.getLootValues() != null && !abilityCard.getLootValues().isEmpty()) {
+                    for (int i = 0; i < abilityCard.getLootValues().size(); i++) {
+                        abilityCard.getLootValues().set(i, value);
+                    }
+                }
             }
         }
     }

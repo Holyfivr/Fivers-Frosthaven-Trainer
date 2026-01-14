@@ -42,8 +42,11 @@
                     <tr th:each="val,iter : ${abilityCard.rangeValues}">
                         <td class="object-attribute-td">Range <span th:text="${iter.index + 1}"></span>:</td>
                         <td>
-
-                            <span>
+                            <span th:if="${val == '-1'}">
+                                <input type="hidden" th:name="|rangeValues[${iter.index}]|" value="-1">
+                                <input type="text" value="AoE" readonly>
+                            </span>
+                            <span th:unless="${val == '-1'}">
                                 <input required type="number" th:name="|rangeValues[${iter.index}]|" th:value="${val}"
                                     max="99" min="1">
                             </span>
@@ -70,7 +73,7 @@
                             </span>
                         </td>
                     </tr>
-                    
+
                     <tr th:each="val,iter : ${abilityCard.lootValues}">
                         <td class="object-attribute-td">Loot <span th:text="${iter.index + 1}"></span>:</td>
                         <td><input required type="number" th:name="|lootValues[${iter.index}]|" th:value="${val}"
@@ -115,17 +118,17 @@
                             </select>
                         </td>
                     </tr>
-                    <tr th:if="${abilityCard.infuses != null}">
-                        <td class="object-attribute-td">Infuses: </td>
+                    <tr th:if="${abilityCard.infuse != null}">
+                        <td class="object-attribute-td">Infuse: </td>
                         <td>
-                            <select required name="infuses" id="infusion">
-                                <option th:selected="${abilityCard.infuses == 'Any'}" value="Any">Any</option>
-                                <option th:selected="${abilityCard.infuses == 'Air'}" value="Air">Air</option>
-                                <option th:selected="${abilityCard.infuses == 'Dark'}" value="Dark">Dark</option>
-                                <option th:selected="${abilityCard.infuses == 'Earth'}" value="Earth">Earth</option>
-                                <option th:selected="${abilityCard.infuses == 'Fire'}" value="Fire">Fire</option>
-                                <option th:selected="${abilityCard.infuses == 'Ice'}" value="Ice">Ice</option>
-                                <option th:selected="${abilityCard.infuses == 'Light'}" value="Light">Light</option>
+                            <select required name="infuse" id="infusion">
+                                <option th:selected="${abilityCard.infuse == 'Any'}" value="Any">Any</option>
+                                <option th:selected="${abilityCard.infuse == 'Air'}" value="Air">Air</option>
+                                <option th:selected="${abilityCard.infuse == 'Dark'}" value="Dark">Dark</option>
+                                <option th:selected="${abilityCard.infuse == 'Earth'}" value="Earth">Earth</option>
+                                <option th:selected="${abilityCard.infuse == 'Fire'}" value="Fire">Fire</option>
+                                <option th:selected="${abilityCard.infuse == 'Ice'}" value="Ice">Ice</option>
+                                <option th:selected="${abilityCard.infuse == 'Light'}" value="Light">Light</option>
                             </select>
                         </td>
                     </tr>
@@ -147,6 +150,30 @@
                         <td class="object-attribute-td">XP <span th:text="${iter.index + 1}"></span>:</td>
                         <td><input required type="number" th:name="|xpValues[${iter.index}]|" th:value="${val}" max="99"
                                 min="0"></td>
+                    </tr>
+                    <tr>
+                        <td class="object-attribute-td">Discard</td>
+                        <td>
+                            <select name="discard">
+                                <option value="NONE"
+                                    th:selected="${abilityCard.discard == null or abilityCard.discard.name() == 'NONE'}">
+                                    Default</option>
+                                <option value="DISCARD_DISCARD"
+                                    th:selected="${abilityCard.discard != null and abilityCard.discard.name() == 'DISCARD_DISCARD'}">
+                                    Discard / Discard</option>
+                                <option value="DISCARD_LOST"
+                                    th:selected="${abilityCard.discard != null and abilityCard.discard.name() == 'DISCARD_LOST'}">
+                                    Discard / Lost</option>
+                                <option value="LOST_DISCARD"
+                                    th:selected="${abilityCard.discard != null and abilityCard.discard.name() == 'LOST_DISCARD'}">
+                                    Lost / Discard</option>
+                                <option value="LOST_LOST"
+                                    th:selected="${abilityCard.discard != null and abilityCard.discard.name() == 'LOST_LOST'}">
+                                    Lost / Lost</option>
+                            </select>
+                        </td>
+
+                        </td>
                     </tr>
                 </table>
 

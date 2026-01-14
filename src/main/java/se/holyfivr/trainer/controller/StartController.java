@@ -30,6 +30,9 @@ public class StartController {
         // loads card classes to be used in the ability card dropdown
         model.addAttribute("abilityCardClasses", activeSessionData.getCardClasses());
 
+        // loads ability card map into the model, so they can be used in the templates
+        model.addAttribute("abilityCardMap", activeSessionData.getAbilityCards());
+
         // Sends info to frontend on whether a file is loaded or not
         // if not, appropriate menu-options are disabled
         model.addAttribute("rulesetLoaded", activeSessionData.getRulesetPath() != null);
@@ -55,6 +58,21 @@ public class StartController {
             System.exit(0);
         });
         return "redirect:/start";
+    }
+
+    @GetMapping("/how")
+    public String redirectHow() {
+        return "how";
+    }
+    
+    @GetMapping("/about")
+    public String redirectAbout() {
+        return "about";
+    }
+
+    @GetMapping("/why")
+    public String redirectWhy() {
+        return "why";
     }
 
 }

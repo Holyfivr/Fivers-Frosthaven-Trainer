@@ -17,8 +17,10 @@ public enum CardAction {
     SET_RETALIATE("setRetaliate"),
     SET_PIERCE("setPierce"),
     SET_CONSUMES("setConsumes"),
-    SET_INFUSES("setInfuses"),
-    SET_XP("setXP");
+    SET_INFUSE("setInfuse"),
+    SET_XP("setXP"),
+    SET_LOOT("setLoot")
+    ;
 
     private final String attribute;
 

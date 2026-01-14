@@ -97,7 +97,7 @@ public class AbilityCardParser {
             }
             case DISCARD -> {
                 if (isTopLevel) {
-                    abilityCard.setDiscard(value);
+                    abilityCard.setDiscard(null);
                 }
             }
             case CONSUMES -> {
@@ -107,8 +107,8 @@ public class AbilityCardParser {
                 }
             }
             case INFUSE -> {
-                if (!inOverrides && indent <= MAX_ACCEPTED_CARD_LEVEL_INDENT && abilityCard.getInfuses() == null) {
-                    abilityCard.setInfuses(value);
+                if (!inOverrides && indent <= MAX_ACCEPTED_CARD_LEVEL_INDENT && abilityCard.getInfuse() == null) {
+                    abilityCard.setInfuse(value);
                 }
             }
             case XP -> {

@@ -108,14 +108,8 @@ public class SaveUtils {
             BlockListUpdater listUpdater,
             BlockValueUpdater valueUpdater) {
         if (validator.isValidList(stat.getList(abilityCard))) {
-            if (!validator.areAllNonNegativeInts(stat.getList(abilityCard))) {
-                return block;
-            }
             return listUpdater.apply(block, stat.getKey(), stat.getList(abilityCard));
         } else if (validator.isValidValue(stat.getSingle(abilityCard))) {
-            if (!validator.isNonNegativeInt(stat.getSingle(abilityCard))) {
-                return block;
-            }
             return valueUpdater.apply(block, stat.getKey(), stat.getSingle(abilityCard));
         }
         return block;

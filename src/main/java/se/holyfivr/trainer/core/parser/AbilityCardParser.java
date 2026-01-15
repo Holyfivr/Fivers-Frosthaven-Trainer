@@ -1,8 +1,12 @@
 package se.holyfivr.trainer.core.parser;
 
+import java.util.List;
+import java.util.regex.Pattern;
+
 import org.springframework.stereotype.Service;
 
 import se.holyfivr.trainer.core.ActiveSessionData;
+import se.holyfivr.trainer.core.utils.Validator;
 import se.holyfivr.trainer.model.AbilityCard;
 import se.holyfivr.trainer.model.enums.CardAttribute;
 import se.holyfivr.trainer.service.AbilityCardService;
@@ -10,22 +14,31 @@ import se.holyfivr.trainer.service.AbilityCardService;
 @Service
 public class AbilityCardParser {
 
-    private static final int MAX_ACCEPTED_CARD_LEVEL_INDENT = 8;
-
     private final ActiveSessionData activeSessionData;
     private final AbilityCardService abilityCardService;
+    private final Validator validator;
 
-    public AbilityCardParser(ActiveSessionData activeSessionData, AbilityCardService abilityCardService) {
+    // Lista över giltiga stat-nycklar. Denna kan vara ett instansfält då den är final (konstant).
+    private static final List<String> VALID_STAT_KEYS = List.of(
+            "Attack", "Damage", "Heal", "Move", "Range", "Shield", "Target",
+            "Loot", "Pull", "Push", "Retaliate", "Pierce", "XP"
+    );
+    
+    // Endast acceptera root-level Name, inte nästade Name/ParentName nycklar.
+    private static final Pattern NAME_PATTERN = Pattern.compile("^\\$[^\\r\\n]+\\$$");
+
+    public AbilityCardParser(ActiveSessionData activeSessionData, AbilityCardService abilityCardService, Validator validator) {
         this.activeSessionData = activeSessionData;
         this.abilityCardService = abilityCardService;
-
+        this.validator = validator;
     }
 
     public void parseAbilityCardBlock(String currentBlock) {
 
         AbilityCard abilityCard = new AbilityCard();
         String[] lines = currentBlock.split("\n");
-        ParserContext context = new ParserContext();
+        // VIKTIGT: Denna variabel är LOKAL till metoden för trådsäkerhet.
+        String storedKey = null;
 
         for (String line : lines) {
 
@@ -33,57 +46,59 @@ public class AbilityCardParser {
                 continue;
             }
 
-            String trimmed = line.trim();
-            if (trimmed.isEmpty() || trimmed.startsWith("#")) {
+            String trimmedLine = line.trim();
+            if (trimmedLine.isEmpty() || trimmedLine.startsWith("#")) {
                 continue;
             }
 
-            int indent = countLeadingSpaces(line);
-            context.pruneToIndent(indent);
-
-            int separatorIndex = trimmed.indexOf(':');
+            int separatorIndex = trimmedLine.indexOf(':');
             if (separatorIndex < 0) {
                 continue;
             }
 
             // Split into key and value
-            String key = trimmed.substring(0, separatorIndex).trim();
-            String value = trimmed.substring(separatorIndex + 1).trim();
+            String key = trimmedLine.substring(0, separatorIndex).trim();
+            String value = trimmedLine.substring(separatorIndex + 1).trim();
+            
+            // Uppdatera storedKey if key contains a valid string
+            if (VALID_STAT_KEYS.contains(key)) {
+                storedKey = key;
+            }
 
-            // Track nested sections like ConditionalOverrides / AbilityOverrides so we can ignore
-            // deeply nested values (e.g. XP/Pierce inside overrides).
+            // empty value = skip this iteration
             if (value.isEmpty()) {
-                context.setSection(indent, key);
-                context.maybeSetLastStatKey(key);
                 continue;
             }
 
-            // Remember last stat key for resolving "Amount" and "Strength"
-            String effectiveKey = context.resolveStatKey(key);
+            // if storedKey has a value, and the current key is "Amount" or "Strength", it belongs to the stored key
+            String effectiveKey = key;
+            if ((key.equalsIgnoreCase("Amount") || key.equalsIgnoreCase("Strength")) && storedKey != null) {
+                effectiveKey = storedKey;
+            }
+            
+            // we check the key towards the list of enums and assign it to attrEnum. if null, skip this iteration
             CardAttribute attrEnum = CardAttribute.fromString(effectiveKey);
             if (attrEnum == null) {
                 continue;
             }
 
-            // Apply the attribute to the ability card
-            applyAttribute(abilityCard, attrEnum, value, indent, context);
+            // call applyAttribute to set the value on the abilityCard
+            applyAttribute(abilityCard, attrEnum, value);
         }
+        
+        // Only add ability cards to activeSessionData with a known class name
         if (!abilityCard.getClassName().equals("Unknown")) {
             activeSessionData.addAbilityCard(abilityCard);
         }
     }
 
-    
-    private void applyAttribute(AbilityCard abilityCard, CardAttribute attrEnum, String value, int indent,
-            ParserContext context) {
 
-        boolean isTopLevel = indent == 0;
-        boolean inOverrides = context.isInsideOverrides();
+    private void applyAttribute(AbilityCard abilityCard, CardAttribute attrEnum, String value) {
 
+        // set values to the current abilityCard, based on the attrEnum connected to the keys retrieved
         switch (attrEnum) {
-            case NAME -> {
-                // Only accept the block-level Name, not nested Name/ParentName keys.
-                if (isTopLevel && abilityCard.getName() == null) {
+            case NAME -> { 
+                if (abilityCard.getName() == null && NAME_PATTERN.matcher(value).matches()) {
                     abilityCard.setName(value);
                     String[] details = abilityCardService.formatCardDetails(value);
                     abilityCard.setClassName(details[0]);
@@ -91,135 +106,104 @@ public class AbilityCardParser {
                 }
             }
             case INITIATIVE -> {
-                if (isTopLevel) {
-                    abilityCard.setInitiative(value);
+                if (abilityCard.getInitiative() == null) {
+                    abilityCard.setInitiative(value);                
                 }
             }
             case DISCARD -> {
-                if (isTopLevel) {
-                    abilityCard.setDiscard(null);
-                }
+                abilityCard.setDiscard(null);                
             }
             case CONSUMES -> {
-                // Often a block section, but can also appear as a key.
-                if (!inOverrides && indent <= MAX_ACCEPTED_CARD_LEVEL_INDENT && abilityCard.getConsumes() == null) {
+                if (abilityCard.getConsumes() == null) {
                     abilityCard.setConsumes(value);
                 }
             }
             case INFUSE -> {
-                if (!inOverrides && indent <= MAX_ACCEPTED_CARD_LEVEL_INDENT && abilityCard.getInfuse() == null) {
+                if (abilityCard.getInfuse() == null) {
                     abilityCard.setInfuse(value);
                 }
             }
             case XP -> {
-                // XP appears both as card-level and nested under ConditionalOverrides; ignore nested.
-                if (!inOverrides
-                        && indent <= MAX_ACCEPTED_CARD_LEVEL_INDENT
-                        && isPureInteger(value)) {
-                    String normalized = normalizeSignedNumberForUi(value);
-                    abilityCard.getXpValues().add(normalized);
-                    abilityCard.setXP(normalized);
+                if (validator.isValidInteger(value)) {
+                    String trimmed = trimmed(value);
+                    abilityCard.getXpValues().add(trimmed);
+                    abilityCard.setXP(trimmed);
                 }
             }
             case PIERCE -> {
-                if (!inOverrides) {
-                    String normalized = normalizeSignedNumberForUi(value);
-                    abilityCard.getPierceValues().add(normalized);
-                    abilityCard.setPierce(normalized);
-                }
+                String trimmed = trimmed(value);
+                abilityCard.getPierceValues().add(trimmed);
+                abilityCard.setPierce(trimmed);
             }
             case RETALIATE -> {
-                if (!inOverrides) {
-                    String normalized = normalizeSignedNumberForUi(value);
-                    abilityCard.getRetaliateValues().add(normalized);
-                    abilityCard.setRetaliate(normalized);
-                }
+                String trimmed = trimmed(value);
+                abilityCard.getRetaliateValues().add(trimmed);
+                abilityCard.setRetaliate(trimmed);
             }
             case ATTACK -> {
-                if (!inOverrides) {
-                    String normalized = normalizeSignedNumberForUi(value);
-                    abilityCard.getAttackValues().add(normalized);
-                    abilityCard.setAttack(normalized);
-                }
+                String trimmed = trimmed(value);
+                abilityCard.getAttackValues().add(trimmed);
+                abilityCard.setAttack(trimmed);
             }
             case HEAL -> {
-                if (!inOverrides) {
-                    String normalized = normalizeSignedNumberForUi(value);
-                    abilityCard.getHealValues().add(normalized);
-                    abilityCard.setHeal(normalized);
-                }
+                String trimmed = trimmed(value);
+                abilityCard.getHealValues().add(trimmed);
+                abilityCard.setHeal(trimmed);
             }
             case HEALTH -> {
-                if (!inOverrides && abilityCard.getHealth() == null) {
-                    // Keep as single value for now (not used in the card details UI).
-                    abilityCard.setHealth(value);
+                if (abilityCard.getHealth() == null) {
+                    abilityCard.setHealth(value); 
                 }
             }
             case DAMAGE -> {
-                if (!inOverrides) {
-                    String normalized = normalizeSignedNumberForUi(value);
-                    abilityCard.getDamageValues().add(normalized);
-                    abilityCard.setDamage(normalized);
-                }
+                String trimmed = trimmed(value);
+                abilityCard.getDamageValues().add(trimmed);
+                abilityCard.setDamage(trimmed);
             }
             case MOVE -> {
-                if (!inOverrides) {
-                    String normalized = normalizeSignedNumberForUi(value);
-                    abilityCard.getMoveValues().add(normalized);
-                    abilityCard.setMove(normalized);
-                }
+                String trimmed = trimmed(value);
+                abilityCard.getMoveValues().add(trimmed);
+                abilityCard.setMove(trimmed);
             }
             case RANGE -> {
-                if (!inOverrides) {
-                    String normalized = normalizeSignedNumberForUi(value);
-                    abilityCard.getRangeValues().add(normalized);
-                    abilityCard.setRange(normalized);
-                }
+                String trimmed = trimmed(value);
+                abilityCard.getRangeValues().add(trimmed);
+                abilityCard.setRange(trimmed);
             }
             case SHIELD -> {
-                if (!inOverrides) {
-                    String normalized = normalizeSignedNumberForUi(value);
-                    abilityCard.getShieldValues().add(normalized);
-                    abilityCard.setShield(normalized);
-                }
+                String trimmed = trimmed(value);
+                abilityCard.getShieldValues().add(trimmed);
+                abilityCard.setShield(trimmed);
             }
             case TARGET -> {
-                if (!inOverrides) {
-                    String normalized = normalizeSignedNumberForUi(value);
-                    abilityCard.getTargetValues().add(normalized);
-                    abilityCard.setTarget(normalized);
-                }
+                String trimmed = trimmed(value);
+                abilityCard.getTargetValues().add(trimmed);
+                abilityCard.setTarget(trimmed);
             }
             case PULL -> {
-                if (!inOverrides) {
-                    String normalized = normalizeSignedNumberForUi(value);
-                    abilityCard.getPullValues().add(normalized);
-                    abilityCard.setPull(normalized);
-                }
+                String trimmed = trimmed(value);
+                abilityCard.getPullValues().add(trimmed);
+                abilityCard.setPull(trimmed);
             }
             case PUSH -> {
-                if (!inOverrides) {
-                    String normalized = normalizeSignedNumberForUi(value);
-                    abilityCard.getPushValues().add(normalized);
-                    abilityCard.setPush(normalized);
-                }
+                String trimmed = trimmed(value);
+                abilityCard.getPushValues().add(trimmed);
+                abilityCard.setPush(trimmed);
             }
             case JUMP -> {
-                if (!inOverrides && abilityCard.getJump() == null) {
+                if (abilityCard.getJump() == null) {
                     abilityCard.setJump(value);
                 }
             }
             case LOOT -> {
-                if (!inOverrides) {
-                    String normalized = normalizeSignedNumberForUi(value);
-                    abilityCard.getLootValues().add(normalized);
-                    abilityCard.setLoot(normalized);
-                }
+                String trimmed = trimmed(value);
+                abilityCard.getLootValues().add(trimmed);
+                abilityCard.setLoot(trimmed);
             }
         }
     }
 
-    private static String normalizeSignedNumberForUi(String value) {
+    private static String trimmed(String value) {
         if (value == null) {
             return null;
         }
@@ -228,76 +212,5 @@ public class AbilityCardParser {
             return trimmed.substring(1);
         }
         return trimmed;
-    }
-
-    private static int countLeadingSpaces(String value) {
-        int count = 0;
-        while (count < value.length() && value.charAt(count) == ' ') {
-            count++;
-        }
-        return count;
-    }
-
-    private static boolean isPureInteger(String value) {
-        if (value == null) {
-            return false;
-        }
-        // Only accept lines like: XP: 1  (no extra symbols, quotes, comments, etc.)
-        return value.matches("-?\\d+");
-    }
-
-    private static final class ParserContext {
-
-        private final java.util.Map<Integer, String> sectionByIndent = new java.util.HashMap<>();
-        private String lastStatKey;
-
-        void pruneToIndent(int indent) {
-            sectionByIndent.keySet().removeIf(existingIndent -> existingIndent > indent);
-        }
-
-        void setSection(int indent, String key) {
-            sectionByIndent.put(indent, key);
-        }
-
-        boolean isInsideOverrides() {
-            for (String section : sectionByIndent.values()) {
-                if (section == null) {
-                    continue;
-                }
-                if (section.equalsIgnoreCase("ConditionalOverrides") || section.equalsIgnoreCase("AbilityOverrides")) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        void maybeSetLastStatKey(String key) {
-            if (isStatKey(key)) {
-                lastStatKey = key;
-            }
-        }
-
-        String resolveStatKey(String key) {
-            if ((key.equalsIgnoreCase("Amount") || key.equalsIgnoreCase("Strength")) && lastStatKey != null) {
-                return lastStatKey;
-            }
-            return key;
-        }
-
-        private static boolean isStatKey(String key) {
-            return key.equalsIgnoreCase("Attack")
-                    || key.equalsIgnoreCase("Damage")
-                    || key.equalsIgnoreCase("Heal")
-                    || key.equalsIgnoreCase("Move")
-                    || key.equalsIgnoreCase("Range")
-                    || key.equalsIgnoreCase("Shield")
-                    || key.equalsIgnoreCase("Target")
-                    || key.equalsIgnoreCase("Loot")
-                    || key.equalsIgnoreCase("Pull")
-                    || key.equalsIgnoreCase("Push")
-                    || key.equalsIgnoreCase("Retaliate")
-                    || key.equalsIgnoreCase("Pierce")
-                    || key.equalsIgnoreCase("XP");
-        }
     }
 }

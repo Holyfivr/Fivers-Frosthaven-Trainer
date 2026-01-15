@@ -68,6 +68,7 @@ public class RulesetSaver {
 
 
 
+
         /**
          * Constructs the saver with its collaborators.
          *
@@ -329,30 +330,18 @@ public class RulesetSaver {
         
         // Complex attributes that might be nested (e.g. Move: 3 OR Move: \n Amount: 3)
         // These use a nested "Amount" or "Strength" key, so we need regex-based replacement.
-        if (item.getHeal() != null && validator.isNonNegativeInt(item.getHeal()))
-            block = updateAttribute(block, "Heal", item.getHeal());
-        if (item.getAttack() != null && validator.isNonNegativeInt(item.getAttack()))
-            block = updateAttribute(block, "Attack", item.getAttack());
-        if (item.getRange() != null && validator.isNonNegativeInt(item.getRange()))
-            block = updateAttribute(block, "Range", item.getRange());
-        if (item.getTarget() != null && validator.isNonNegativeInt(item.getTarget()))
-            block = updateAttribute(block, "Target", item.getTarget());
-        if (item.getShield() != null && validator.isNonNegativeInt(item.getShield()))
-            block = updateAttribute(block, "Shield", item.getShield());
-        if (item.getShieldValue() != null && validator.isNonNegativeInt(item.getShieldValue()))
-            block = updateAttribute(block, "ShieldValue", item.getShieldValue());
-        if (item.getRetaliate() != null && validator.isNonNegativeInt(item.getRetaliate()))
-            block = updateAttribute(block, "Retaliate", item.getRetaliate());
-        if (item.getMove() != null && validator.isNonNegativeInt(item.getMove()))
-            block = updateAttribute(block, "Move", item.getMove());
-        if (item.getOMove() != null && validator.isNonNegativeInt(item.getOMove()))
-            block = updateAttribute(block, "OMove", item.getOMove());
-        if (item.getAMove() != null && validator.isNonNegativeInt(item.getAMove()))
-            block = updateAttribute(block, "AMove", item.getAMove());
-        if (item.getPull() != null && validator.isNonNegativeInt(item.getPull()))
-            block = updateAttribute(block, "Pull", item.getPull());
-        if (item.getPush() != null && validator.isNonNegativeInt(item.getPush()))
-            block = updateAttribute(block, "Push", item.getPush());
+        if (validator.isValidInteger(item.getHeal()))        block = updateAttribute(block, "Heal", item.getHeal());
+        if (validator.isValidInteger(item.getAttack()))      block = updateAttribute(block, "Attack", item.getAttack());
+        if (validator.isValidInteger(item.getRange()))       block = updateAttribute(block, "Range", item.getRange());
+        if (validator.isValidInteger(item.getTarget()))      block = updateAttribute(block, "Target", item.getTarget());
+        if (validator.isValidInteger(item.getShield()))      block = updateAttribute(block, "Shield", item.getShield());
+        if (validator.isValidInteger(item.getShieldValue())) block = updateAttribute(block, "ShieldValue", item.getShieldValue());
+        if (validator.isValidInteger(item.getRetaliate()))   block = updateAttribute(block, "Retaliate", item.getRetaliate());
+        if (validator.isValidInteger(item.getMove()))        block = updateAttribute(block, "Move", item.getMove());
+        if (validator.isValidInteger(item.getOMove()))       block = updateAttribute(block, "OMove", item.getOMove());
+        if (validator.isValidInteger(item.getAMove()))       block = updateAttribute(block, "AMove", item.getAMove());
+        if (validator.isValidInteger(item.getPull()))        block = updateAttribute(block, "Pull", item.getPull());
+        if (validator.isValidInteger(item.getPush()))        block = updateAttribute(block, "Push", item.getPush());
         // Jump is stored as a boolean flag (True/False)
         if (item.getJump() != null)
             block = JUMP_PATTERN.matcher(block).replaceAll("Jump: " + item.getJump());
@@ -425,7 +414,7 @@ public class RulesetSaver {
      */
     private String updateAttributeList(String block, String attributeKey, List<String> values) {
         Pattern pattern = Pattern.compile("\\b" + Pattern.quote(attributeKey)
-                + ":\\s*(?:(?:\\r?\\n\\s*)+(?:Amount|Strength):\\s*)?([+-]?\\d+)");
+            + ":[ \\t]*(?:(?:\\r?\\n[ \\t]*)+(?:Amount|Strength):[ \\t]*)?([+-]?\\d+)");
         Matcher matcher = pattern.matcher(block);
 
         int i = 0;
@@ -441,6 +430,12 @@ public class RulesetSaver {
                 continue;
             }
             String replacementValue = values.get(i++);
+
+            // If either the existing value or the incoming value is negative, leave this occurrence unchanged.
+            if (oldValue.startsWith("-") || !validator.isValidInteger(replacementValue)) {
+                matcher.appendReplacement(sb, Matcher.quoteReplacement(fullMatch));
+                continue;
+            }
 
             // Preserve "+" prefix if the original value had it.
             if (oldValue.startsWith("+") && !replacementValue.startsWith("-") && !replacementValue.startsWith("+")) {
@@ -477,7 +472,7 @@ public class RulesetSaver {
     private String updateAttribute(String block, String attributeKey, String value) {
         // Matches "Key: Value" OR "Key:\n...Amount: Value" OR "Key:\n...Strength: Value"
         // Handles variable whitespace and newlines.
-        Pattern pattern = Pattern.compile("\\b" + attributeKey + ":\\s*(?:(?:\\r?\\n\\s*)+(?:Amount|Strength):\\s*)?([+-]?\\d+)");
+        Pattern pattern = Pattern.compile("\\b" + attributeKey + ":[ \\t]*(?:(?:\\r?\\n[ \\t]*)+(?:Amount|Strength):[ \\t]*)?([+-]?\\d+)");
         Matcher matcher = pattern.matcher(block);
         
         StringBuffer sb = new StringBuffer();
@@ -489,6 +484,12 @@ public class RulesetSaver {
             // There are cases in the ruleset where attributes start with +.
             // Preserve that prefix to avoid changing the meaning of the value.
             String replacementValue = value;
+
+            // If either the existing value or the incoming value is negative, leave this occurrence unchanged.
+            if (oldValue.startsWith("-") || !validator.isValidInteger(replacementValue)) {
+                matcher.appendReplacement(sb, Matcher.quoteReplacement(fullMatch));
+                continue;
+            }
             if (oldValue.startsWith("+") && !replacementValue.startsWith("-") && !replacementValue.startsWith("+")) {
                 replacementValue = "+" + replacementValue;
             }

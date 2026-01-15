@@ -1,7 +1,9 @@
 package se.holyfivr.trainer.core.utils;
 
 import java.util.List;
-import org.springframework.stereotype.Component;
+import java.util.regex.Pattern;
+
+import org.springframework.stereotype.Service;
 
 /**
  * Centralized validation helpers used by the save pipeline.
@@ -9,8 +11,11 @@ import org.springframework.stereotype.Component;
  * This class only answers the question "is this value acceptable?" and does not
  * perform transformations or side effects.
  */
-@Component
+@Service
 public class Validator {
+
+    //checks for integers including leading/trailing whitespace
+    private static final Pattern IS_INTEGER = Pattern.compile("^\\s*\\d+\\s*$");
 
     /**
      * Checks if a list is present and contains at least one element.
@@ -33,24 +38,21 @@ public class Validator {
     }
 
     /**
-     * Parses a value to integer and verifies it is not negative.
-     *
+     * Parses a value to integer and verifies that it matches the regex expression.
      * Used as a failsafe for numeric attributes where negative values should be
      * skipped when writing back to the file.
      *
      * @param value string containing an integer
      * @return true if value parses to an integer and is >= 0
      */
-    public boolean isNonNegativeInt(String value) {
-        if (!isValidValue(value)) {
-            return false;
-        }
+    public boolean isValidInteger(String value) {
         try {
-            return Integer.parseInt(value.trim()) >= 0;
-        } catch (NumberFormatException ex) {
+            return value != null && Integer.parseInt(value.trim()) > 0 ? IS_INTEGER.matcher(value).matches() : false;    
+        } catch (NumberFormatException e) {
             return false;
         }
     }
+
 
     /**
      * Verifies that every value in the list is a non-negative integer.
@@ -66,7 +68,7 @@ public class Validator {
             return false;
         }
         for (String value : values) {
-            if (!isNonNegativeInt(value)) {
+            if (!isValidInteger(value)) {
                 return false;
             }
         }

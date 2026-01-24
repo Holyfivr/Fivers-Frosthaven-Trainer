@@ -30,65 +30,26 @@ public class AbilityCardService {
         System.err.println("[updateAllCards] Attribute: " + attribute + " | Value: " + value);
 
         switch (cardAttribute) {
-            case SET_ATTACK:
-                activeSessionData.setAbilityCardAttack(value);
-                break;
-            case SET_DAMAGE:
-                activeSessionData.setAbilityCardDamage(value);
-                break;
-            case SET_HEAL:
-                activeSessionData.setAbilityCardHeal(value);
-                break;
-            case SET_HEALTH:
-                activeSessionData.setAbilityCardHealth(value);
-                break;
-            case SET_MOVE:
-                activeSessionData.setAbilityCardMove(value);
-                break;
-            case SET_RANGE:
-                activeSessionData.setAbilityCardRange(value);
-                break;
-            case SET_SHIELD:
-                activeSessionData.setAbilityCardShield(value);
-                break;
-            case SET_TARGET:
-                activeSessionData.setAbilityCardTarget(value);
-                break;
-            case SET_PULL:
-                activeSessionData.setAbilityCardPull(value);
-                break;
-            case SET_PUSH:
-                activeSessionData.setAbilityCardPush(value);
-                break;
-            case SET_JUMP:
-                activeSessionData.setAbilityCardJump(value);
-                break;
-            case SET_RETALIATE:
-                activeSessionData.setAbilityCardRetaliate(value);
-                break;
-            case SET_PIERCE:
-                activeSessionData.setAbilityCardPierce(value);
-                break;
-            case SET_INITIATIVE:
-                activeSessionData.setAbilityCardInitiative(value);
-                break;
-            case SET_DISCARD:
-                activeSessionData.setAbilityCardDiscard(DiscardEnum.fromString(value));
-                break;
-            case SET_CONSUMES:
-                activeSessionData.setAbilityCardConsumes(value);
-                break;
-            case SET_INFUSE:
-                activeSessionData.setAbilityCardInfuse(value);
-                break;
-            case SET_XP:
-                activeSessionData.setAbilityCardXP(value);
-                break;
-            case SET_LOOT:
-                activeSessionData.setAbilityCardLoot(value);
-                break;
-            default:
-                break;
+            case SET_ATTACK     ->  activeSessionData.setAbilityCardAttack      (value);
+            case SET_DAMAGE     ->  activeSessionData.setAbilityCardDamage      (value);
+            case SET_HEAL       ->  activeSessionData.setAbilityCardHeal        (value);
+            case SET_HEALTH     ->  activeSessionData.setAbilityCardHealth      (value);
+            case SET_MOVE       ->  activeSessionData.setAbilityCardMove        (value);
+            case SET_RANGE      ->  activeSessionData.setAbilityCardRange       (value);
+            case SET_SHIELD     ->  activeSessionData.setAbilityCardShield      (value);
+            case SET_TARGET     ->  activeSessionData.setAbilityCardTarget      (value);
+            case SET_PULL       ->  activeSessionData.setAbilityCardPull        (value);
+            case SET_PUSH       ->  activeSessionData.setAbilityCardPush        (value);
+            case SET_JUMP       ->  activeSessionData.setAbilityCardJump        (value);
+            case SET_RETALIATE  ->  activeSessionData.setAbilityCardRetaliate   (value);
+            case SET_PIERCE     ->  activeSessionData.setAbilityCardPierce      (value);
+            case SET_INITIATIVE ->  activeSessionData.setAbilityCardInitiative  (value);
+            case SET_DISCARD    ->  activeSessionData.setAbilityCardDiscard     (DiscardEnum.fromString(value));
+            case SET_CONSUMES   ->  activeSessionData.setAbilityCardConsumes    (value);
+            case SET_INFUSE     ->  activeSessionData.setAbilityCardInfuse      (value);
+            case SET_XP         ->  activeSessionData.setAbilityCardXP          (value);
+            case SET_LOOT       ->  activeSessionData.setAbilityCardLoot        (value);
+
         }
     }
 
@@ -99,36 +60,36 @@ public class AbilityCardService {
 
         if (existingAbilityCard != null) {
             existingAbilityCard
-                    .setInitiative(abilityCard.getInitiative())
-                    .setDiscard(abilityCard.getDiscard())
-                    .setConsumes(abilityCard.getConsumes())
-                    .setInfuse(abilityCard.getInfuse())
-                    .setPierce(abilityCard.getPierce())
-                    .setXP(abilityCard.getXP())
-                    .setHeal(abilityCard.getHeal())
-                    .setAttack(abilityCard.getAttack())
-                    .setRange(abilityCard.getRange())
-                    .setTarget(abilityCard.getTarget())
-                    .setShield(abilityCard.getShield())
-                    .setRetaliate(abilityCard.getRetaliate())
-                    .setLoot(abilityCard.getLoot())
-                    .setMove(abilityCard.getMove())
-                    .setPull(abilityCard.getPull())
-                    .setPush(abilityCard.getPush())
-                    .setJump(abilityCard.getJump())
-                    .setAttackValues(abilityCard.getAttackValues())
-                    .setDamageValues(abilityCard.getDamageValues())
-                    .setHealValues(abilityCard.getHealValues())
-                    .setMoveValues(abilityCard.getMoveValues())
-                    .setRangeValues(abilityCard.getRangeValues())
-                    .setShieldValues(abilityCard.getShieldValues())
-                    .setTargetValues(abilityCard.getTargetValues())
-                    .setPullValues(abilityCard.getPullValues())
-                    .setPushValues(abilityCard.getPushValues())
-                    .setRetaliateValues(abilityCard.getRetaliateValues())
-                    .setPierceValues(abilityCard.getPierceValues())
-                    .setXpValues(abilityCard.getXpValues())
-                    .setLootValues(abilityCard.getLootValues());
+                .setInitiative      (abilityCard.getInitiative())
+                .setDiscard         (abilityCard.getDiscard())
+                .setConsumes        (abilityCard.getConsumes())
+                .setInfuse          (abilityCard.getInfuse())
+                .setPierce          (abilityCard.getPierce())
+                .setXP              (abilityCard.getXP())
+                .setHeal            (abilityCard.getHeal())
+                .setAttack          (abilityCard.getAttack())
+                .setRange           (abilityCard.getRange())
+                .setTarget          (abilityCard.getTarget())
+                .setShield          (abilityCard.getShield())
+                .setRetaliate       (abilityCard.getRetaliate())
+                .setLoot            (abilityCard.getLoot())
+                .setMove            (abilityCard.getMove())
+                .setPull            (abilityCard.getPull())
+                .setPush            (abilityCard.getPush())
+                .setJump            (abilityCard.getJump())
+                .setAttackValues    (abilityCard.getAttackValues())
+                .setDamageValues    (abilityCard.getDamageValues())
+                .setHealValues      (abilityCard.getHealValues())
+                .setMoveValues      (abilityCard.getMoveValues())
+                .setRangeValues     (abilityCard.getRangeValues())
+                .setShieldValues    (abilityCard.getShieldValues())
+                .setTargetValues    (abilityCard.getTargetValues())
+                .setPullValues      (abilityCard.getPullValues())
+                .setPushValues      (abilityCard.getPushValues())
+                .setRetaliateValues (abilityCard.getRetaliateValues())
+                .setPierceValues    (abilityCard.getPierceValues())
+                .setXpValues        (abilityCard.getXpValues())
+                .setLootValues      (abilityCard.getLootValues());
         }
         
     }

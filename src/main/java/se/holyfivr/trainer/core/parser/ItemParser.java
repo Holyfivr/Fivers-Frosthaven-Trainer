@@ -45,30 +45,31 @@ public class ItemParser {
             ItemAttribute attrEnum = ItemAttribute.fromString(attribute);
             if (attrEnum != null) {
                 switch (attrEnum) {
-                    case STRING_ID      -> item.setStringId                 (value);
-                    case ID             -> item.setId                       (value);
-                    case COST           -> item.setCost                     (value);
-                    case TOTAL_IN_GAME  -> item.setTotalInGame              (value);
-                    case SLOT           -> item.setSlot                     (value);
-                    case RARITY         -> item.setRarity                   (value);
-                    case USAGE          -> item.setUsage                    (value);
-                    case PROSPERITY_REQ -> item.setProsperityRequirement    (value);
-                    case CONSUMES       -> item.setConsumes                 (value);
-                    case HEAL           -> item.setHeal                     (value);
-                    case ATTACK         -> item.setAttack                   (value);
-                    case RANGE          -> item.setRange                    (value);
-                    case TARGET         -> item.setTarget                   (value);
-                    case SHIELD         -> item.setShield                   (value);
-                    case SHIELD_VALUE   -> item.setShieldValue              (value);
-                    case RETALIATE      -> item.setRetaliate                (value);
-                    case MOVE           -> item.setMove                     (value);
-                    case OMOVE          -> item.setOMove                    (value);
-                    case AMOVE          -> item.setAMove                    (value);
-                    case PULL           -> item.setPull                     (value);
-                    case PUSH           -> item.setPush                     (value);
-                    case JUMP           -> item.setJump                     (value);
-                    case CONDITIONS     -> item.setConditions               (value);
-                    case INFUSE         -> item.setInfuse                  (value);
+                    case STRING_ID      -> item.setStringId              (value);
+                    case ID             -> item.setId                    (value);
+                    case COST           -> item.setCost                  (value);
+                    case TOTAL_IN_GAME  -> item.setTotalInGame           (value);
+                    case SLOT           -> item.setSlot                  (value);
+                    case RARITY         -> item.setRarity                (value);
+                    case USAGE          -> item.setUsage                 (value);
+                    case PROSPERITY_REQ -> item.setProsperityRequirement (value);
+                    case CONSUMES       -> item.setConsumes              (value);
+                    case HEAL           -> item.setHeal                  (value);
+                    case ATTACK         -> item.setAttack                (value);
+                    case RANGE          -> item.setRange                 (value);
+                    case TARGET         -> item.setTarget                (value);
+                    case SHIELD         -> item.setShield                (value);
+                    case SHIELD_VALUE   -> item.setShieldValue           (value);
+                    case RETALIATE      -> item.setRetaliate             (value);
+                    case MOVE           -> item.setMove                  (value);
+                    case OMOVE          -> item.setOMove                 (value);
+                    case AMOVE          -> item.setAMove                 (value);
+                    case PULL           -> item.setPull                  (value);
+                    case PUSH           -> item.setPush                  (value);
+                    case JUMP           -> item.setJump                  (value);
+                    case CONDITIONS     -> item.setConditions            (value);
+                    case INFUSE         -> item.setInfuse                (value);
+
                 }
             } // else ignore unknown attributes
         }

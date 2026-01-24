@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Component;
 
-import se.holyfivr.trainer.model.AbilityCard;
+
 
 /**
  * Utility helpers used by RulesetSaver to keep the core class focused on flow.
@@ -16,17 +16,6 @@ import se.holyfivr.trainer.model.AbilityCard;
  */
 @Component
 public class SaveUtils {
-
-    private final Validator validator;
-
-    /**
-     * Constructs the helper with its validation dependency.
-     *
-     * @param validator shared validation logic used by save helpers
-     */
-    public SaveUtils(Validator validator) {
-        this.validator = validator;
-    }
 
     /**
      * Extracts a single identifier line from a block based on the given prefix.
@@ -88,46 +77,65 @@ public class SaveUtils {
         return matcher.replaceAll(Matcher.quoteReplacement(key + ": " + normalized));
     }
 
-    /**
-     * Updates an ability-card stat using either list or single-value semantics.
-     *
-     * This method chooses between list and single value updates and enforces
-     * non-negative integer validation before writing back into the block.
-     *
-     * @param block full block text
-     * @param abilityCard source of stat values
-     * @param stat stat metadata (key + getters)
-     * @param listUpdater callback to update list-based attributes
-     * @param valueUpdater callback to update single-value attributes
-     * @return updated block text
-     */
-    public String updateAbilityCardStat(
-            String block,
-            AbilityCard abilityCard,
-            AbilityStat stat,
-            BlockListUpdater listUpdater,
-            BlockValueUpdater valueUpdater) {
-        if (validator.isValidList(stat.getList(abilityCard))) {
-            return listUpdater.apply(block, stat.getKey(), stat.getList(abilityCard));
-        } else if (validator.isValidValue(stat.getSingle(abilityCard))) {
-            return valueUpdater.apply(block, stat.getKey(), stat.getSingle(abilityCard));
+
+        /* checks for integers including leading/trailing whitespace */
+    private static final Pattern IS_INTEGER = Pattern.compile("^\\s*\\d+\\s*$");
+
+    /* Checks if a list is present and contains at least one element. */
+    public boolean isValidList(List<String> values) {
+        return values != null && !values.isEmpty();
+    }
+
+    /* Checks if a single string value is present and not blank. */
+    public boolean isValidValue(String value) {
+        return value != null && !value.isBlank();
+    }
+
+    /* Parses a value to integer and verifies that it matches the regex expression. */
+    public boolean isValidInteger(String value) {
+        try {
+            return value != null && Integer.parseInt(value.trim()) > 0 ? IS_INTEGER.matcher(value).matches() : false;    
+        } catch (NumberFormatException e) {
+            return false;
         }
-        return block;
     }
 
-    /**
-     * Strategy for updating list-based attributes in a block.
-     */
-    @FunctionalInterface
-    public interface BlockListUpdater {
-        String apply(String block, String key, List<String> values);
+    /* Verifies that every value in the list is a non-negative integer. */
+    public boolean areAllNonNegativeInts(List<String> values) {
+        if (!isValidList(values)) {
+            return false;
+        }
+        for (String value : values) {
+            if (!isValidInteger(value)) {
+                return false;
+            }
+        }
+        return true;
     }
 
-    /**
-     * Strategy for updating single-value attributes in a block.
-     */
-    @FunctionalInterface
-    public interface BlockValueUpdater {
-        String apply(String block, String key, String value);
+    /* Sanitizes lines that accidentally stack up multiple inline comments. */
+    public String stripDoubleHashComments(String block) {
+        if (block == null || block.isEmpty()) {
+            return block;
+        }
+        String[] lines = block.split("\n", -1);
+        StringBuilder result = new StringBuilder(block.length());
+        for (int i = 0; i < lines.length; i++) {
+            String line = lines[i];
+            int firstHash = line.indexOf('#');
+            if (firstHash != -1) {
+                int secondHash = line.indexOf('#', firstHash + 1);
+                if (secondHash != -1) {
+                    line = line.substring(0, secondHash);
+                }
+            }
+            result.append(line);
+            if (i < lines.length - 1) {
+                result.append("\n");
+            }
+        }
+        return result.toString();
     }
+ 
+
 }

@@ -76,8 +76,7 @@ public class RulesetLoader {
             footerBytes,
             contentBytes,
             originalContentString,
-            originalTotalSize,
-            activeSession.getCharacters()
+            originalTotalSize
         );
     }
 

@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 import org.springframework.stereotype.Service;
 
 import se.holyfivr.trainer.core.ActiveSessionData;
-import se.holyfivr.trainer.core.utils.Validator;
+import se.holyfivr.trainer.core.utils.SaveUtils;
 import se.holyfivr.trainer.model.AbilityCard;
 import se.holyfivr.trainer.model.enums.CardAttribute;
 import se.holyfivr.trainer.service.AbilityCardService;
@@ -16,7 +16,7 @@ public class AbilityCardParser {
 
     private final ActiveSessionData activeSessionData;
     private final AbilityCardService abilityCardService;
-    private final Validator validator;
+    private final SaveUtils saveUtils;
 
     // Lista över giltiga stat-nycklar. Denna kan vara ett instansfält då den är final (konstant).
     private static final List<String> VALID_STAT_KEYS = List.of(
@@ -27,10 +27,10 @@ public class AbilityCardParser {
     // Endast acceptera root-level Name, inte nästade Name/ParentName nycklar.
     private static final Pattern NAME_PATTERN = Pattern.compile("^\\$[^\\r\\n]+\\$$");
 
-    public AbilityCardParser(ActiveSessionData activeSessionData, AbilityCardService abilityCardService, Validator validator) {
+    public AbilityCardParser(ActiveSessionData activeSessionData, AbilityCardService abilityCardService, SaveUtils saveUtils) {
         this.activeSessionData = activeSessionData;
         this.abilityCardService = abilityCardService;
-        this.validator = validator;
+        this.saveUtils = saveUtils;
     }
 
     public void parseAbilityCardBlock(String currentBlock) {
@@ -124,7 +124,7 @@ public class AbilityCardParser {
                 }
             }
             case XP -> {
-                if (validator.isValidInteger(value)) {
+                if (saveUtils.isValidInteger(value)) {
                     String trimmed = trimmed(value);
                     abilityCard.getXpValues().add(trimmed);
                     abilityCard.setXP(trimmed);

@@ -54,11 +54,9 @@ So please be patient if updates are slow, as I am balancing this with my studies
 <h2 style="max-width: 1000px; margin: auto; text-align: center; color: red; font-weight: bold;"> Important!</h2>
 <div style="max-width: 1000px; margin: auto; font-size: 1.1em; line-height: 1.6em; font-weight: bold;">
 
-**<b>You can not make changes to an existing campaign.</b>** 
-Changes apply only to new campaigns started after the modifications.
+**<b>Making changes affects all existing campaigns.</b>** 
+Making changes in the ruleset file will effectively change the game rules, this means all existing campaigns will be affected by these changes.
 
-**<b>Some features, like adding new starting characters, need more testing to ensure they work correctly.</b>** 
-Adding characters work, but may have unexpected side effects in the campaign. Do this at your own risk.
 
 </div>
 <hr>
@@ -82,6 +80,20 @@ Adding characters work, but may have unexpected side effects in the campaign. Do
 | ![Save Ruleset](/preview/save-ruleset.png) | ![Restore Backup](/preview/restore-ruleset.png) |
 <hr>
 
+## Tools Used
+*   [JDK 21](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html) - Java Development Kit
+*   [Maven](https://maven.apache.org/) - Build Automation Tool
+*   [Spring Boot](https://spring.io/projects/spring-boot) - Application Framework
+*   [Thymeleaf](https://www.thymeleaf.org/) - Templating Engine
+*   [JavaFX (Webview)](https://openjfx.io/) - GUI Framework
+*   [Visual Studio Code](https://code.visualstudio.com/) - IDE
+
+## Languages
+*   Java
+*   Css
+*   HTML
+*   JavaScript
+
 ## Installation
 1.  Download the latest release from the [Releases](https://github.com/Holyfivr/Fivers-Frosthaven-Trainer/releases)
 2.  Extract the ZIP file to a folder of your choice.
@@ -98,6 +110,7 @@ Getting a certificate costs money, and since I am a student working on this proj
 2.  Clone this repository to your local machine.
 3.  Navigate to the project directory.
 4.  Build the project using your preferred IDE or build tool.
+5.  After building the project, there will be a directory named `target\dist\FiversFrosthavenTrainer\` placed in the root of the project directory. In this folder you will find the executable `FrosthavenTrainer.exe`.
 
 ## Troubleshooting
 If you encounter any issues while using the Frosthaven Trainer, please open a [GitHub Issue](https://github.com/Holyfivr/Fivers-Frosthaven-Trainer/issues) in the repository with a detailed description of the problem.

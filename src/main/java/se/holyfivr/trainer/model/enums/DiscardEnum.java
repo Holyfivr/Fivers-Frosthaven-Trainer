@@ -3,9 +3,9 @@ package se.holyfivr.trainer.model.enums;
 public enum DiscardEnum {
     NONE(null),
     DISCARD_DISCARD("[Discard,Discard]"),
-    DISCARD_LOST("[Discard,Lost]"),
-    LOST_DISCARD("[Lost,Discard]"),
-    LOST_LOST("[Lost,Lost]");
+    DISCARD_LOST   ("[Discard,Lost]"),
+    LOST_DISCARD   ("[Lost,Discard]"),
+    LOST_LOST      ("[Lost,Lost]");
 
     private final String value;
 

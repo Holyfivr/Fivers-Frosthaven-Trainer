@@ -54,26 +54,31 @@ This structure reflects the current state of the project. (obviously subject to 
 
 <pre>
 ┐<u><b>src</b></u>
-├─┐<u><b>main</b></u>
-│ └─┐<u><b>java</b></u>
-│   └─┐<u><b>se</b></u>
-│     └─┐<u><b>holyfivr</b></u>
-│       └─┐<u><b>trainer</b></u>
-│         ├ TrainerApplication.java
-│         ├─┐<u><b>controller</b></u>
-│         │ └ StartController.java
-│         ├─┐<u><b>model</b></u>
-│         │ ├ PlayerCharacter.java
-│         │ ├ Item.java
-│         │ ├ AbilityCard.java
-│         │ └ GameObject.java
-│         ├─┐<u><b>service</b></u>
-│         │ ├ <b>RulesetLoader.java</b> (Orchestrator)
-│         │ ├ <b>RulesetParser.java</b> (Parsing Logic)
-│         │ ├ <b>RulesetSaver.java</b> (Saving & Filler Bank Logic)
-│         │ └ <b>ActiveSessionData.java</b> (In-memory State)
-│         └─┐<u><b>utils</b></u>
-│           └ helper classes
+├─┐<u><b>main/java/se/holyfivr/trainer/</b></u>
+│ ├ <i>TrainerApplication.java</i>
+| |
+│ ├─┐<u><b>controller</b></u>
+│ │ └ <i>Spring MVC Controllers</i>
+| |
+│ ├─┐<u><b>Core</b></u>
+│ │ ├ <i>File Handling Logic</i>
+│ │ │
+│ │ │
+│ │ ├─┐<u><b>Parser</b></u>
+│ │ | └  <i>Parsing Logic</i>
+│ │ |
+│ │ └─┐<u><b>utils</b></u>
+│ │   └ <i>Helper classes for the core components</i>
+| |
+│ ├─┐<u><b>model</b></u>
+│ │ ├ <i>POJO Classes</i>
+│ │ │
+│ │ └─┐<u><b>Enums</b></u> 
+│ │   └ <i>Enum Classes</i>
+│ │  
+│ └─┐<u><b>service</b></u>
+│   └ <i>Business Logic Services</i>
+│
 └─┐<u><b>resources</b></u>
   ├─┐<u><b>static</b></u>
   | └ js/css files

@@ -3,7 +3,7 @@
 
 <body>
 
-    <li th:classappend="${!rulesetLoaded} ? 'inactive'" th:fragment="character-menu">
+    <li th:classappend="${!rulesetLoaded} ? 'inactive'" id="characterMenu" th:fragment="character-menu">
         Characters
         <ul class="dropdown">
             <!-- inactive unless opened file -->

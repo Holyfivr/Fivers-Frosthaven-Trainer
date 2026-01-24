@@ -33,23 +33,33 @@ function registerPendingAction(actionName) {
     sessionStorage.setItem("pendingAction", actionName);
 }
 
+function showLoadSuccessfulMessage() {
+    const characterMenu = document.getElementById("characterMenu");
+    if (!characterMenu.classList.contains("inactive")) {
+        showToast("File Loaded Successfully!");
+    }
+}
+
 function showSuccessMessage(action) {
     let message = "";
     switch (action) {
         case "fileLoaded":
             const rulesetLoadedCheck = document.getElementById("rulesetLoadedCheck");
-            if (rulesetLoadedCheck?.value === "true") message = "Ruleset Loaded Successfully!";
-            break;
-        case "backupCreated": message = "Backup Created Successfully!"; break;
-        case "backupRestored": message = "Original Backup Restored!"; break;
-        case "rulesetSaved": message = "Ruleset Saved Successfully!"; break;
-        case "linkCopied": message = "Link Copied to Clipboard!"; break;
-        case "hpMaxed": message = "All Characters Max HP Set to 99!"; break;
-        case "cardsMaxed": message = "All Characters Max Cards Set to 20!"; break;
-        case "charactersEnabled": message = "Characters Enabled from Start!"; break;
-        case "characterSaved": message = "Character Saved Successfully!"; break;
-        case "itemUpdated": message = "Items Updated Successfully!"; break;
-    }
+            if (rulesetLoadedCheck?.value === "true") {
+                showLoadSuccessfulMessage();
+                return;
+            }
+            return;
+        case "backupCreated"    : message = "Backup Created Successfully!"       ; break;
+        case "backupRestored"   : message = "Original Backup Restored!"          ; break;
+        case "rulesetSaved"     : message = "Ruleset Saved Successfully!"        ; break;
+        case "linkCopied"       : message = "Link Copied to Clipboard!"          ; break;
+        case "hpMaxed"          : message = "All Characters Max HP Set to 99!"   ; break;
+        case "cardsMaxed"       : message = "All Characters Max Cards Set to 20!"; break;
+        case "charactersEnabled": message = "Characters Enabled from Start!"     ; break;
+        case "characterSaved"   : message = "Character Saved Successfully!"      ; break;
+        case "itemUpdated"      : message = "Items Updated Successfully!"        ; break;
+        }
 
     if (message) {
         showToast(message);

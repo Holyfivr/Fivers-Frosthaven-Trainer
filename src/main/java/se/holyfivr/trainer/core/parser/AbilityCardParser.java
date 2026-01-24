@@ -18,13 +18,13 @@ public class AbilityCardParser {
     private final AbilityCardService abilityCardService;
     private final SaveUtils saveUtils;
 
-    // Lista över giltiga stat-nycklar. Denna kan vara ett instansfält då den är final (konstant).
+    // List of valid "stat"-keys. These are use when looping through the ruleset when finding abilities to change
     private static final List<String> VALID_STAT_KEYS = List.of(
             "Attack", "Damage", "Heal", "Move", "Range", "Shield", "Target",
-            "Loot", "Pull", "Push", "Retaliate", "Pierce", "XP"
+            "Loot", "Pull", "Push", "Retaliate", "Pierce", "XP", "Consumes"
     );
     
-    // Endast acceptera root-level Name, inte nästade Name/ParentName nycklar.
+    // Pattern to make name-key only accept root-level card-names
     private static final Pattern NAME_PATTERN = Pattern.compile("^\\$[^\\r\\n]+\\$$");
 
     public AbilityCardParser(ActiveSessionData activeSessionData, AbilityCardService abilityCardService, SaveUtils saveUtils) {
@@ -37,42 +37,57 @@ public class AbilityCardParser {
 
         AbilityCard abilityCard = new AbilityCard();
         String[] lines = currentBlock.split("\n");
-        // VIKTIGT: Denna variabel är LOKAL till metoden för trådsäkerhet.
+        
+        /* ========================================================================= */
+        /* This is used to store temporary values during the loops. If an item with  */
+        /* a valid key-phrase ends with ':' (which means it has no value), the       */
+        /* the value is then stored in the temporary key variable, and when the next */
+        /* "Amount" or "Strength" phase appears, we apply the value to update on     */
+        /* that key instead. This is to handle occasions when the value of a key is  */
+        /* not used in the original name of the key.                                 */
+        /* ========================================================================= */
         String storedKey = null;
 
+        // read all the rows in current block
         for (String line : lines) {
 
+
+            // skip null or empty lines
             if (line == null) {
                 continue;
             }
 
+            // trim line and skip comments or empty lines
             String trimmedLine = line.trim();
             if (trimmedLine.isEmpty() || trimmedLine.startsWith("#")) {
                 continue;
             }
 
+            // separates the key and value by the first occurrence of ':'
             int separatorIndex = trimmedLine.indexOf(':');
             if (separatorIndex < 0) {
                 continue;
             }
 
-            // Split into key and value
+            // Assign key and value to 0, and 1 respectively
             String key = trimmedLine.substring(0, separatorIndex).trim();
             String value = trimmedLine.substring(separatorIndex + 1).trim();
             
-            // Uppdatera storedKey if key contains a valid string
+            // Updates storedKey if key contains a valid string
             if (VALID_STAT_KEYS.contains(key)) {
                 storedKey = key;
             }
 
             // empty value = skip this iteration
-            if (value.isEmpty()) {
+            // We also skip values containing "Resonance", as this is a special element for the Astral class
+            if (value.isEmpty() || value.equalsIgnoreCase("Resonance")) {
                 continue;
             }
 
             // if storedKey has a value, and the current key is "Amount" or "Strength", it belongs to the stored key
+            // so we set key to storedKey to apply the value to that key instead
             String effectiveKey = key;
-            if ((key.equalsIgnoreCase("Amount") || key.equalsIgnoreCase("Strength")) && storedKey != null) {
+            if ((key.equalsIgnoreCase("Amount") || key.equalsIgnoreCase("Strength") || key.equalsIgnoreCase("Elements")) && storedKey != null) {
                 effectiveKey = storedKey;
             }
             

@@ -94,6 +94,9 @@ public class AbilityCardService {
         
     }
 
+    /* ========================================================= */
+    /* Get all cards for a specific class, or all cards if "all" */
+    /* ========================================================= */
     public Map<String, AbilityCard> getCardsByClass(String className) {
         Map<String, AbilityCard> cardMap = activeSessionData.getAbilityCards();
         if ("all".equals(className)) {

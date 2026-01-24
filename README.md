@@ -23,13 +23,16 @@ So please be patient if updates are slow, as I am balancing this with my studies
 </h2>
 <div style="max-width: 1000px; margin: auto; font-size: 1.1em; line-height: 1.6em;">
 
-*   **Character Editing:** Change HP for all levels (1-9) for all characters, as well as available cards on hand.
-*   **Unlock Characters:** Unlock starting classes (currently Snowflake, Fist, Meteor, Prism, Trap)
-*   **Item Editing:** Modify item stats and properties.
-*   **Mass Item/Character Editing** All values can be 'maxed' to their allowed value by single-click menu options.
+*   ✅**File Safety:** Automatically creates a backup of the original file when first opened. Ability to restore from backup if needed.
+*   ✅**Character Editing:** Change HP for all levels (1-9) for all characters, as well as available cards on hand.
+*   ✅**Mass Character Editing** All values can be maxed to their allowed value by single-click menu options.
+*   ✅**Unlock Characters:** Unlock starting classes (currently Snowflake, Fist, Meteor, Prism, Trap)
+*   ✅**Item Editing:** Modify item stats and properties.
+*   ✅**Mass Item Editing** All item values can be set to desired values by a popup window with all the fields needed. Leave fields empty to skip changing that value.
+*   ✅**Ability Card Editing:** Change ability card effects and values.
+*   ✅**Mass Ability Card Editing** All ability card values can be edited to desired values in a popup window with all needed fields. Leave fields empty to skip changing that value.
 
 ## Upcoming Features
-*   **Ability Card Editing:** Change ability card effects and values.
 *   **Enchantment Editing:** Change enchantment effects and values.
 *   **Town Editing**: Adjust things like prosperity/morale/available buildings.
 </div>

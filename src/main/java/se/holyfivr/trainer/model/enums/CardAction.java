@@ -2,24 +2,24 @@ package se.holyfivr.trainer.model.enums;
 
 public enum CardAction {
     SET_INITIATIVE("setInitiative"),
-    SET_DISCARD("setDiscard"),
-    SET_DAMAGE("setDamage"),
-    SET_ATTACK("setAttack"),
-    SET_HEAL("setHeal"),
-    SET_MOVE("setMove"),
-    SET_RANGE("setRange"),
-    SET_SHIELD("setShield"),
-    SET_HEALTH("setHealth"),
-    SET_TARGET("setTarget"),
-    SET_PULL("setPull"),
-    SET_PUSH("setPush"),
-    SET_JUMP("setJump"),
-    SET_RETALIATE("setRetaliate"),
-    SET_PIERCE("setPierce"),
-    SET_CONSUMES("setConsumes"),
-    SET_INFUSE("setInfuse"),
-    SET_XP("setXP"),
-    SET_LOOT("setLoot")
+    SET_DISCARD   ("setDiscard"),
+    SET_DAMAGE    ("setDamage"),
+    SET_ATTACK    ("setAttack"),
+    SET_HEAL      ("setHeal"),
+    SET_MOVE      ("setMove"),
+    SET_RANGE     ("setRange"),
+    SET_SHIELD    ("setShield"),
+    SET_HEALTH    ("setHealth"),
+    SET_TARGET    ("setTarget"),
+    SET_PULL      ("setPull"),
+    SET_PUSH      ("setPush"),
+    SET_JUMP      ("setJump"),
+    SET_RETALIATE ("setRetaliate"),
+    SET_PIERCE    ("setPierce"),
+    SET_CONSUMES  ("setConsumes"),
+    SET_INFUSE    ("setInfuse"),
+    SET_XP        ("setXP"),
+    SET_LOOT      ("setLoot")
     ;
 
     private final String attribute;

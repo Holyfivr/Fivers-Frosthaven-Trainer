@@ -127,6 +127,25 @@ public class BlockUpdater {
         return updatedBlock.toString();
     } 
 
+    /* Updates nested attributes like Consumes -> Elements */
+    private String updateNestedAttribute(String block, String parentKey, String childKey, String value) {
+        if (value == null) {
+            return block;
+        }
+        
+        // Matches ParentKey: ... (lazy content not crossing boundaries) ... ChildKey: Value
+        String regex = "(?s)(\\b" + Pattern.quote(parentKey) + ":(?:(?!\\b" + Pattern.quote(parentKey) + ":).)*?\\b" + Pattern.quote(childKey) + ":\\s*)([^\\r\\n]*)";
+        
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(block);
+
+        if (matcher.find()) {
+             // Group 1 is everything up to the value. 
+             // We replace the whole match (parent...value) with (parent...newValue)
+             return matcher.replaceFirst(Matcher.quoteReplacement(matcher.group(1) + value));
+        }
+        return block;
+    }
 
 
     public String updateBlock(String currentBlock, AbilityCard card, Item item, Map<String, AbilityCard> cardMap) {
@@ -149,6 +168,8 @@ public class BlockUpdater {
             currentBlock = updateAttribute(currentBlock, CardAttribute.LOOT           .get(),  card.getLootValues(),      null);
             currentBlock = updateAttribute(currentBlock, CardAttribute.INITIATIVE     .get(),  null,           card.getInitiative());
             currentBlock = updateAttribute(currentBlock, CardAttribute.DISCARD        .get(),  card.getDiscard());
+            currentBlock = updateAttribute(currentBlock, CardAttribute.INFUSE         .get(),  card.getInfuse());
+            currentBlock = updateNestedAttribute(currentBlock, CardAttribute.CONSUMES .get(), "Elements", card.getConsumes());
         }
 
         if (item != null) {

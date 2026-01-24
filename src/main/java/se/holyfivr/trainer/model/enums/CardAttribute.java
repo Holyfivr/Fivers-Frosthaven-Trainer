@@ -1,26 +1,26 @@
 package se.holyfivr.trainer.model.enums;
 
 public enum CardAttribute {
-    NAME("Name"),
-    INITIATIVE("Initiative"),
-    DISCARD("Discard"),
-    RETALIATE("Retaliate"),
-    PIERCE("Pierce"),
-    CONSUMES("Consumes"),
-    XP("XP"),
-    DAMAGE("Damage"),
-    ATTACK("Attack"),
-    HEAL("Heal"),
-    MOVE("Move"),
-    RANGE("Range"),
-    SHIELD("Shield"),
-    HEALTH("Health"),
-    PULL("Pull"),
-    PUSH("Push"),
-    TARGET("Target"),
-    LOOT("Loot"),
-    JUMP("Jump"),
-    INFUSE("Infuse");
+    NAME            ("Name"),
+    INITIATIVE      ("Initiative"),
+    DISCARD         ("Discard"),
+    RETALIATE       ("Retaliate"),
+    PIERCE          ("Pierce"),
+    CONSUMES        ("Consumes"),
+    XP              ("XP"),
+    DAMAGE          ("Damage"),
+    ATTACK          ("Attack"),
+    HEAL            ("Heal"),
+    MOVE            ("Move"),
+    RANGE           ("Range"),
+    SHIELD          ("Shield"),
+    HEALTH          ("Health"),
+    PULL            ("Pull"),
+    PUSH            ("Push"),
+    TARGET          ("Target"),
+    LOOT            ("Loot"),
+    JUMP            ("Jump"),
+    INFUSE          ("Infuse");
 
     private final String attribute;
 
@@ -28,7 +28,7 @@ public enum CardAttribute {
         this.attribute = attribute;
     }
 
-    public String getAttribute() {
+    public String get() {
         return attribute;
     }
 

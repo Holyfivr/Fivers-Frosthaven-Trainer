@@ -1,30 +1,36 @@
 package se.holyfivr.trainer.model.enums;
 
 public enum ItemAttribute {
-    STRING_ID("StringID"),
-    ID("ID"),
-    COST("Cost"),
-    TOTAL_IN_GAME("TotalInGame"),
-    SLOT("Slot"),
-    RARITY("Rarity"),
-    USAGE("Usage"),
+    
+    STRING_ID     ("StringID"             ),
+    ITEM_NAME     ("ItemName"             ),
+    ID            ("ID"                   ),
+    COST          ("Cost"                 ),
+    TOTAL_IN_GAME ("TotalInGame"          ),
+    SLOT          ("Slot"                 ),
+    RARITY        ("Rarity"               ),
+    USAGE         ("Usage"                ),
     PROSPERITY_REQ("ProsperityRequirement"),
-    CONSUMES("Consumes"),
-    HEAL("Heal"),
-    ATTACK("Attack"),
-    RANGE("Range"),
-    TARGET("Target"),
-    SHIELD("Shield"),
-    SHIELD_VALUE("ShieldValue"),
-    RETALIATE("Retaliate"),
-    MOVE("Move"),
-    OMOVE("OMove"),
-    AMOVE("AMove"),
-    PULL("Pull"),
-    PUSH("Push"),
-    JUMP("Jump"),
-    CONDITIONS("Conditions"),
-    INFUSE("Infuse");
+    OMOVE         ("OMove"                ),
+    AMOVE         ("AMove"                ),
+    SHIELD_VALUE  ("ShieldValue"          ),
+    CONDITIONS    ("Conditions"           ),
+    CONSUMES      ("Consumes"             ),
+    RETALIATE     ("Retaliate"            ),
+    MOVE          ("Move"                 ),
+    PUSH          ("Push"                 ),
+    JUMP          ("Jump"                 ),
+    INFUSE        ("Infuse"               ),
+    PULL          ("Pull"                 ),
+    HEAL          ("Heal"                 ),
+    ATTACK        ("Attack"               ),
+    RANGE         ("Range"                ),
+    TARGET        ("Target"               ),
+    SHIELD        ("Shield"               ),
+    PIERCE        ("Pierce"               ),
+    DAMAGE        ("Damage"               );
+    
+
 
     private final String value;
 
@@ -32,7 +38,7 @@ public enum ItemAttribute {
         this.value = value;
     }
 
-    public String getValue() {
+    public String get() {
         return value;
     }
 
@@ -45,3 +51,4 @@ public enum ItemAttribute {
         return null;
     }
 }
+

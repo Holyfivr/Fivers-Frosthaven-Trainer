@@ -91,6 +91,14 @@ public class ActiveSessionData {
         items.clear();
     }
 
+    public void setID(String value) {
+        for (Item item : items.values()) {
+            if (item.getId() != null) {
+                item.setId(value);
+            }
+        }
+    }
+
     public void setGold(String value) {
         System.err.println("Setting gold to: " + value);
         for (Item item : items.values()) {

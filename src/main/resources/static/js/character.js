@@ -8,3 +8,9 @@ function maxAllValues(event){
     }
     abilityCardAmount.value = "20";
 }
+
+/* const characterPane = document.getElementById("characterPane");
+switch(characterPane.data.character){
+    case "BanneSpear":
+        characterPane.style.backgroundImage = "url('/img/art/bannerspear.png')";
+} */

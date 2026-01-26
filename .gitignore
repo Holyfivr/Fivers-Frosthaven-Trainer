@@ -44,3 +44,4 @@ old/
 last_path.txt
 src/main/resources/ruleset/itemblocks.txt
 src/main/java/se/holyfivr/trainer/ObjectTransformer.java
+src/main/resources/static/img/art/characters.psd

@@ -12,8 +12,9 @@
 </head>
 
 <body>
+      
 
-        <div id="characterPane">
+        <div id="characterPane" >
 
 
                 <h1 th:text="${character.getDisplayName()}"></h1>
@@ -70,14 +71,17 @@
                         <input class="btn" type="submit" value="Save" id="saveBtn">
                 </form>
 
+                
         </div>
-
+        <div id="characterBackground">
+                <img th:src="@{/img/art/{name}.png(name=${character.displayName})}" alt="">
+        </div>
         <!-- Show success message if character was saved -->
         <script th:if="${saved}">
-            if (window.parent && typeof window.parent.showSuccessMessage === 'function') {
-                window.parent.showSuccessMessage('characterSaved');
-            }
-        </script>
+                if (window.parent && typeof window.parent.showSuccessMessage === 'function') {
+                        window.parent.showSuccessMessage('characterSaved');
+                }
+                </script>
 
 </body>
 

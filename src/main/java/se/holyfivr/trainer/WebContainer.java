@@ -10,7 +10,7 @@ import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
 // if i followed these warnings, the program wouldnt work as intended. Sooooo. Shysh!
-@SuppressWarnings({"java:S1104", "java:S1444", "java:S2696"}) 
+@SuppressWarnings({ "java:S1104", "java:S1444", "java:S2696" })
 public class WebContainer extends Application {
 
     // Will be set by TrainerApplication
@@ -35,8 +35,6 @@ public class WebContainer extends Application {
 
         StackPane root = new StackPane();
         root.getChildren().addAll(background, webView);
-
-        stage.setAlwaysOnTop(true);
         stage.onCloseRequestProperty().set(event -> {
             System.exit(0);
         });

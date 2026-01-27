@@ -74,7 +74,8 @@
                 
         </div>
         <div id="characterBackground">
-                <img th:src="@{/img/art/{name}.png(name=${character.displayName})}" alt="">
+                <img th:src="@{/img/art/{name}.png(name=${#strings.toLowerCase(character.displayName)})}" alt="">
+
         </div>
         <!-- Show success message if character was saved -->
         <script th:if="${saved}">

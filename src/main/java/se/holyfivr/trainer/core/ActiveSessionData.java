@@ -110,7 +110,7 @@ public class ActiveSessionData {
 
     public void setProsperity(String value) {
         for (Item item : items.values()) {
-            if (item.getProsperityRequirement() != null) {
+            if (item.getProsperityRequirement() != null && !item.getProsperityRequirement().trim().equals("0")) {
                 item.setProsperityRequirement(value);
             }
         }

@@ -1,6 +1,7 @@
 HELP.md
 target/
 docs/
+tools/
 empty_dir/
 temp_empty_folder/
 .mvn/wrapper/maven-wrapper.jar
@@ -45,3 +46,4 @@ last_path.txt
 src/main/resources/ruleset/itemblocks.txt
 src/main/java/se/holyfivr/trainer/ObjectTransformer.java
 src/main/resources/static/img/art/characters.psd
+src/main/java/se/holyfivr/trainer/ImageOptimizer.java

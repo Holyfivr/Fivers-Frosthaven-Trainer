@@ -12,46 +12,67 @@
 </head>
 
 <body>
-    <div id="aboutContainer" style="width:800px;"><br>
+    <div id="aboutContainer"><br>
         <div style="margin: 0 auto; text-align: left; width:750px;">
-            It started with me wanting to tweak a few values in my Frosthaven campaign. Maybe give myself a bit more
-            gold, or adjust a character's stats. Sounds easy, right? I thought so too.
-            <br><br>
-            <center>I was wrong.</center>
-            <center><b>Very</b> wrong.</center>
-            <center>
-                <p><b>Technicals</b></p>
-            </center>
-            I quickly realized that the game's ruleset file is incredibly strict. You can't just open it in a text
-            editor and change a number. The file structure relies on precise byte conversions and is incredibly fragile
-            if anything is shifted.
-        </div>
-        <div style="margin: 0 auto; text-align: left; width:750px;">
-            If you change a value, and end up turning a 1-byte integer into a 2-byte integer, you have to
-            recalculate and adjust the file size perfectly. If you miss by a single byte, the whole file corrupts and
-            the game won't load. Oh, and this can't just be done in a text editor, because you aren't guaranteed to get
-            the same amount of bytes, even if you add/remove the same number of characters. This has to be done in a
-            hex editor, where you can see and control the exact byte values, or by altering the file on
-            byte-level/ISO-8859-1 encoding.
-            <br><br>
-            Knowing this, I suddenly faced a big issue. To compensate for added bytes when increasing values, I would
-            have to
-            find bytes to remove elsewhere in the file. This took me a lot of trial and error, but at some point, while
-            staring at the file in a hex editor, I noticed something interesting.<br>
-            I noticed that every line ended with double linebreaks (0D 0A). This is the standard for Windows
-            text files, however, in most cases, a single break is sufficient.
-            After some testing, I confirmed that I could just compensate for extra bytes added by removing one of these
-            linebreaks. The file is about 250,000 lines long, and the actual content section is about 100,000, so
-            there's plenty of bytes to play with...
+            <h2 style="text-align: center;"><b>So why did I create this tool?</b></h2>
+            <hr>
             <br>
-        </div>
-        <div style="margin: 0 auto; text-align: left; width:750px;">
-            I'll be honest, this project gave me more headaches than I care to admit. As a first-year student, this code
-            became much more advanced than I was prepared for.
-            <br><br>
-            In the end, I learned a lot about file handling, byte conversions, and Java programming in general.
-            I hope you find this program useful, and if you have any questions or suggestions, feel free to reach out on
-            GitHub.
+            <p>It started with me wanting to tweak a few values in my Frosthaven campaign. Maybe give myself a bit more
+                gold, or adjust a character's stats. Sounds easy, right? <b>Wrong.</b></p>
+
+            <p>The game's ruleset file is incredibly strict.
+                This isn't the kind of file you can just open in Notepad, change a number, hit save, and call it a day.
+                The game relies on the file having an <i>exact</i> byte structure.
+                If that structure shifts, even by a single byte, the entire file becomes corrupted and the game simply
+                won't load.</p>
+
+            <p>Now, you might say <i>“Just don't add extra characters. If a value is one digit, keep it one digit and that
+                    should be fine, right?”</i> <b>Nope.</b></p>
+
+            <p>The problem is that characters and bytes are not the same thing.
+                Modern text editors use UTF-8 encoding, which means that what looks like a single character
+                can take up a different number of bytes depending on its value and context.
+                Even changing a number from one digit to another, without adding or removing characters,
+                can still change the file's byte size.</p>
+
+            <p>On top of that, some values can be stored as signed integers, others as unsigned.
+                So a value that <i>looks</i> safe to change might require more bytes internally.
+                This means you're never guaranteed a 1:1 byte replacement when editing the file in a normal text editor.
+                Even if the visible text looks identical in length, the underlying byte data may not be.</p>
+
+            <p>That's why this can't reliably be done in Notepad or similar tools.
+                To do it safely, you either need a hex editor, where you can see and control the exact byte values, or you
+                need to edit the file at the byte level using a single-byte encoding like ISO-8859-1.</p>
+
+            <p>Once I understood this, I ran into the real challenge.</p>
+
+            <p>If increasing a value adds bytes to the file, those bytes have to be removed somewhere else.
+            The total file size must remain <i>exactly</i> the same, and this has to be done without altering the files
+            internal structure.</p>
+
+            <p>While examining the file in a hex editor, I noticed something interesting.
+                Every line in the file ends with a Windows-style line break: <code>0D 0A</code>.
+                In most cases, only one of those bytes is actually necessary.</p>
+
+            <p>After testing, I confirmed that I could safely "steal" bytes by removing one of these line breaks
+                to compensate for bytes added elsewhere.</p>
+
+            <p>Considering the file is around 250,000 lines long, with roughly 100,000 lines of editable content,
+                there turned out to be plenty of bytes to work with.</p>
+
+            <p>That discovery is what made this tool possible.</p>
+            
+            <p>I'll be honest, this project gave me more headaches than I care to admit. As a first-year student, this code
+                became much more advanced than I was prepared for.</p>
+
+            <p>However, during this journey, I've learned a lot about file handling, byte conversions, and Java programming in general.
+                I hope you find this program useful, and if you have any questions or suggestions, feel free to reach out on
+                GitHub.</p>
+
+                <hr>
+                <div style="display: flex; justify-content: space-between; flex-direction: row;"><span>&nbsp;</span><span><i>Thanks for coming to my TED-talk.</i></span><span> /Fiver &nbsp;&nbsp;&nbsp; </span></div>
+                <hr>
+
 
         </div>
         <br>

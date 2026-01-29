@@ -110,14 +110,13 @@
                     </tr>
                     <tr th:if="${item.target != null}">
                         <td class="object-attribute-td">Target: </td>
-
                         <td>
                             <div data-target-aoe>
-                                <input type="hidden" name="target" data-target-aoe-hidden th:value="${item.target}">
-                                <input type="number" data-target-aoe-number th:value="${item.target == '-1' ? '1' : item.target}" max="99" min="1">
-                                <label>
-                                    <input type="checkbox" data-target-aoe-checkbox th:checked="${item.target == '-1'}"> AoE
-                                </label>
+                                <input type="hidden" name="target" data-target-aoe-hidden th:value="${item.target}">             
+                                <input th:if="${item.target == '-1'}" type="text" data-target-aoe-number th:value="AoE" disabled>
+                                <input th:unless="${item.target == '-1'}" type="number" data-target-aoe-number th:value="${item.target}" max="99" min="1">
+
+                                
                             </div>
                         </td>
                     </tr>

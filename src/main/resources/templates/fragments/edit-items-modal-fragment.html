@@ -8,61 +8,91 @@
             <h2 id="itemModalTitle">Edit All Items</h2>
             <h3>Leave a field blank or enter 0 to ignore</h3>
 
-            <div class="modal-field">
-                <label for="goldCostInput">Gold Cost</label>
-                <input id="goldCostInput" name="setGoldCost" type="number" min="0" placeholder="1-200" />
-            </div>
 
-            <div class="modal-field">
-                <label for="damageInput">Damage</label>
-                <input id="damageInput" name="setDamage" type="number" min="0" placeholder="1-99" />
-            </div>
 
-            <div class="modal-field">
-                <label for="rangeInput">Range</label>
-                <input id="rangeInput" name="setRange" type="number" min="0" placeholder="1-99" />
-            </div>
 
-            <div class="modal-field">
-                <label for="shieldInput">Shield</label>
-                <input id="shieldInput" name="setShield" type="number" min="0" placeholder="1-99" />
-            </div>
+            <table>
+                <tr>
+                    <!-- Left column -->
+                    <td>
+                        <div class="modal-field">
+                            <label for="goldCostInput">Gold Cost</label>
+                            <input id="goldCostInput" name="setGoldCost" type="number" min="0" placeholder="1-200" />
+                        </div>
 
-            <div class="modal-field">
-                <label for="healInput">Heal</label>
-                <input id="healInput" name="setHeal" type="number" min="0" placeholder="1-99" />
-            </div>
+                        <div class="modal-field">
+                            <label for="damageInput">Damage</label>
+                            <input id="damageInput" name="setDamage" type="number" min="0" placeholder="1-99" />
+                        </div>
 
-            <div class="modal-field">
-                <label for="retaliateInput">Retaliate</label>
-                <input id="retaliateInput" name="setRetaliate" type="number" min="0" placeholder="1-99" />
-            </div>
+                        <div class="modal-field">
+                            <label for="rangeInput">Range</label>
+                            <input id="rangeInput" name="setRange" type="number" min="0" placeholder="1-99" />
+                        </div>
 
-            <div class="modal-field">
-                <label for="movementInput">Movement</label>
-                <input id="movementInput" name="setMovement" type="number" min="0" placeholder="1-99" />
-            </div>
+                        <div class="modal-field">
+                            <label for="shieldInput">Shield</label>
+                            <input id="shieldInput" name="setShield" type="number" min="0" placeholder="1-99" />
+                        </div>
 
-            <div class="modal-field">
-                <label for="totalInGameInput">Total Available</label>
-                <input id="totalInGameInput" name="setTotalInGame" type="number" min="0" placeholder="1-9" />
-            </div>
+                        <div class="modal-field">
+                            <label for="healInput">Heal</label>
+                            <input id="healInput" name="setHeal" type="number" min="0" placeholder="1-99" />
+                        </div>
+                        <div class="modal-field">
+                            <label for="xpInput">XP</label>
+                            <input id="xpInput" name="setXP" type="number" min="0" placeholder="1-99" />
+                        </div>
+                    </td>
 
-            <div class="modal-field">
-                <label for="prosperityReqInput">Prosperity Requirement</label>
-                <input id="prosperityReqInput" name="setProsperityReq" type="number" min="0" placeholder="1-9" />
-            </div>
+                    <!-- Right column -->
+                    <td>
+                        <div class="modal-field">
+                            <label for="targetInput">Target</label>
+                            <input id="targetInput" name="setTarget" type="number" min="0" placeholder="1-99" />
+                        </div>
+                        <div class="modal-field">
+                            <label for="retaliateInput">Retaliate</label>
+                            <input id="retaliateInput" name="setRetaliate" type="number" min="0" placeholder="1-99" />
+                        </div>
 
-            <div class="modal-field">
-                <label for="usageInput">Usage</label>
-                <select name="setUsage" id="usageInput">
-                    <option value="Unchanged">Unchanged</option>
-                    <option value="Spent">Spent</option>
-                    <option value="Consumed">Consumed</option>
-                    <option value="Unrestricted">Unrestricted
-                    </option>
-                </select>
-            </div>
+                        <div class="modal-field">
+                            <label for="movementInput">Movement</label>
+                            <input id="movementInput" name="setMovement" type="number" min="0" placeholder="1-99" />
+                        </div>
+
+                        <div class="modal-field">
+                            <label for="totalInGameInput">Total Available</label>
+                            <input id="totalInGameInput" name="setTotalInGame" type="number" min="0"
+                                placeholder="1-9" />
+                        </div>
+
+                        <div class="modal-field">
+                            <label for="prosperityReqInput">Prosperity Requirement</label>
+                            <input id="prosperityReqInput" name="setProsperityReq" type="number" min="0"
+                                placeholder="1-9" />
+                        </div>
+
+                        <div class="modal-field">
+                            <label for="usageInput">Usage</label>
+                            <select name="setUsage" id="usageInput">
+                                <option value="Unchanged">Unchanged</option>
+                                <option value="Spent">Spent</option>
+                                <option value="Consumed">Consumed</option>
+                                <option value="Unrestricted">Unrestricted
+                                </option>
+                            </select>
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+
+
 
             <div class="modal-buttons">
                 <button type="submit" class="btn">Apply</button>

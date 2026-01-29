@@ -204,6 +204,22 @@ public class ActiveSessionData {
         }
     }
 
+    public void setXp(String value) {
+        for (Item item : items.values()) {
+            if (item.getXp() != null) {
+                item.setXp(value);
+            }
+        }
+    }
+
+    public void setTarget(String value) {
+        for (Item item : items.values()) {
+            if (item.getTarget() != null) {
+                item.setTarget(value);
+            }
+        }
+    }
+
     /* ====================== */
     /* STORE ALL ABILITYCARDS */
     /* ====================== */

@@ -184,6 +184,7 @@ public class BlockUpdater {
             currentBlock = updateAttribute(currentBlock, ItemAttribute.ATTACK         .get(), null, item.getAttack());
             currentBlock = updateAttribute(currentBlock, ItemAttribute.RANGE          .get(), null, item.getRange());
             currentBlock = updateAttribute(currentBlock, ItemAttribute.TARGET         .get(), null, item.getTarget());
+            currentBlock = updateAttribute(currentBlock, ItemAttribute.XP             .get(), null, item.getXp());
             currentBlock = updateAttribute(currentBlock, ItemAttribute.SHIELD         .get(), null, item.getShield());
             currentBlock = updateAttribute(currentBlock, ItemAttribute.RETALIATE      .get(), null, item.getRetaliate());
             currentBlock = updateAttribute(currentBlock, ItemAttribute.MOVE           .get(), null, item.getMove());

@@ -10,7 +10,9 @@ public enum ItemAction {
     SET_USAGE         ("setUsage"),
     SET_TOTAL_IN_GAME ("setTotalInGame"),
     SET_SHIELD        ("setShield"),
-    SET_MOVEMENT      ("setMovement");
+    SET_MOVEMENT      ("setMovement"),
+    SET_XP            ("setXp"),
+    SET_TARGET        ("setTarget");
 
     private final String action;
 

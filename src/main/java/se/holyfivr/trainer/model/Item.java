@@ -22,6 +22,7 @@ public class Item {
     public String prosperityRequirement;
     public String consumes;
     public String infuse;
+    public String xp; // integer
 
     // Effects (from each "Data" block)
     public String heal; // integer
@@ -299,6 +300,42 @@ public class Item {
 
     public Item setConditions(String conditions) {
         this.conditions = conditions;
+        return this;
+    }
+
+    public static String getUppercaseLetter() {
+        return UPPERCASE_LETTER;
+    }
+
+    public Item setItemName(String itemName) {
+        this.itemName = itemName;
+        return this;
+    }
+
+    public String getXp() {
+        return xp;
+    }
+
+    public Item setXp(String xp) {
+        this.xp = xp;
+        return this;
+    }
+
+    public String getoMove() {
+        return oMove;
+    }
+
+    public Item setoMove(String oMove) {
+        this.oMove = oMove;
+        return this;
+    }
+
+    public String getaMove() {
+        return aMove;
+    }
+
+    public Item setaMove(String aMove) {
+        this.aMove = aMove;
         return this;
     }
 

@@ -107,7 +107,6 @@ public class CharacterService {
         // Add or remove from unlocked list based on the checkbox
         if (isUnlockedFromStart && !isUnlocked) {
             unlockedList.add(characterName);
-            System.out.println("Added " + characterName + " to unlocked list."); // debug
         } else if (!isUnlockedFromStart && isUnlocked && !isStartingCharacter) {
             unlockedList.removeIf(s -> s.trim().equals(characterName));
         }

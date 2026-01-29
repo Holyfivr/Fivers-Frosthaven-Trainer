@@ -126,7 +126,6 @@ public class AbilityCardService {
                 return new String[] { className, cardName };
             }
         }
-        System.err.println("class not found: " + formattedName);
         return new String[] { "Unknown", formattedName };
     }
 

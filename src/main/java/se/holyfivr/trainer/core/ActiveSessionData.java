@@ -100,7 +100,6 @@ public class ActiveSessionData {
     }
 
     public void setGold(String value) {
-        System.err.println("Setting gold to: " + value);
         for (Item item : items.values()) {
             if (item.getCost() != null && !item.getCost().trim().equals("0")) {
                 item.setCost(value);

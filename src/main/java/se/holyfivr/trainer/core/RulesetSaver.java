@@ -70,7 +70,6 @@ public class RulesetSaver {
     {
            
         try {
-            System.out.println("Starting save process..."); // debug
 
             // First we reconstruct the content string with updated values from ActiveSessionData.
             // This now handles Filler Bank (padding/trimming) internally to preserve offsets.
@@ -116,7 +115,6 @@ public class RulesetSaver {
             System.out.println("File saved successfully!"); // debug
 
         } catch (IOException e) {
-            e.printStackTrace();
             System.err.println("Failed to save ruleset: " + e.getMessage()); // debug
         }
     }
@@ -246,6 +244,9 @@ public class RulesetSaver {
      */
     private String adjustBlockSize(String currentBlock, int originalLength) {
         //System.out.println(currentBlock + " | Original Length: " + originalLength); // debug
+        // I'm leaving this debug in, because it's a very useful debug. It should be commented out unless specifically needed.
+        // When saving, it will print every block and its original length, which helps identify which block is causing size mismatches, 
+        // but it slows down the saving process a lot.
 
         // checks current length against original length
         int currentLength = currentBlock.length();

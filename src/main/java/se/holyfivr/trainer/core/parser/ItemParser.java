@@ -78,9 +78,5 @@ public class ItemParser {
         }
         // Store the parsed item in the active session data
         activeSessionData.addItem(item);
-        System.out.printf(" Slot: %s --- StringId: %s %n", item.getSlot(), item.getStringId()); // debug print
     }
-
-
-
 }

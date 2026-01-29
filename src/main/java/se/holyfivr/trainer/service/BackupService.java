@@ -52,7 +52,6 @@ public class BackupService {
             try {
                 Files.copy(backupPath, path, StandardCopyOption.REPLACE_EXISTING);
                 rulesetLoader.loadRuleset();
-                System.out.println("Backup restored successfully.");
             } catch (IOException e) {
                 e.printStackTrace();
             }

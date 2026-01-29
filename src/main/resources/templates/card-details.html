@@ -39,6 +39,11 @@
                         <td><input required type="number" th:name="|attackValues[${iter.index}]|" th:value="${val}"
                                 max="99" min="1"></td>
                     </tr>
+                    <tr th:each="val,iter : ${abilityCard.damageValues}">
+                        <td class="object-attribute-td">Damage <span th:text="${iter.index + 1}"></span>:</td>
+                        <td><input required type="number" th:name="|damageValues[${iter.index}]|" th:value="${val}"
+                                max="99" min="0"></td>
+                    </tr>
                     <tr th:each="val,iter : ${abilityCard.rangeValues}">
                         <td class="object-attribute-td">Range <span th:text="${iter.index + 1}"></span>:</td>
                         <td>

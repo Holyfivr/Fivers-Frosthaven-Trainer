@@ -19,7 +19,6 @@ public class ItemService {
 
     }
 
-
     /* =================================================== */
     /* Retrieves a map of all items of a specific category */
     /* =================================================== */
@@ -64,7 +63,6 @@ public class ItemService {
                     .setShieldValue(item.getShieldValue());
         }
 
-    
         /* This is disabled for the forseeable future, until I can implement */
         /* an "upgraded" version of the filler-banks that can use bytes from */
         /* other blocks to avoid data corruption. */
@@ -91,41 +89,25 @@ public class ItemService {
         System.err.println("Action: " + itemAction + " | Value: " + value);
 
         switch (itemAction) {
-            case SET_GOLD_COST:
-                activeSessionData.setGold(value);
-                break;
-            case SET_DAMAGE:
-                activeSessionData.setAttack(value);
-                break;
-            case SET_RANGE:
-                activeSessionData.setRange(value);
-                break;
-            case SET_HEAL:
-                activeSessionData.setHeal(value);
-                break;
-            case SET_RETALIATE:
-                activeSessionData.setRetaliate(value);
-                break;
-            case SET_PROSPERITY_REQ:
-                activeSessionData.setProsperity(value);
-                break;
-            case SET_USAGE:
-                activeSessionData.setUsage(value);
-                break;
-            case SET_TOTAL_IN_GAME:
-                activeSessionData.setTotalInGame(value);
-                break;
-            case SET_SHIELD:
-                activeSessionData.setShield(value);
-                activeSessionData.setShieldValue(value);
-                break;
-            case SET_MOVEMENT:
-                activeSessionData.setMovement(value);
-                activeSessionData.setOMove(value);
-                activeSessionData.setAMove(value);
-                break;
-            default:
-                break;
+            case SET_GOLD_COST          -> activeSessionData.setGold        (value);
+            case SET_DAMAGE             -> activeSessionData.setAttack      (value);
+            case SET_RANGE              -> activeSessionData.setRange       (value);
+            case SET_HEAL               -> activeSessionData.setHeal        (value);
+            case SET_RETALIATE          -> activeSessionData.setRetaliate   (value);
+            case SET_PROSPERITY_REQ     -> activeSessionData.setProsperity  (value);
+            case SET_USAGE              -> activeSessionData.setUsage       (value);
+            case SET_TOTAL_IN_GAME      -> activeSessionData.setTotalInGame (value);
+            case SET_XP                 -> activeSessionData.setXp          (value);
+            case SET_TARGET             -> activeSessionData.setTarget      (value);
+            case SET_SHIELD             -> {
+                                           activeSessionData.setShield      (value);
+                                           activeSessionData.setShieldValue (value);
+                                           }
+            case SET_MOVEMENT           -> {
+                                           activeSessionData.setMovement    (value);
+                                           activeSessionData.setOMove       (value);
+                                           activeSessionData.setAMove       (value);
+                                           }
         }
     }
 }

@@ -13,6 +13,8 @@ public class ItemParser {
     public ItemParser(ActiveSessionData activeSessionData) {
         this.activeSessionData = activeSessionData;
     }
+
+    @SuppressWarnings("incomplete-switch") // The switch wants to implement unneeded cases
     public void parseItemBlock(String currentBlock) {
 
         Item item = new Item();
@@ -42,9 +44,9 @@ public class ItemParser {
             }
 
 
-            ItemAttribute attrEnum = ItemAttribute.fromString(attribute);
-            if (attrEnum != null) {
-                switch (attrEnum) {
+            ItemAttribute itemAttribute = ItemAttribute.fromString(attribute);
+            if (itemAttribute != null) {
+                switch (itemAttribute) {
                     case STRING_ID      -> item.setStringId              (value);
                     case ID             -> item.setId                    (value);
                     case COST           -> item.setCost                  (value);
@@ -69,6 +71,7 @@ public class ItemParser {
                     case JUMP           -> item.setJump                  (value);
                     case CONDITIONS     -> item.setConditions            (value);
                     case INFUSE         -> item.setInfuse                (value);
+                    case XP             -> item.setXp                    (value);
 
                 }
             } // else ignore unknown attributes

@@ -28,7 +28,8 @@ public enum ItemAttribute {
     TARGET        ("Target"),
     SHIELD        ("Shield"),
     PIERCE        ("Pierce"),
-    DAMAGE        ("Damage");
+    DAMAGE        ("Damage"),
+    XP            ("GainXP");
     
 
 

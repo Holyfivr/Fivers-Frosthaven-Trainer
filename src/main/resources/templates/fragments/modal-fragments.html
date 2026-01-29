@@ -71,7 +71,13 @@
         <template id="maxCardsTemplate">
             <div style="text-align: center;">
                 <h2>Are you sure?</h2>
-                <span>This will set all characters max <br>ability cards in battle to 20.</span><br><br>
+                <span>
+                    This will set all characters max ability cards
+                    <br> 
+                    in battle to their maximum safe value.
+                    <br>
+                    See individual character pages for details.
+                </span><br><br>
                 <a class="btn" th:href="@{/maxcards}" onclick="closeModal();registerPendingAction('cardsMaxed')">I am
                     sure</a>
                 <a class="btn" href="#" onclick="closeModal()">Nevermind</a>
@@ -91,6 +97,9 @@
                     <li>Frozen Fist</li>
                     <li>Trapper</li>
                     <li>Hive</li>
+                    <li>Infuser</li>
+                    <li>Metal Mosaic</li>
+                    <li>Pain Conduit</li>
                 </ul>
             </div>
 

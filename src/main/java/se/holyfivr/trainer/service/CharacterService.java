@@ -13,8 +13,8 @@ public class CharacterService {
 
 
     /*
-    LIST OF CHARACTERS THAT CAN BE ADDED SAFELY: Pyroclast, Snowdancer, Frozen fist, Trapper, Hive
-    LIST OF CHARACTERS THAT CAN BE ADDED BUT DO NOT SHOW UP: Crashing tide, Shattersong, Deepwraith, Infuser, MetalMosaic, PainConduit
+    LIST OF CHARACTERS THAT CAN BE ADDED SAFELY: Pyroclast, Snowdancer, Frozen Fist, Trapper, Hive, Infuser, Metal Mosaic, Pain Conduit
+    LIST OF CHARACTERS THAT CAN BE ADDED BUT DO NOT SHOW UP: Crashing tide, Shattersong, Deepwraith
     LIST OF CHARACTERS THAT BREAK THE GAME: none ... 
 
     IMPORTANT NOTE:
@@ -41,7 +41,10 @@ public class CharacterService {
         "SnowdancerID", 
         "FrozenFistID", 
         "TrapperID",
-        "HIVEID" 
+        "HIVEID",
+        "InfuserID",
+        "MetalMosaicID",
+        "PainConduitID" 
     };
 
     private ActiveSessionData activeSessionData;
@@ -170,17 +173,59 @@ public class CharacterService {
 
     }
 
-    /* ========================================================================== */
-    /* This method sets the maximum ability card amount to 20 for all characters. */
-    /* ========================================================================== */
+
+
+    // Amount of cards each class has available at level 1
+    // Blinkblade    = 13
+    // BannerSpear   = 13
+    // Boneshaper    = 15
+    // Drifter       = 15
+    // Deathwalker   = 14
+    // Geminate      = 18
+    // Crashing Tide = 15
+    // Deepwraith    = 13
+    // Frozen Fist   = 11
+    // HIVE          = 14
+    // Infuser       = 14
+    // Metal Mosaic  = 12
+    // Pain Conduit  = 13
+    // Pyroclast     = 13
+    // Snowdancer    = 14
+    // Shattersong   = 13
+    // Trapper       = 12
+
+    /* ============================================================================ */
+    /* This method sets the maximum safe ability card amount for all characters.    */
+    /* There are limits in place here on purpose, because of in-game mechanics.     */
+    /* Entering combat without being able to fill up your hands will cause the game */
+    /* to prompt you to fill your hand. If you have a higher card limit allowed     */
+    /* than the amount of cards available, you will be locked from entering battle  */
+    /* ============================================================================ */
     public void maxCharacterAbilityCards() {
         for (PlayerCharacter character : activeSessionData.getCharacters().values()) {
             // Only update card amount if it's not null
             if (character.getCardAmount() != null) {
-                character.setCardAmount("20");
+                switch (character.getName()) {
+                    case "GeminateID"     -> character.setCardAmount("18");
+                    case "BoneshaperID"   -> character.setCardAmount("15");
+                    case "DrifterID"      -> character.setCardAmount("15");
+                    case "CrashingTideID" -> character.setCardAmount("15");
+                    case "DeathwalkerID"  -> character.setCardAmount("14");
+                    case "HIVEID"         -> character.setCardAmount("14");
+                    case "SnowdancerID"   -> character.setCardAmount("14");
+                    case "BlinkbladeID"   -> character.setCardAmount("13");
+                    case "DeepwraithID"   -> character.setCardAmount("13");
+                    case "BannerSpearID"  -> character.setCardAmount("13");
+                    case "PainConduitID"  -> character.setCardAmount("13");
+                    case "PyroclastID"    -> character.setCardAmount("13");
+                    case "ShattersongID"  -> character.setCardAmount("13");
+                    case "FrozenFistID"   -> character.setCardAmount("11");
+                    case "TrapperID"      -> character.setCardAmount("12");
+                    case "InfuserID"      -> character.setCardAmount("14");
+                    case "MetalMosaicID"  -> character.setCardAmount("12");
+                }
             }
         }
-        
     }
 
     /* =============================================================== */

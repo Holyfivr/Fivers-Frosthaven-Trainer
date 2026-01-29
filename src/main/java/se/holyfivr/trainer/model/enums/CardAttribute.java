@@ -7,6 +7,7 @@ public enum CardAttribute {
     RETALIATE       ("Retaliate"),
     PIERCE          ("Pierce"),
     CONSUMES        ("Consumes"),
+    CONSUME         ("Consume"),
     XP              ("XP"),
     DAMAGE          ("Damage"),
     ATTACK          ("Attack"),

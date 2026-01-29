@@ -31,7 +31,9 @@ public class BlockUpdater {
     }
 
 
-    
+    /* ======================== */
+    /* Updates numerical values */
+    /* ======================== */    
     public String updateAttribute(String block, String key, List<String> values, String singleValue) {
         
         Pattern attributePattern = Pattern.compile("\\b" + Pattern.quote(key) + PatternRepository.VALID_ATTRIBUTE_PATTERN);
@@ -93,7 +95,11 @@ public class BlockUpdater {
     }
 
 
-    /* Updates non-numerical updates (discard, true/false, etc) */
+    /* =============================================================== */
+    /* Updates non-numerical updates (discard, true/false, infuse etc) */
+    /* Consume is not included here, it needs to be in the function    */
+    /* that deals with nested structures.                              */
+    /* =============================================================== */
     private String updateAttribute(String block, String key, String value) {
         if (value == null) {
             return block;
@@ -129,7 +135,9 @@ public class BlockUpdater {
 
     /* Updates nested attributes like Consumes -> Elements */
     private String updateNestedAttribute(String block, String parentKey, String childKey, String value) {
-        if (value == null) {
+        // the -1/-2 shouldn't be needed here but I'm leaving it in anyway.
+        // this was a temporary fix to deal with numerical values getting applied to consume, in some nested structures.
+        if (value == null || value.equals("-1") || value.equals("-2")) { 
             return block;
         }
         
@@ -148,28 +156,27 @@ public class BlockUpdater {
     }
 
 
-    public String updateBlock(String currentBlock, AbilityCard card, Item item, Map<String, AbilityCard> cardMap) {
-        
-        
+    public String updateBlock(String currentBlock, AbilityCard card, Item item, Map<String, AbilityCard> cardMap) {        
         
         if (card != null) {
-            currentBlock = updateAttribute(currentBlock, CardAttribute.HEAL           .get(),  card.getHealValues(),      null);
-            currentBlock = updateAttribute(currentBlock, CardAttribute.ATTACK         .get(),  card.getAttackValues(),    null);
-            currentBlock = updateAttribute(currentBlock, CardAttribute.RANGE          .get(),  card.getRangeValues(),     null);
-            currentBlock = updateAttribute(currentBlock, CardAttribute.TARGET         .get(),  card.getTargetValues(),    null);
-            currentBlock = updateAttribute(currentBlock, CardAttribute.SHIELD         .get(),  card.getShieldValues(),    null);
-            currentBlock = updateAttribute(currentBlock, CardAttribute.RETALIATE      .get(),  card.getRetaliateValues(), null);
-            currentBlock = updateAttribute(currentBlock, CardAttribute.MOVE           .get(),  card.getMoveValues(),      null);
-            currentBlock = updateAttribute(currentBlock, CardAttribute.PULL           .get(),  card.getPullValues(),      null);
-            currentBlock = updateAttribute(currentBlock, CardAttribute.PUSH           .get(),  card.getPushValues(),      null);
-            currentBlock = updateAttribute(currentBlock, CardAttribute.DAMAGE         .get(),  card.getDamageValues(),    null);
-            currentBlock = updateAttribute(currentBlock, CardAttribute.PIERCE         .get(),  card.getPierceValues(),    null);
-            currentBlock = updateAttribute(currentBlock, CardAttribute.XP             .get(),  card.getXpValues(),        null);
-            currentBlock = updateAttribute(currentBlock, CardAttribute.LOOT           .get(),  card.getLootValues(),      null);
-            currentBlock = updateAttribute(currentBlock, CardAttribute.INITIATIVE     .get(),  null,           card.getInitiative());
-            currentBlock = updateAttribute(currentBlock, CardAttribute.DISCARD        .get(),  card.getDiscard());
-            currentBlock = updateAttribute(currentBlock, CardAttribute.INFUSE         .get(),  card.getInfuse());
-            currentBlock = updateNestedAttribute(currentBlock, CardAttribute.CONSUMES .get(), "Elements", card.getConsumes());
+            currentBlock = updateAttribute(         currentBlock, CardAttribute.HEAL        .get(),  card.getHealValues(),      null);
+            currentBlock = updateAttribute(         currentBlock, CardAttribute.ATTACK      .get(),  card.getAttackValues(),    null);
+            currentBlock = updateAttribute(         currentBlock, CardAttribute.RANGE       .get(),  card.getRangeValues(),     null);
+            currentBlock = updateAttribute(         currentBlock, CardAttribute.TARGET      .get(),  card.getTargetValues(),    null);
+            currentBlock = updateAttribute(         currentBlock, CardAttribute.SHIELD      .get(),  card.getShieldValues(),    null);
+            currentBlock = updateAttribute(         currentBlock, CardAttribute.RETALIATE   .get(),  card.getRetaliateValues(), null);
+            currentBlock = updateAttribute(         currentBlock, CardAttribute.MOVE        .get(),  card.getMoveValues(),      null);
+            currentBlock = updateAttribute(         currentBlock, CardAttribute.PULL        .get(),  card.getPullValues(),      null);
+            currentBlock = updateAttribute(         currentBlock, CardAttribute.PUSH        .get(),  card.getPushValues(),      null);
+            currentBlock = updateAttribute(         currentBlock, CardAttribute.DAMAGE      .get(),  card.getDamageValues(),    null);
+            currentBlock = updateAttribute(         currentBlock, CardAttribute.PIERCE      .get(),  card.getPierceValues(),    null);
+            currentBlock = updateAttribute(         currentBlock, CardAttribute.XP          .get(),  card.getXpValues(),        null);
+            currentBlock = updateAttribute(         currentBlock, CardAttribute.LOOT        .get(),  card.getLootValues(),      null);
+            currentBlock = updateAttribute(         currentBlock, CardAttribute.INITIATIVE  .get(),  null,           card.getInitiative());
+            currentBlock = updateAttribute(         currentBlock, CardAttribute.DISCARD     .get(),  card.getDiscard());
+            currentBlock = updateAttribute(         currentBlock, CardAttribute.INFUSE      .get(),  card.getInfuse());
+            currentBlock = updateNestedAttribute(   currentBlock, CardAttribute.CONSUMES    .get(), "Elements", card.getConsumes());
+            currentBlock = updateNestedAttribute(   currentBlock, CardAttribute.CONSUME     .get(), "Elements", card.getConsumes());
         }
 
         if (item != null) {
@@ -196,8 +203,6 @@ public class BlockUpdater {
 
         return currentBlock;
     }
-
-
 
 
     /* ============================================================================================ */

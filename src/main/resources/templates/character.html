@@ -12,9 +12,9 @@
 </head>
 
 <body>
-      
 
-        <div id="characterPane" >
+
+        <div id="characterPane">
 
 
                 <h1 th:text="${character.getDisplayName()}"></h1>
@@ -23,13 +23,19 @@
 
                 <form th:action="@{/character/submit}">
                         <hr>
-                        <div style="display: flex; align-items: center; justify-content: center;" th:if="${allowedCharacter}">
-                                <input type="checkbox" th:checked="${isUnlockedFromStart}" name="isUnlockedFromStart" id="enableFromStartCheckbox">
-                                Enable Character from start &nbsp;  <span style="color: red;"> (Experimental)</span>
+                        <div style="display: flex; align-items: center; justify-content: center;"
+                                th:if="${allowedCharacter}">
+                                <input type="checkbox" th:checked="${isUnlockedFromStart}" name="isUnlockedFromStart"
+                                        id="enableFromStartCheckbox">
+                                Enable Character from start &nbsp; <span style="color: red;"> (Experimental)</span>
                         </div>
+
                         <input type="hidden" name="characterName" th:value="${character.getName()}">
                         Amount of cards in battle: <input id="maxAbilityCard" type="number" name="maxAbilityCard"
                                 min="6" max="20" th:value="${character.getCardAmount}" maxlength="2" required>
+
+
+
                         <table>
                                 <tr>
                                         <td>Level:</td>
@@ -66,23 +72,74 @@
                                 </tr>
                         </table>
                         Min value 6 | Max value 99 <br><br>
-                        <button class="btn" onClick="maxAllValues(event)">Max All Values</button>
                         <hr>
                         <input class="btn" type="submit" value="Save" id="saveBtn">
                 </form>
 
-                
+
         </div>
         <div id="characterBackground">
                 <img th:src="@{/img/art/{name}.png(name=${#strings.toLowerCase(character.displayName)})}" alt="">
 
         </div>
+
+
+        <div class="info-icon info-icon-character">
+                <div class="info-icon-symbol">
+                        ?
+                </div>
+                <div class="info-icon-text">
+                        <p align="center"><b>IMPORTANT!</b></p>
+                        <p>I will keep this limit at 20, but after you have fiddled with your ability cards in game (at
+                                all),
+                                the game enforces you to fill out your hand before battle.</p>
+                        <p>Since the different classes have different starting values, this will lock you out of combat
+                                if you set this number to more cards than is currently available to your character.</p>
+                        <p>Only override the default value of available cards to your character, once you have increased
+                                your level and card-arsenal.</p>
+                        <p>These are the total amount of cards each class has available at level 1:</p>
+
+                        <table>
+                          <tr>
+                           <td>
+                            <ul style="text-align: left;">
+                                    <li><span>Blinkblade    </span><span> 13</span></li>
+                                    <li><span>BannerSpear   </span><span> 13</span></li>
+                                    <li><span>Boneshaper    </span><span> 15</span></li>
+                                    <li><span>Drifter       </span><span> 15</span></li>
+                                    <li><span>Deathwalker   </span><span> 14</span></li>
+                                    <li><span>Geminate      </span><span> 18</span></li>
+                                    <li><span>Crashing Tide </span><span> 15</span></li>
+                                    <li><span>Deepwraith    </span><span> 13</span></li>
+                                    <li><span>Frozen Fist   </span><span> 11</span></li>
+                            </ul>
+                           </td>
+                           <td>
+                            <ul style="text-align: left;">
+                                    <li><span>HIVE          </span><span> 14</span></li>
+                                    <li><span>Infuser       </span><span> 14</span></li>
+                                    <li><span>Metal Mosaic  </span><span> 12</span></li>
+                                    <li><span>Pain Conduit  </span><span> 13</span></li>
+                                    <li><span>Pyroclast     </span><span> 13</span></li>
+                                    <li><span>Snowdancer    </span><span> 14</span></li>
+                                    <li><span>Shattersong   </span><span> 13</span></li>
+                                    <li><span>Trapper       </span><span> 12</span></li>
+                            </ul>
+                           </td>
+                          </tr>
+                        </table>
+
+                </div>
+        </div>
+
+
+
         <!-- Show success message if character was saved -->
         <script th:if="${saved}">
                 if (window.parent && typeof window.parent.showSuccessMessage === 'function') {
                         window.parent.showSuccessMessage('characterSaved');
                 }
-                </script>
+        </script>
 
 </body>
 

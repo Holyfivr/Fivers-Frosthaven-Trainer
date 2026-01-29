@@ -55,7 +55,7 @@ function showSuccessMessage(action) {
         case "rulesetSaved"     : message = "Ruleset Saved Successfully!"        ; break;
         case "linkCopied"       : message = "Link Copied to Clipboard!"          ; break;
         case "hpMaxed"          : message = "All Characters Max HP Set to 99!"   ; break;
-        case "cardsMaxed"       : message = "All Characters Max Cards Set to 20!"; break;
+        case "cardsMaxed"       : message = "Maxed out Available Abilitycards!"  ; break;
         case "charactersEnabled": message = "Characters Enabled from Start!"     ; break;
         case "characterSaved"   : message = "Character Saved Successfully!"      ; break;
         case "itemUpdated"      : message = "Items Updated Successfully!"        ; break;

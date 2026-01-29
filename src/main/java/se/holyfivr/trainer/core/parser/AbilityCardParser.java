@@ -21,7 +21,7 @@ public class AbilityCardParser {
     // List of valid "stat"-keys. These are use when looping through the ruleset when finding abilities to change
     private static final List<String> VALID_STAT_KEYS = List.of(
             "Attack", "Damage", "Heal", "Move", "Range", "Shield", "Target",
-            "Loot", "Pull", "Push", "Retaliate", "Pierce", "XP", "Consumes"
+            "Loot", "Pull", "Push", "Retaliate", "Pierce", "XP", "Consumes", "Consume"
     );
     
     // Pattern to make name-key only accept root-level card-names
@@ -75,7 +75,12 @@ public class AbilityCardParser {
             
             // Updates storedKey if key contains a valid string
             if (VALID_STAT_KEYS.contains(key)) {
-                storedKey = key;
+                // We normalize Consume to Consumes for easier handling
+                if (key.equalsIgnoreCase("Consume")) {
+                    storedKey = "Consumes";
+                } else {
+                    storedKey = key;
+                }
             }
 
             // empty value = skip this iteration
@@ -87,7 +92,14 @@ public class AbilityCardParser {
             // if storedKey has a value, and the current key is "Amount" or "Strength", it belongs to the stored key
             // so we set key to storedKey to apply the value to that key instead
             String effectiveKey = key;
-            if ((key.equalsIgnoreCase("Amount") || key.equalsIgnoreCase("Strength") || key.equalsIgnoreCase("Elements")) && storedKey != null) {
+
+            if (storedKey != null && (storedKey.equalsIgnoreCase("Consumes") || storedKey.equalsIgnoreCase("Consume"))) {
+                if (key.equalsIgnoreCase("Elements")) {
+                    effectiveKey = "Consumes";
+                } else if (key.equalsIgnoreCase("Amount") || key.equalsIgnoreCase("Strength")) {
+                    storedKey = null;
+                }
+            } else if ((key.equalsIgnoreCase("Amount") || key.equalsIgnoreCase("Strength")) && storedKey != null) {
                 effectiveKey = storedKey;
             }
             

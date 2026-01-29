@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import se.holyfivr.trainer.core.ActiveSessionData;
+
 import se.holyfivr.trainer.model.AbilityCard;
 import se.holyfivr.trainer.service.AbilityCardService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,7 +36,6 @@ public class AbilityCardController {
 
     @GetMapping("/ability-cards/{className}")
     public String getClassCards(Model model, @PathVariable("className") String className) {
-        System.out.println(className);
         Map<String, AbilityCard> classCards = abilityCardService.getCardsByClass(className);
         model.addAttribute("currentClass", className);
         model.addAttribute("abilityCards", classCards);

@@ -46,15 +46,8 @@ public class AuthController {
     public ResponseEntity<byte[]> getAbilityObject(@PathVariable String classname, @PathVariable String filename) {
         try {
 
-            System.out.println(classname); // debug
-            System.out.println(filename); // debug
-
             String formattedClassName = formatClassNames(classname);
             String formattedFileName = formatCardNames(filename);
-
-            System.out.println(formattedClassName); // debug
-            System.out.println(formattedFileName); // debug
-
 
             ClassPathResource objFile = new ClassPathResource("static/img/abilitycards/" + formattedClassName + "-" + formattedFileName + ".dat");
             

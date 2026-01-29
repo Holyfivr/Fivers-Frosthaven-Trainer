@@ -64,15 +64,6 @@ public class AbilityCard {
     /* ======================================================== */
 
 
-    public AbilityCard() {
-
-    }
-
-    @Override
-    public String toString() {
-        return "";
-    }
-
     // Full unchanged name
     public String getName() {
         return name;

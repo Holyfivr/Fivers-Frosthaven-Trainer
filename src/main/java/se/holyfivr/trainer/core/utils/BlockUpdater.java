@@ -135,9 +135,7 @@ public class BlockUpdater {
 
     /* Updates nested attributes like Consumes -> Elements */
     private String updateNestedAttribute(String block, String parentKey, String childKey, String value) {
-        // the -1/-2 shouldn't be needed here but I'm leaving it in anyway.
-        // this was a temporary fix to deal with numerical values getting applied to consume, in some nested structures.
-        if (value == null || value.equals("-1") || value.equals("-2")) { 
+        if (value == null) { 
             return block;
         }
         

@@ -66,17 +66,17 @@ Making changes in the ruleset file will effectively change the game rules, this 
 
 ## <center>Preview</center>
 
-| Open ruleset | Create backup or rely on the automatic original backup |
+| Open ruleset | Edit specific characters |
 |:---:|:---:|
-| ![Open Ruleset](/preview/open-ruleset.png) | ![Create Backup](/preview/create-backup.png) |
+| ![Open Ruleset](/preview/open-ruleset.png) | ![Edit Characters](/preview/edit-character.png) |
 
-| Edit characters (don't forget to save) | Use "Max All HP/Cards", or "Enable All" to mass-edit |
-|:---:|:---:|
-| ![Edit Characters](/preview/edit-character.png) | ![Edit All Characters](/preview/edit-all-character.png) |
-
-| Edit items | Use the "set" options to mass-edit |
+| Edit specific items | Mass-edit items |
 |:---:|:---:|
 | ![Edit Items](/preview/edit-item.png) | ![Edit All Items](/preview/edit-all-item.png) |
+
+| Edit specific ability cards | Mass-edit ability cards |
+|:---:|:---:|
+| ![Edit Items](/preview/edit-ability-card.png) | ![Edit All Items](/preview/edit-all-ability-card.png) |
 
 | Save Ruleset  | If file somehow gets corrupted, restore from backup |
 |:---:|:---:|

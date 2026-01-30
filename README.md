@@ -97,7 +97,7 @@ Making changes in the ruleset file will effectively change the game rules, this 
 *   HTML
 *   JavaScript
 
-## Installation
+## How to run
 1.  Download the latest release from the [Releases](https://github.com/Holyfivr/Fivers-Frosthaven-Trainer/releases)
 2.  Extract the ZIP file to a folder of your choice.
 3.  Run the `FrosthavenTrainer.exe` file to start the application.

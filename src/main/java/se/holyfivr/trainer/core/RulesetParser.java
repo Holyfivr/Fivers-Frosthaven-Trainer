@@ -15,6 +15,8 @@ import se.holyfivr.trainer.core.parser.UnlockedCharacterParser;
 @Service
 public class RulesetParser {
 
+    private static final String PARSER_BLOCK_MARKER = "Parser: ";
+
     // injected from the State class to store parsed data
     private final ActiveSessionData activeSession;
     private final CharacterParser characterParser;
@@ -48,60 +50,37 @@ public class RulesetParser {
     /*                                                                                              */
     /* ============================================================================================ */
     public void parseRulesetContent(String contentString) {
-        
-        // Clear any existing characters 
-        activeSession.clearCharacters();
 
-        // Clear any existing unlocked characters
-        activeSession.clearUnlockedCharacters();
+        // Prepare a clean session for this parsing run
+        activeSession.reset();
 
-        // Clear any existing items
-        activeSession.clearItems();
+        // Split the content into blocks using the parser marker
+        String[] blocks = contentString.split(PARSER_BLOCK_MARKER);
 
-        // Clear any existing cards
-        activeSession.clearAbilityCards();
-
-        // Splits up the content block into smaller blocks based on parser tags
-        String[] allBlocks = contentString.split("Parser: ");
-
-        // Debug variables just to check how many of each entity we found
-        int itemCount = 0;      // should be 264
-        int abilityCount = 0;   // should be 531
-
-        // skip index 0, as it is empty (the content string starts with the marker "Parser: ")
-        for (int i = 1; i < allBlocks.length; i++) {
-            String currentBlock = allBlocks[i].trim();
-
-            // Check the type of block and process accordingly
-
-            if (currentBlock.startsWith("Character")) {
-
-                characterParser.parseCharacterBlock(currentBlock);
-
-            } else if (currentBlock.startsWith("GameMode")) {                
-
-                unlockedCharacterParser.parseGameModeBlock(currentBlock);
-
-            } else if (currentBlock.startsWith("ItemCard")) {
-
-                itemParser.parseItemBlock(currentBlock);
-                itemCount++;        //debug
-
-            } else if (currentBlock.startsWith("AbilityCard")) {
-                abilityCardParser.parseAbilityCardBlock(currentBlock);
-                abilityCount++;     //debug
-                
-            }
+        // Skip index 0, as the content starts with the parser marker
+        for (int i = 1; i < blocks.length; i++) {
+            routeBlock(blocks[i].trim());
         }
-
-
-
-        // DEBUG: Print totals
-        System.out.println("Total Characters Parsed: " + activeSession.getCharacters().size()); 
-        System.out.println("Total Items Found: " + itemCount); 
-        System.out.println("Total Ability Cards Found: " + abilityCount); 
-
     }
 
+    /**
+     * Routes a single parser block to the appropriate parser
+     * based on its leading identifier.
+     */
+    private void routeBlock(String block) {
+
+        if (block.startsWith("Character")) {
+            characterParser.parseCharacterBlock(block);
+
+        } else if (block.startsWith("GameMode")) {
+            unlockedCharacterParser.parseGameModeBlock(block);
+
+        } else if (block.startsWith("ItemCard")) {
+            itemParser.parseItemBlock(block);
+
+        } else if (block.startsWith("AbilityCard")) {
+            abilityCardParser.parseAbilityCardBlock(block);
+        }
+    }
     
 }

@@ -26,6 +26,19 @@ public class ActiveSessionData {
         this.rulesetPath = rulesetPath;
     }
 
+
+    /* ========================================== */
+    /* RESET ALL DATA WHEN STARTING A NEW SESSION */
+    /* ========================================== */
+     public void reset() {
+        clearCharacters();
+        clearUnlockedCharacters();
+        clearAbilityCards();
+        clearItems();
+    }
+
+
+
     /* =========================== */
     /* STORE ALL GAME CHARACTERS */
     /* =========================== */
@@ -51,6 +64,7 @@ public class ActiveSessionData {
 
     public void clearCharacters() {
         characters.clear();
+        
     }
 
     /* ============================= */
@@ -67,9 +81,7 @@ public class ActiveSessionData {
     }
 
     public void clearUnlockedCharacters() {
-        for (int i = unlockedCharacters.size() - 1; i >= 0; i--) {
-            unlockedCharacters.remove(i);
-        }
+        unlockedCharacters.clear();
     }
 
     /* =============== */
@@ -89,6 +101,7 @@ public class ActiveSessionData {
 
     public void clearItems() {
         items.clear();
+        
     }
 
     public void setID(String value) {
@@ -248,6 +261,7 @@ public class ActiveSessionData {
 
     public void clearAbilityCards() {
         abilityCards.clear();
+        
     }
 
     public void setAbilityCardAttack(String value) {

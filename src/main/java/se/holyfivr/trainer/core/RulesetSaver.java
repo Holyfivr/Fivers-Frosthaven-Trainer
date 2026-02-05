@@ -6,6 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.AtomicMoveNotSupportedException;
 
 import se.holyfivr.trainer.model.enums.RulesetFileName;
 import java.util.List;
@@ -92,10 +93,7 @@ public class RulesetSaver {
             if (finalFileBytes.length != originalTotalSize) {
                 throw new SecurityException("Error: Final file size (" + finalFileBytes.length
                         + ") does not match original size (" + originalTotalSize + "). Aborting save."); // debug
-            }
-
-            // Finally, if everything is good, we write the bytes back to disk
-            
+            }            
             
             
             // This part ensures that no matter what backup is being edited, it will always update the Base.ruleset file
@@ -103,19 +101,54 @@ public class RulesetSaver {
             // any backup to Base.ruleset to have it be the file that the game uses.
             String fileName = filePath.getFileName().toString();
             if (fileName.equals(RulesetFileName.BASE_RULESET.getFileName())) {
-                Files.write(filePath, finalFileBytes);
+                safeWrite(filePath, finalFileBytes, originalTotalSize);
             } else if (fileName.equals(RulesetFileName.ORIGINAL_BACKUP.getFileName())) {
                 // If we are editing the original backup, we DO NOT want to overwrite it.
                 // We only want to apply the changes to the active game file (Base.ruleset).
-                Files.write(filePath.resolveSibling(RulesetFileName.BASE_RULESET.getFileName()), finalFileBytes);
+                safeWrite(filePath.resolveSibling(RulesetFileName.BASE_RULESET.getFileName()), finalFileBytes, originalTotalSize);
             } else {
-                Files.write(filePath, finalFileBytes);
+                safeWrite(filePath, finalFileBytes, originalTotalSize);
                 Files.copy(filePath, filePath.resolveSibling(RulesetFileName.BASE_RULESET.getFileName()), StandardCopyOption.REPLACE_EXISTING);
             }
             System.out.println("File saved successfully!"); // debug
 
         } catch (IOException e) {
             System.err.println("Failed to save ruleset: " + e.getMessage()); // debug
+        }
+    }
+
+    /* ============================================================================================ */
+    /* SAFE WRITE                                                                                   */
+    /*                                                                                              */
+    /* Writes bytes to disk using a temp-file-then-atomic-rename strategy.                         */
+    /* This prevents file corruption if the write is interrupted (crash, power loss, etc).          */
+    /*                                                                                              */
+    /* 1. Writes to a .tmp sibling file                                                             */
+    /* 2. Validates that the temp file is exactly the expected size                                 */
+    /* 3. Atomically replaces the target file with the temp file                                    */
+    /*                                                                                              */
+    /* If validation fails, the temp file is deleted and the original remains untouched.            */
+    /* ============================================================================================ */
+    private void safeWrite(Path targetPath, byte[] data, int expectedSize) throws IOException {
+        Path tempPath = targetPath.resolveSibling(targetPath.getFileName() + ".tmp");
+
+        // Write to temp file first — if this crashes, the original is still intact
+        Files.write(tempPath, data);
+
+        // Validate the temp file on disk before committing
+        long writtenSize = Files.size(tempPath);
+        if (writtenSize != expectedSize) {
+            Files.deleteIfExists(tempPath);
+            throw new IOException("Safe write failed: temp file size (" + writtenSize
+                    + ") does not match expected size (" + expectedSize + "). Original file is untouched.");
+        }
+
+        // Atomic replace — either fully succeeds or the original remains
+        try {
+            Files.move(tempPath, targetPath, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+        } catch (AtomicMoveNotSupportedException e) {
+            // Fallback for filesystems that don't support atomic moves (e.g. some network drives)
+            Files.move(tempPath, targetPath, StandardCopyOption.REPLACE_EXISTING);
         }
     }
 

@@ -14,7 +14,8 @@ public class ItemParser {
         this.activeSessionData = activeSessionData;
     }
 
-    @SuppressWarnings("incomplete-switch") // The switch wants to implement unneeded cases
+    // Enum contains values that are not relevant for parsing
+    @SuppressWarnings("incomplete-switch") 
     public void parseItemBlock(String currentBlock) {
 
         Item item = new Item();

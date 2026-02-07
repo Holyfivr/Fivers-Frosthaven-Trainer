@@ -180,10 +180,12 @@ public class BlockUpdater {
         if (item != null) {
             currentBlock = updateAttribute(currentBlock, ItemAttribute.HEAL           .get(), null, item.getHeal());
             currentBlock = updateAttribute(currentBlock, ItemAttribute.ATTACK         .get(), null, item.getAttack());
+            currentBlock = updateAttribute(currentBlock, ItemAttribute.DAMAGE         .get(), null, item.getDamage());
             currentBlock = updateAttribute(currentBlock, ItemAttribute.RANGE          .get(), null, item.getRange());
             currentBlock = updateAttribute(currentBlock, ItemAttribute.TARGET         .get(), null, item.getTarget());
             currentBlock = updateAttribute(currentBlock, ItemAttribute.XP             .get(), null, item.getXp());
             currentBlock = updateAttribute(currentBlock, ItemAttribute.SHIELD         .get(), null, item.getShield());
+            currentBlock = updateAttribute(currentBlock, ItemAttribute.PIERCE         .get(), null, item.getPierce());
             currentBlock = updateAttribute(currentBlock, ItemAttribute.RETALIATE      .get(), null, item.getRetaliate());
             currentBlock = updateAttribute(currentBlock, ItemAttribute.MOVE           .get(), null, item.getMove());
             currentBlock = updateAttribute(currentBlock, ItemAttribute.PULL           .get(), null, item.getPull());
@@ -192,7 +194,7 @@ public class BlockUpdater {
             currentBlock = updateAttribute(currentBlock, ItemAttribute.OMOVE          .get(), null, item.getOMove());
             currentBlock = updateAttribute(currentBlock, ItemAttribute.AMOVE          .get(), null, item.getAMove());
             currentBlock = updateAttribute(currentBlock, ItemAttribute.SHIELD_VALUE   .get(), null, item.getShieldValue());
-            currentBlock = updateAttribute(currentBlock, ItemAttribute.PROSPERITY_REQ .get(), null, item.getProsperityRequirement());
+            currentBlock = updateAttribute(currentBlock, ItemAttribute.PROSPERITY_REQ .get(), null, item.getProsperReq());
             currentBlock = updateAttribute(currentBlock, ItemAttribute.ITEM_NAME      .get(), null, item.getItemName());
             currentBlock = updateAttribute(currentBlock, ItemAttribute.COST           .get(), null, item.getCost()); 
             currentBlock = updateAttribute(currentBlock, ItemAttribute.USAGE          .get(), null, item.getUsage());

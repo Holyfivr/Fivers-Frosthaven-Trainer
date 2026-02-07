@@ -55,10 +55,12 @@ public class ItemParser {
                     case SLOT           -> item.setSlot                  (value);
                     case RARITY         -> item.setRarity                (value);
                     case USAGE          -> item.setUsage                 (value);
-                    case PROSPERITY_REQ -> item.setProsperityRequirement (value);
+                    case PROSPERITY_REQ -> item.setProsperReq            (value);
+                    case PIERCE         -> item.setPierce                (value);
                     case CONSUMES       -> item.setConsumes              (value);
                     case HEAL           -> item.setHeal                  (value);
                     case ATTACK         -> item.setAttack                (value);
+                    case DAMAGE         -> item.setDamage                (value);
                     case RANGE          -> item.setRange                 (value);
                     case TARGET         -> item.setTarget                (value);
                     case SHIELD         -> item.setShield                (value);

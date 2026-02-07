@@ -12,7 +12,8 @@ public enum ItemAction {
     SET_SHIELD        ("setShield"),
     SET_MOVEMENT      ("setMovement"),
     SET_XP            ("setXp"),
-    SET_TARGET        ("setTarget");
+    SET_TARGET        ("setTarget"),
+    SET_PIERCE        ("setPierce");
 
     private final String action;
 

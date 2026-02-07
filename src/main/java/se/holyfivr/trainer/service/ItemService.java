@@ -2,6 +2,9 @@ package se.holyfivr.trainer.service;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
+
 import se.holyfivr.trainer.model.enums.ItemAction;
 
 import org.springframework.stereotype.Service;
@@ -42,25 +45,26 @@ public class ItemService {
     public void saveItem(Item existingItem, Item item) {
 
         if (existingItem != null) {
-            existingItem.setCost(item.getCost())
-                    .setTotalInGame(item.getTotalInGame())
-                    .setUsage(item.getUsage())
-                    .setProsperityRequirement(item.getProsperityRequirement())
-                    .setConsumes(item.getConsumes())
-                    .setInfuse(item.getInfuse())
-                    .setHeal(item.getHeal())
-                    .setAttack(item.getAttack())
-                    .setRange(item.getRange())
-                    .setTarget(item.getTarget())
-                    .setShield(item.getShield())
-                    .setRetaliate(item.getRetaliate())
-                    .setMove(item.getMove())
-                    .setOMove(item.getOMove())
-                    .setAMove(item.getAMove())
-                    .setPull(item.getPull())
-                    .setPush(item.getPush())
-                    .setJump(item.getJump())
-                    .setShieldValue(item.getShieldValue());
+            existingItem
+                    .setCost                 (item.getCost                 ())
+                    .setTotalInGame          (item.getTotalInGame          ())
+                    .setUsage                (item.getUsage                ())
+                    .setProsperReq(item.getProsperReq())
+                    .setConsumes             (item.getConsumes             ())
+                    .setInfuse               (item.getInfuse               ())
+                    .setHeal                 (item.getHeal                 ())
+                    .setAttack               (item.getDamage               ())
+                    .setRange                (item.getRange                ())
+                    .setTarget               (item.getTarget               ())
+                    .setShield               (item.getShield               ())
+                    .setRetaliate            (item.getRetaliate            ())
+                    .setMove                 (item.getMove                 ())
+                    .setOMove                (item.getOMove                ())
+                    .setAMove                (item.getAMove                ())
+                    .setPull                 (item.getPull                 ())
+                    .setPush                 (item.getPush                 ())
+                    .setJump                 (item.getJump                 ())
+                    .setShieldValue          (item.getShieldValue          ());
         }
 
         /* This is disabled for the forseeable future, until I can implement */
@@ -76,9 +80,15 @@ public class ItemService {
 
     }
 
-    /* ========================================== */
-    /* Updates all items with the received value. */
-    /* ========================================== */
+    /* ============================================ */
+    /* Updates all items with the received value.   */
+    /*                                              */
+    /* Uses functions and biconsumer to dynamically */
+    /* set values, and avoid having 15 identical    */
+    /* setters with loops+nullchecks in the         */
+    /* ActiveSessionData class.                     */
+    /* ============================================ */
+    
     public void updateAllItems(String action, String value) {
 
         if (value == null || value.isBlank() || value.equals("0")) {
@@ -89,25 +99,40 @@ public class ItemService {
         System.err.println("Action: " + itemAction + " | Value: " + value);
 
         switch (itemAction) {
-            case SET_GOLD_COST          -> activeSessionData.setGold        (value);
-            case SET_DAMAGE             -> activeSessionData.setAttack      (value);
-            case SET_RANGE              -> activeSessionData.setRange       (value);
-            case SET_HEAL               -> activeSessionData.setHeal        (value);
-            case SET_RETALIATE          -> activeSessionData.setRetaliate   (value);
-            case SET_PROSPERITY_REQ     -> activeSessionData.setProsperity  (value);
-            case SET_USAGE              -> activeSessionData.setUsage       (value);
-            case SET_TOTAL_IN_GAME      -> activeSessionData.setTotalInGame (value);
-            case SET_XP                 -> activeSessionData.setXp          (value);
-            case SET_TARGET             -> activeSessionData.setTarget      (value);
+            case SET_GOLD_COST          ->  updateAllItems(Item::getCost,        Item::setCost,          value);
+            case SET_RANGE              ->  updateAllItems(Item::getRange,       Item::setRange,         value);
+            case SET_HEAL               ->  updateAllItems(Item::getHeal,        Item::setHeal,          value);
+            case SET_RETALIATE          ->  updateAllItems(Item::getRetaliate,   Item::setRetaliate,     value);
+            case SET_USAGE              ->  updateAllItems(Item::getUsage,       Item::setUsage,         value);
+            case SET_TOTAL_IN_GAME      ->  updateAllItems(Item::getTotalInGame, Item::setTotalInGame,   value);
+            case SET_XP                 ->  updateAllItems(Item::getXp,          Item::setXp,            value);
+            case SET_TARGET             ->  updateAllItems(Item::getTarget,      Item::setTarget,        value);
+            case SET_PIERCE             ->  updateAllItems(Item::getPierce,      Item::setPierce,        value);
+            case SET_DAMAGE             -> {
+                                            updateAllItems(Item::getAttack,      Item::setAttack,        value);
+                                            updateAllItems(Item::getDamage,      Item::setDamage,        value);
+            }
             case SET_SHIELD             -> {
-                                           activeSessionData.setShield      (value);
-                                           activeSessionData.setShieldValue (value);
-                                           }
+                                            updateAllItems(Item::getShield,      Item::setShield,        value);
+                                            updateAllItems(Item::getShieldValue, Item::setShieldValue,   value);
+            }
             case SET_MOVEMENT           -> {
-                                           activeSessionData.setMovement    (value);
-                                           activeSessionData.setOMove       (value);
-                                           activeSessionData.setAMove       (value);
-                                           }
+                                            updateAllItems(Item::getMove,        Item::setMove,          value);
+                                            updateAllItems(Item::getOMove,       Item::setOMove,         value);
+                                            updateAllItems(Item::getAMove,       Item::setAMove,         value);
+            }
+            case SET_PROSPERITY_REQ     ->  activeSessionData.setProsperity(value);
         }
     }
+
+    private void updateAllItems(Function<Item, String> getter, BiConsumer<Item, String> setter, String value) {
+    for (Item item : activeSessionData.getItems().values()) {
+        if (getter.apply(item) != null) {
+            setter.accept(item, value);
+        }
+    }
+}
+
+
+
 }

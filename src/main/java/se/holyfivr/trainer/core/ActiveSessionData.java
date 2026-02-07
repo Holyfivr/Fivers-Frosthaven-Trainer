@@ -112,125 +112,14 @@ public class ActiveSessionData {
         }
     }
 
-    public void setGold(String value) {
-        for (Item item : items.values()) {
-            if (item.getCost() != null && !item.getCost().trim().equals("0")) {
-                item.setCost(value);
-            }
-        }
-    }
-
     public void setProsperity(String value) {
         for (Item item : items.values()) {
-            if (item.getProsperityRequirement() != null && !item.getProsperityRequirement().trim().equals("0")) {
-                item.setProsperityRequirement(value);
+            if (item.getProsperReq() != null && !item.getProsperReq().trim().equals("0")) {
+                item.setProsperReq(value);
             }
         }
     }
 
-    public void setHeal(String value) {
-        for (Item item : items.values()) {
-            if (item.getHeal() != null) {
-                item.setHeal(value);
-            }
-        }
-    }
-
-    public void setRetaliate(String value) {
-        for (Item item : items.values()) {
-            if (item.getRetaliate() != null) {
-                item.setRetaliate(value);
-            }
-        }
-    }
-
-    public void setMovement(String value) {
-        for (Item item : items.values()) {
-            if (item.getMove() != null) {
-                item.setMove(value);
-            }
-        }
-    }
-
-    public void setOMove(String value) {
-        for (Item item : items.values()) {
-            if (item.getOMove() != null) {
-                item.setOMove(value);
-            }
-        }
-    }
-
-    public void setAMove(String value) {
-        for (Item item : items.values()) {
-            if (item.getAMove() != null) {
-                item.setAMove(value);
-            }
-        }
-    }
-
-    public void setAttack(String value) {
-        for (Item item : items.values()) {
-            if (item.getAttack() != null) {
-                item.setAttack(value);
-            }
-        }
-    }
-
-    public void setShield(String value) {
-        for (Item item : items.values()) {
-            if (item.getShield() != null) {
-                item.setShield(value);
-            }
-        }
-    }
-
-    public void setShieldValue(String value) {
-        for (Item item : items.values()) {
-            if (item.getShieldValue() != null) {
-                item.setShieldValue(value);
-            }
-        }
-    }
-
-    public void setUsage(String value) {
-        for (Item item : items.values()) {
-            if (item.getUsage() != null) {
-                item.setUsage(value);
-            }
-        }
-    }
-
-    public void setRange(String value) {
-        for (Item item : items.values()) {
-            if (item.getRange() != null) {
-                item.setRange(value);
-            }
-        }
-    }
-
-    public void setTotalInGame(String value) {
-        for (Item item : items.values()) {
-            if (item.getTotalInGame() != null) {
-                item.setTotalInGame(value);
-            }
-        }
-    }
-
-    public void setXp(String value) {
-        for (Item item : items.values()) {
-            if (item.getXp() != null) {
-                item.setXp(value);
-            }
-        }
-    }
-
-    public void setTarget(String value) {
-        for (Item item : items.values()) {
-            if (item.getTarget() != null) {
-                item.setTarget(value);
-            }
-        }
-    }
 
     /* ====================== */
     /* STORE ALL ABILITYCARDS */

@@ -12,35 +12,45 @@ public class Item {
     public static final String UPPERCASE_LETTER = "([A-Z])";
     // General item info
     public String itemName;
-    public String id; // numeric ID - used to identify the FHItem version of the item when rewriting
+    public String id;       // numeric ID - used to identify the FHItem version of the item when rewriting
     public String stringId; // "nameID"
-    public String totalInGame; // integer
-    public String cost; // integer
-    public String slot; // Head/Body/Legs/SmallItem/OneHand/TwoHand/QuestItem
-    public String rarity; // Rare/Relic
-    public String usage; // Spent/Unrestricted/Consumed/Flip
-    public String prosperityRequirement;
-    public String consumes;
-    public String infuse;
-    public String xp; // integer
-
+    public String rarity;   // Rare/Relic
+    public String slot;     // Head/Body/Legs/SmallItem/OneHand/TwoHand/QuestItem
+    
+    
+    // Strings
+    public String usage;    // Spent/Unrestricted/Consumed/Flip
+    public String consumes; // air/fire/etc
+    public String infuse;   // air/fire/etc
+    
     // Effects (from each "Data" block)
-    public String heal; // integer
-    public String attack; // integer
-    public String range; // integer
-    public String target; // integer (-1 = adjacent(or rather aoe, depending on range))
-    public String shield; // integer
+    // Integers
+    public String prosperityRequirement;
+    public String xp;
+    public String heal;
+    public String attack;
+    public String damage;
+    public String totalInGame; 
+    public String cost; 
+    public String range;
+    public String target; // (-1 = adjacent(or rather aoe, depending on range))
+    public String shield;
     public String shieldValue;
-    public String retaliate; // integer
-    public String move; // integer
+    public String retaliate;
+    public String move;
     public String oMove;
     public String aMove;
-    public String pull; // integer
-    public String push; // integer
-    public String jump; // bool
-    public String isMelee; // bool
+    public String pull;
+    public String push;
+    public String pierce;
     public String conditions; // (Muddle, Stun, Poison, Immobilize, Disarm, Stun, Curse, Bless, Strengthen,
                               // Invisible, Brittle, Bane, Impair)
+
+    // bool
+    public String jump; // bool
+    public String isMelee; // bool
+
+   
 
     // Conditions & Status Effects ... We're leaving these out for now
     /*
@@ -141,11 +151,11 @@ public class Item {
         return this;
     }
 
-    public String getProsperityRequirement() {
+    public String getProsperReq() {
         return prosperityRequirement;
     }
 
-    public Item setProsperityRequirement(String prosperityRequirement) {
+    public Item setProsperReq(String prosperityRequirement) {
         this.prosperityRequirement = prosperityRequirement;
         return this;
     }
@@ -183,6 +193,15 @@ public class Item {
 
     public Item setAttack(String attack) {
         this.attack = attack;
+        return this;
+    }
+
+    public String getDamage() {
+        return damage;
+    }
+
+    public Item setDamage(String damage) {
+        this.damage = damage;
         return this;
     }
 
@@ -337,6 +356,14 @@ public class Item {
     public Item setaMove(String aMove) {
         this.aMove = aMove;
         return this;
+    }
+    
+    public String getPierce() {
+        return pierce;
+    }
+
+    public void setPierce(String pierce) {
+        this.pierce = pierce;
     }
 
 }

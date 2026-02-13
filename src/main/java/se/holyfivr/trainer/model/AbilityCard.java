@@ -32,20 +32,24 @@ public class AbilityCard {
     public String XP;
 
     // MVP multi-attribute support: store every occurrence in the block, in order.
-    public List<String> attackValues = new ArrayList<>();
-    public List<String> damageValues = new ArrayList<>();
-    public List<String> healValues = new ArrayList<>();
-    public List<String> moveValues = new ArrayList<>();
-    public List<String> rangeValues = new ArrayList<>();
-    public List<String> shieldValues = new ArrayList<>();
-    public List<String> targetValues = new ArrayList<>();
-    public List<String> pullValues = new ArrayList<>();
-    public List<String> pushValues = new ArrayList<>();
+    public List<String> attackValues    = new ArrayList<>();
+    public List<String> damageValues    = new ArrayList<>();
+    public List<String> healValues      = new ArrayList<>();
+    public List<String> moveValues      = new ArrayList<>();
+    public List<String> rangeValues     = new ArrayList<>();
+    public List<String> shieldValues    = new ArrayList<>();
+    public List<String> targetValues    = new ArrayList<>();
+    public List<String> pullValues      = new ArrayList<>();
+    public List<String> pushValues      = new ArrayList<>();
     public List<String> retaliateValues = new ArrayList<>();
-    public List<String> pierceValues = new ArrayList<>();
-    public List<String> xpValues = new ArrayList<>();
-    public List<String> lootValues = new ArrayList<>();
-    
+    public List<String> pierceValues    = new ArrayList<>();
+    public List<String> xpValues        = new ArrayList<>();
+    public List<String> lootValues      = new ArrayList<>();
+
+    // unused for now
+    public List<String> consumeValues   = new ArrayList<>();
+    public List<String> infuseValues    = new ArrayList<>();
+    // 
     
 
     /* ======================================================== */
@@ -383,5 +387,26 @@ public class AbilityCard {
         this.lootValues = lootValues;
         return this;
     }
+
+
+    // These are unused for now
+    public AbilityCard setConsumeValues(List<String> consumeValues) {
+        this.consumeValues = consumeValues;
+        return this;
+    }
+
+    public List<String> getConsumeValues() {
+        return consumeValues;
+    }
+
+    public List<String> getInfuseValues() {
+        return infuseValues;
+    }
+
+    public void setInfuseValues(List<String> infuseValues) {
+        this.infuseValues = infuseValues;
+    }  
+    //
+    
 
 }

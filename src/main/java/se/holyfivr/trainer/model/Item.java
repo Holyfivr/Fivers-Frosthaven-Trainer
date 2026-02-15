@@ -11,8 +11,8 @@ package se.holyfivr.trainer.model;
 public class Item {
     public static final String UPPERCASE_LETTER = "([A-Z])";
     // General item info
-    public String itemName;
     public String id;       // numeric ID - used to identify the FHItem version of the item when rewriting
+    public String itemName; // "nameID" with spaces and without the "ID" at the end
     public String stringId; // "nameID"
     public String rarity;   // Rare/Relic
     public String slot;     // Head/Body/Legs/SmallItem/OneHand/TwoHand/QuestItem
@@ -362,8 +362,9 @@ public class Item {
         return pierce;
     }
 
-    public void setPierce(String pierce) {
+    public Item setPierce(String pierce) {
         this.pierce = pierce;
+        return this;
     }
 
 }

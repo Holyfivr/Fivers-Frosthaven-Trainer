@@ -18,11 +18,11 @@ public class CharacterController {
     private static final String REDIRECT_START = "redirect:/start";
 
     // Active session data to access characters and unlocked character list
-    private final ActiveSessionData state;
+    private final ActiveSessionData activeSessionData;
     private final CharacterService characterService;
 
-    CharacterController(ActiveSessionData state, CharacterService characterService) {
-        this.state = state;
+    CharacterController(ActiveSessionData activeSessionData, CharacterService characterService) {
+        this.activeSessionData = activeSessionData;
         this.characterService = characterService;
     }
 
@@ -30,18 +30,19 @@ public class CharacterController {
     /* Handles request to fetch characterdata to display in their respective page */
     /* ========================================================================== */
     @GetMapping("/character/{characterName}")
-    public String getCharacter(@PathVariable("characterName") String characterName,
-            @RequestParam(required = false) Boolean saved, Model model) {
+    public String getCharacter(
+    @PathVariable("characterName") String characterName,
+    @RequestParam(required = false) Boolean saved, 
+    Model model) {
 
-        PlayerCharacter selectedCharacter = state.getCharacters().get(characterName);
-        model.addAttribute("character", selectedCharacter);
-        model.addAttribute("saved", saved);
-
-        boolean isUnlocked = characterService.isCharacterUnlocked(characterName);
-        model.addAttribute("isUnlockedFromStart", isUnlocked);
-
-        boolean isAllowed = characterService.isCharacterAllowed(characterName);
-        model.addAttribute("allowedCharacter", isAllowed);
+        PlayerCharacter selectedCharacter = activeSessionData            .getCharacters        ().get(characterName);
+        boolean isAllowed                 = characterService .isCharacterAllowed   (characterName);
+        boolean isUnlocked                = characterService .isCharacterUnlocked  (characterName);
+        
+        model.addAttribute("character"           , selectedCharacter);
+        model.addAttribute("saved"               , saved);
+        model.addAttribute("isUnlockedFromStart" , isUnlocked);
+        model.addAttribute("allowedCharacter"    , isAllowed);
 
         return "character";
     }
@@ -50,21 +51,33 @@ public class CharacterController {
     /* Handles request to update character data, based on the form from the individual character pages */
     /* =============================================================================================== */
     @GetMapping("/character/submit")
-    public String submitCharacter(@RequestParam("maxAbilityCard") String maxAbilityCard,
-            @RequestParam("characterName") String characterName,
-            @RequestParam("hpFieldOne") String hpFieldOne,
-            @RequestParam("hpFieldTwo") String hpFieldTwo,
-            @RequestParam("hpFieldThree") String hpFieldThree,
-            @RequestParam("hpFieldFour") String hpFieldFour,
-            @RequestParam("hpFieldFive") String hpFieldFive,
-            @RequestParam("hpFieldSix") String hpFieldSix,
-            @RequestParam("hpFieldSeven") String hpFieldSeven,
-            @RequestParam("hpFieldEight") String hpFieldEight,
-            @RequestParam("hpFieldNine") String hpFieldNine,
-            @RequestParam(value = "isUnlockedFromStart", defaultValue = "false") boolean isUnlockedFromStart) {
+    public String submitCharacter(
+    @RequestParam("maxAbilityCard") String maxAbilityCard,
+    @RequestParam("characterName")  String characterName,
+    @RequestParam("hpFieldOne"   )  String hpFieldOne,
+    @RequestParam("hpFieldTwo"   )  String hpFieldTwo,
+    @RequestParam("hpFieldThree" )  String hpFieldThree,
+    @RequestParam("hpFieldFour"  )  String hpFieldFour,
+    @RequestParam("hpFieldFive"  )  String hpFieldFive,
+    @RequestParam("hpFieldSix"   )  String hpFieldSix,
+    @RequestParam("hpFieldSeven" )  String hpFieldSeven,
+    @RequestParam("hpFieldEight" )  String hpFieldEight,
+    @RequestParam("hpFieldNine"  )  String hpFieldNine,
+    @RequestParam(value = "isUnlockedFromStart", defaultValue = "false") boolean isUnlockedFromStart) {
 
-        characterService.updateCharacter(maxAbilityCard, characterName, hpFieldOne, hpFieldTwo, hpFieldThree,
-                hpFieldFour, hpFieldFive, hpFieldSix, hpFieldSeven, hpFieldEight, hpFieldNine, isUnlockedFromStart);
+        characterService.updateCharacter(
+            maxAbilityCard, 
+            characterName, 
+            hpFieldOne, 
+            hpFieldTwo, 
+            hpFieldThree,
+            hpFieldFour, 
+            hpFieldFive, 
+            hpFieldSix, 
+            hpFieldSeven, 
+            hpFieldEight, 
+            hpFieldNine, 
+            isUnlockedFromStart);
 
         return "redirect:/character/" + characterName + "?saved=true";
     }
@@ -75,7 +88,6 @@ public class CharacterController {
     @GetMapping("/enablecharacters")
     public String enableCharacters() {
         characterService.enableAllCharacters();
-
         return REDIRECT_START;
     }
 
@@ -85,9 +97,7 @@ public class CharacterController {
     @GetMapping("/maxcards")
     public String maxCards(Model model) {
         characterService.maxCharacterAbilityCards();
-
         model.addAttribute("maxcards", true);
-
         return REDIRECT_START;
     }
 
@@ -96,10 +106,8 @@ public class CharacterController {
     /* ================================================= */
     @GetMapping("/maxhp")
     public String maxHp(Model model) {
-
         characterService.maxAllCharacterHp();
         model.addAttribute("maxhp", true);
-
         return REDIRECT_START;
     }
 

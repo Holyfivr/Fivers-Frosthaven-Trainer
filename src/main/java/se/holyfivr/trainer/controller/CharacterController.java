@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import se.holyfivr.trainer.core.ActiveSessionData;
 import se.holyfivr.trainer.model.PlayerCharacter;
@@ -50,7 +51,7 @@ public class CharacterController {
     /* =============================================================================================== */
     /* Handles request to update character data, based on the form from the individual character pages */
     /* =============================================================================================== */
-    @GetMapping("/character/submit")
+    @PostMapping("/character/submit")
     public String submitCharacter(
     @RequestParam("maxAbilityCard") String maxAbilityCard,
     @RequestParam("characterName")  String characterName,
@@ -85,7 +86,7 @@ public class CharacterController {
     /* ================================================ */
     /* Handles request to enable all allowed characters */
     /* ================================================ */
-    @GetMapping("/enablecharacters")
+    @PostMapping("/enablecharacters")
     public String enableCharacters() {
         characterService.enableAllCharacters();
         return REDIRECT_START;
@@ -94,7 +95,7 @@ public class CharacterController {
     /* ===================================================================== */
     /* Handles request to set max available ability cards for all characters */
     /* ===================================================================== */
-    @GetMapping("/maxcards")
+    @PostMapping("/maxcards")
     public String maxCards(Model model) {
         characterService.maxCharacterAbilityCards();
         model.addAttribute("maxcards", true);
@@ -104,7 +105,7 @@ public class CharacterController {
     /* ================================================= */
     /* Handles request to set max hp for all characters. */
     /* ================================================= */
-    @GetMapping("/maxhp")
+    @PostMapping("/maxhp")
     public String maxHp(Model model) {
         characterService.maxAllCharacterHp();
         model.addAttribute("maxhp", true);

@@ -14,12 +14,11 @@ public class CharacterService {
 
     /*
     LIST OF CHARACTERS THAT CAN BE ADDED SAFELY: Pyroclast, Snowdancer, Frozen Fist, Trapper, Hive, Infuser, Metal Mosaic, Pain Conduit
-    LIST OF CHARACTERS THAT CAN BE ADDED BUT DO NOT SHOW UP: Crashing tide, Shattersong, Deepwraith
-    LIST OF CHARACTERS THAT BREAK THE GAME: none ... 
+    LIST OF CHARACTERS THAT CAN BE ADDED BUT DO NOT SHOW UP (aren't added to the game yet): Crashing tide, Shattersong, Deepwraith
 
     IMPORTANT NOTE:
-    Adding too many characters may add more bytes than can safely be removed from the filler bank.
-    This WILL crash the game. So avoid this until we have a more sophisticated way of handling the filler bank, that can share bytes between multiple banks.
+    Adding too many characters *may* add more bytes than can safely be removed from the specific block. Whether or not this will be a problem
+    remains to be seen once all 17 characters are added. For now, it works fine with the currently 14 existing characters. 
     */
 
 
@@ -47,7 +46,7 @@ public class CharacterService {
         "PainConduitID" 
     };
 
-    private ActiveSessionData activeSessionData;
+    private final ActiveSessionData activeSessionData;
 
     public CharacterService(ActiveSessionData activeSessionData){
         this.activeSessionData = activeSessionData;

@@ -4,8 +4,6 @@ public class PlayerCharacter {
 
     private String name;
     private String displayName;
-    private boolean isAvailableFromStart;
-
     private String cardAmount;
     private String hpLvlOne;
     private String hpLvlTwo;
@@ -148,15 +146,6 @@ public class PlayerCharacter {
 
     public PlayerCharacter setHpLvlNine(String hpLvlNine) {
         this.hpLvlNine = hpLvlNine;
-        return this;
-    }
-
-    public boolean isAvailableFromStart() {
-        return isAvailableFromStart;
-    }
-
-    public PlayerCharacter setAvailableFromStart(boolean isAvailableFromStart) {
-        this.isAvailableFromStart = isAvailableFromStart;
         return this;
     }
 

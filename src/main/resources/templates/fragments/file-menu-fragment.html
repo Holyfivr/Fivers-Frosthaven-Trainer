@@ -16,10 +16,14 @@
                     onclick="openModal('backupTemplate')">
                     <div>Create Backup</div>
                 </a></li>
-            <li th:classappend="${!rulesetLoaded} ? 'inactive-dropdown'"><a id="restoreBackupLink"
-                    th:href="@{/restore-backup}" onclick="registerPendingAction('backupRestored')">
-                    <div>Restore Original</div>
-                </a></li>
+            <li th:classappend="${!rulesetLoaded} ? 'inactive-dropdown'">
+                <form th:action="@{/restore-backup}" method="POST" style="display:inline;"
+                    onsubmit="registerPendingAction('backupRestored')">
+                    <button class="restore-btn" type="submit">
+                        <div th:classappend="${!rulesetLoaded} ? 'inactive-dropdown'" class="restore-btn">Restore Original</div>
+                    </button>
+                </form>
+            </li>
             <li th:classappend="${!rulesetLoaded} ? 'inactive-dropdown'"><a id="saveRuleset"
                     onclick="openModal('saveTemplate')">
                     <div>Save Ruleset</div>
@@ -28,7 +32,8 @@
             <hr>
             <li><a th:href="@{/exit}">
                     <div>Exit Program</div>
-                </a></li>
+                </a>
+            </li>
         </ul>
     </li>
 

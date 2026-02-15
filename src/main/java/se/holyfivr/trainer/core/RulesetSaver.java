@@ -29,7 +29,8 @@ import se.holyfivr.trainer.model.PlayerCharacter;
 /* me the most headaches. At the time of writing this, I was studying my first semester to       */
 /* become a Java developer, and if I knew in advance how difficult this would prove, I probably  */
 /* wouldn't have made this application so early into my studies. But here we are. ¯\_(ツ)_/¯     */
-/* It implements the "Filler Bank" strategy to ensure the file size remains exactly unchanged.   */
+/* In this class we implement the "Byte Compensation" strategy to ensure the file size remains   */
+/* unchanged.                                                                                    */
 /*                                                                                               */
 /* ============================================================================================= */
 
@@ -73,7 +74,7 @@ public class RulesetSaver {
         try {
 
             // First we reconstruct the content string with updated values from ActiveSessionData.
-            // This now handles Filler Bank (padding/trimming) internally to preserve offsets.
+            // This now handles byte compensation (padding/trimming) internally to preserve offsets.
             String newContentString = reconstructContentWithUpdates(originalContentString);
 
             // We encode the string back to bytes (ISO_8859_1) to match original encoding
@@ -159,7 +160,7 @@ public class RulesetSaver {
     /* We then fetch the latest data from our ActiveSessionData.java class and inject it into       */
     /* the block.                                                                                   */
     /*                                                                                              */
-    /* Something very important to remember before editing this part: We use a "Filler Bank"        */
+    /* Something very important to remember before editing this part: We use a Byte Compensation    */
     /* strategy here. This means every single block MUST maintain its exact original byte length    */
     /* to avoid breaking the file's structure.                                                      */
     /* We handle this by calling 'adjustBlockSize' for every block before appending it.             */
@@ -230,7 +231,7 @@ public class RulesetSaver {
             currentBlock = saveUtils.stripDoubleHashComments(currentBlock);
             
             /* ============================================================================= */
-            /*                              FILLER BANK STRATEGY                             */
+            /*                          BYTE COMPENSATION STRATEGY                           */
             /* ============================================================================= */
             // We must ensure currentBlock has the EXACT same length as originalBlock.
             currentBlock = adjustBlockSize(currentBlock, originalBlock.length());
@@ -255,19 +256,12 @@ public class RulesetSaver {
     /* ============================================================================================ */
     /*                                      ADJUST BLOCK SIZE                                       */
     /*                                                                                              */
-    /* This is our "Filler Bank" implementation. For the file to remain valid, every section        */
+    /* This is our "Byte Compensation" implementation. For the file to remain valid, every section  */
     /* must be exactly the same size (in bytes) as it was when we read it.                          */
     /*                                                                                              */
     /* Logic is split into 'padBlock' and 'trimBlock' for better readability.                       */
     /* padBlock adds spaces to the end of the block until it matches the original size.             */
     /* trimBlock removes unnecessary whitespace to shrink the block to the original size.           */
-    /* In this first version, trimBlock has a huge weakness: If there are not enough removable      */
-    /* spaces,                                                                                      */
-    /* it will throw an exception and abort the saving process. This is to avoid corrupting         */ 
-    /* the file. This will be addressed in the future, by making the fillerbanks more dynamic.      */
-    /* It is far too complex to address now, and is not needed in this current version. In a future */
-    /* update I will add the feature to add more starting characters, and this must be addressed at */
-    /* that point, since those blocks have far too few whitespaces to trim.                         */
     /* ============================================================================================ */
     /**
      * Ensures the current block matches the original byte length.

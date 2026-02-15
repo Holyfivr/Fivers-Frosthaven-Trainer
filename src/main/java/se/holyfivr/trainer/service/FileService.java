@@ -31,7 +31,7 @@ public class FileService {
     /* This method opens the filechooser dialog for the user to select a file. */
     /* It pauses the execution until the user has made a selection, by using a */
     /* countdownLatch and running the dialog in the JavaFX thread.             */
-    /* When the file is selected, the chosen fil is processed by the           */
+    /* When the file is selected, the chosen file is processed by the           */
     /* performedFileSelection() method.                                        */
     /* ======================================================================= */
     public void openFileWithDialog() {
@@ -51,12 +51,12 @@ public class FileService {
     }
 
     /* ================================================================================ */
-    /* Handles the file selection dialog and processes the selected rulese file.        */
+    /* Handles the file selection dialog and processes the selected ruleset file.        */
     /* - Opens a file chooser for ruleset files (*.ruleset).                            */
     /* - Sets the selected file as the active ruleset path.                             */
     /* - Creates a permanent reset-backup of the ruleset if one does not already exist. */
     /* - Loads the ruleset into the application.                                        */
-    /* - Saves the directory to use as the standard path, when the user opens it agian  */
+    /* - Saves the directory to use as the standard path, when the user opens it again  */
     /* ================================================================================ */
     public void performFileSelection() {
         FileChooser fileChooser = new FileChooser();

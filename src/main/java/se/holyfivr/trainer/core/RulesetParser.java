@@ -41,9 +41,9 @@ public class RulesetParser {
     /*                                    PARSE RULESET CONTENT                                     */
     /*                                                                                              */
     /* This method restructures the data retrieved from the ruleset.                                */
-    /* We use the 'originalContentString' which we decoded safely using ISO_5589_1 format.          */
+    /* We use the 'originalContentString' which we decoded safely using ISO_8859_1 format.          */
     /* In this file, while parsing and using the data we do not care about the format, so it will   */
-    /* be UTF-16 from now on (which is java standard). It will be decoded back to ISO_5589_1, and   */
+    /* be UTF-16 from now on (which is java standard). It will be decoded back to ISO_8859_1, and   */
     /* then bytes again later before saving the file.                                               */
     /* We split the content into smaller blocks based on the "Parser: " tag.                        */
     /* These blocks are then processed one by one, extracting the relevant data.                    */

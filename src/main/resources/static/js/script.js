@@ -106,6 +106,7 @@ function openModal(templateId, setupCallback) {
     
     // Use requestAnimationFrame to ensure the browser paints 'display: flex' 
     // before applying the opacity transition.
+    // We need two frames: one to apply the display change, and another to apply the opacity change.
     requestAnimationFrame(() => {
         requestAnimationFrame(() => {
             if (universalModal) universalModal.style.opacity = "1";
@@ -129,8 +130,10 @@ window.onclick = function(event) {
     }
 }
 
-// TODO: add comment
 
+/* ================================== */
+/*  SPECIFIC MODAL OPENING FUNCTIONS  */
+/* ================================== */
 function openEditAllItemsModal() {
     openModal("editAllItemsTemplate", (container) => {
         container.querySelectorAll("input").forEach(input => {

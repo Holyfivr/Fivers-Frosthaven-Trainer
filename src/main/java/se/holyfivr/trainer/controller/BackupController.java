@@ -3,7 +3,7 @@ package se.holyfivr.trainer.controller;
 import se.holyfivr.trainer.service.BackupService;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
@@ -21,7 +21,7 @@ public class BackupController {
     /* ============================================= */
     /* Handles request to create a new custom backup */
     /* ============================================= */
-    @GetMapping("/create-backup")
+    @PostMapping("/create-backup")
     public String createBackup(@RequestParam("name") String name) {
         return backupService.createBackup(name);
     }
@@ -29,7 +29,7 @@ public class BackupController {
     /* =========================================== */
     /* Handles request to restore original ruleset */
     /* =========================================== */
-    @GetMapping("/restore-backup")
+    @PostMapping("/restore-backup")
     public String restoreBackup() {
         return backupService.restoreBackup();
     }

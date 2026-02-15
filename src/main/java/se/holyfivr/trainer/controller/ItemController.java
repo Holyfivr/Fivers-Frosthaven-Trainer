@@ -24,8 +24,8 @@ import se.holyfivr.trainer.service.ItemService;
 @Controller
 public class ItemController {
 
-    private ActiveSessionData activeSessionData;
-    private ItemService itemService;
+    private final ActiveSessionData activeSessionData;
+    private final ItemService itemService;
 
 
     public ItemController(ActiveSessionData activeSessionData, ItemService itemService) {

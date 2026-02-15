@@ -9,64 +9,64 @@ package se.holyfivr.trainer.model;
  * use.
  */
 public class Item {
-    public static final String UPPERCASE_LETTER = "([A-Z])";
+    private static final String UPPERCASE_LETTER = "([A-Z])";
     // General item info
-    public String id;       // numeric ID - used to identify the FHItem version of the item when rewriting
-    public String itemName; // "nameID" with spaces and without the "ID" at the end
-    public String stringId; // "nameID"
-    public String rarity;   // Rare/Relic
-    public String slot;     // Head/Body/Legs/SmallItem/OneHand/TwoHand/QuestItem
+    private String id;       // numeric ID - used to identify the FHItem version of the item when rewriting
+    private String itemName; // "nameID" with spaces and without the "ID" at the end
+    private String stringId; // "nameID"
+    private String rarity;   // Rare/Relic
+    private String slot;     // Head/Body/Legs/SmallItem/OneHand/TwoHand/QuestItem
     
     
     // Strings
-    public String usage;    // Spent/Unrestricted/Consumed/Flip
-    public String consumes; // air/fire/etc
-    public String infuse;   // air/fire/etc
+    private String usage;    // Spent/Unrestricted/Consumed/Flip
+    private String consumes; // air/fire/etc
+    private String infuse;   // air/fire/etc
     
     // Effects (from each "Data" block)
     // Integers
-    public String prosperityRequirement;
-    public String xp;
-    public String heal;
-    public String attack;
-    public String damage;
-    public String totalInGame; 
-    public String cost; 
-    public String range;
-    public String target; // (-1 = adjacent(or rather aoe, depending on range))
-    public String shield;
-    public String shieldValue;
-    public String retaliate;
-    public String move;
-    public String oMove;
-    public String aMove;
-    public String pull;
-    public String push;
-    public String pierce;
-    public String conditions; // (Muddle, Stun, Poison, Immobilize, Disarm, Stun, Curse, Bless, Strengthen,
+    private String prosperityRequirement;
+    private String xp;
+    private String heal;
+    private String attack;
+    private String damage;
+    private String totalInGame; 
+    private String cost; 
+    private String range;
+    private String target; // (-1 = adjacent(or rather aoe, depending on range))
+    private String shield;
+    private String shieldValue;
+    private String retaliate;
+    private String move;
+    private String oMove;
+    private String aMove;
+    private String pull;
+    private String push;
+    private String pierce;
+    private String conditions; // (Muddle, Stun, Poison, Immobilize, Disarm, Stun, Curse, Bless, Strengthen,
                               // Invisible, Brittle, Bane, Impair)
 
     // bool
-    public String jump; // bool
-    public String isMelee; // bool
+    private String jump; // bool
+    private String isMelee; // bool
 
    
 
     // Conditions & Status Effects ... We're leaving these out for now
     /*
-     * public Boolean muddle;
-     * public Boolean poison;
-     * public Boolean wound;
-     * public Boolean immobilize;
-     * public Boolean disarm;
-     * public Boolean stun;
-     * public Boolean curse;
-     * public Boolean bless;
-     * public Boolean strengthen;
-     * public Boolean invisible;
-     * public Boolean brittle;
-     * public Boolean bane;
-     * public Boolean impair;
+     * private Boolean muddle;
+     * private Boolean poison;
+     * private Boolean wound;
+     * private Boolean immobilize;
+     * private Boolean disarm;
+     * private Boolean stun;
+     * private Boolean curse;
+     * private Boolean bless;
+     * private Boolean strengthen;
+     * private Boolean invisible;
+     * private Boolean brittle;
+     * private Boolean bane;
+     * private Boolean impair;
      */
 
     public Item() {
@@ -340,24 +340,6 @@ public class Item {
         return this;
     }
 
-    public String getoMove() {
-        return oMove;
-    }
-
-    public Item setoMove(String oMove) {
-        this.oMove = oMove;
-        return this;
-    }
-
-    public String getaMove() {
-        return aMove;
-    }
-
-    public Item setaMove(String aMove) {
-        this.aMove = aMove;
-        return this;
-    }
-    
     public String getPierce() {
         return pierce;
     }

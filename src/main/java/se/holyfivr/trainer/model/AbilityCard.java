@@ -6,49 +6,49 @@ import java.util.List;
 import se.holyfivr.trainer.model.enums.DiscardEnum;
 
 public class AbilityCard {
-    public static final String UPPERCASE_LETTER = "([A-Z])";
+    private static final String UPPERCASE_LETTER = "([A-Z])";
 
-    public String name;
-    public String className;
-    public String cardName;
-    public String health;
-    public String heal;
-    public String damage;
-    public String shield;
-    public String range;
-    public String attack;
-    public String move;
-    public String jump;
-    public String target;
-    public String pull;
-    public String push;
-    public String retaliate;
-    public String loot;
-    public DiscardEnum discard; // format in ruleset: [Discard/Lost, Discard/Lost]
-    public String initiative;
-    public String pierce;
-    public String infuse;
-    public String consumes;
-    public String XP;
+    private String name;
+    private String className;
+    private String cardName;
+    private String health;
+    private String heal;
+    private String damage;
+    private String shield;
+    private String range;
+    private String attack;
+    private String move;
+    private String jump;
+    private String target;
+    private String pull;
+    private String push;
+    private String retaliate;
+    private String loot;
+    private DiscardEnum discard; // format in ruleset: [Discard/Lost, Discard/Lost]
+    private String initiative;
+    private String pierce;
+    private String infuse;
+    private String consumes;
+    private String XP;
 
     // MVP multi-attribute support: store every occurrence in the block, in order.
-    public List<String> attackValues    = new ArrayList<>();
-    public List<String> damageValues    = new ArrayList<>();
-    public List<String> healValues      = new ArrayList<>();
-    public List<String> moveValues      = new ArrayList<>();
-    public List<String> rangeValues     = new ArrayList<>();
-    public List<String> shieldValues    = new ArrayList<>();
-    public List<String> targetValues    = new ArrayList<>();
-    public List<String> pullValues      = new ArrayList<>();
-    public List<String> pushValues      = new ArrayList<>();
-    public List<String> retaliateValues = new ArrayList<>();
-    public List<String> pierceValues    = new ArrayList<>();
-    public List<String> xpValues        = new ArrayList<>();
-    public List<String> lootValues      = new ArrayList<>();
+    private List<String> attackValues    = new ArrayList<>();
+    private List<String> damageValues    = new ArrayList<>();
+    private List<String> healValues      = new ArrayList<>();
+    private List<String> moveValues      = new ArrayList<>();
+    private List<String> rangeValues     = new ArrayList<>();
+    private List<String> shieldValues    = new ArrayList<>();
+    private List<String> targetValues    = new ArrayList<>();
+    private List<String> pullValues      = new ArrayList<>();
+    private List<String> pushValues      = new ArrayList<>();
+    private List<String> retaliateValues = new ArrayList<>();
+    private List<String> pierceValues    = new ArrayList<>();
+    private List<String> xpValues        = new ArrayList<>();
+    private List<String> lootValues      = new ArrayList<>();
 
     // unused for now
-    public List<String> consumeValues   = new ArrayList<>();
-    public List<String> infuseValues    = new ArrayList<>();
+    private List<String> consumeValues   = new ArrayList<>();
+    private List<String> infuseValues    = new ArrayList<>();
     // 
     
 
@@ -403,8 +403,9 @@ public class AbilityCard {
         return infuseValues;
     }
 
-    public void setInfuseValues(List<String> infuseValues) {
+    public AbilityCard setInfuseValues(List<String> infuseValues) {
         this.infuseValues = infuseValues;
+        return this;
     }  
     //
     

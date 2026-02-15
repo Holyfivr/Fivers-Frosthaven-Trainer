@@ -1,4 +1,4 @@
-
+// Just animates the background in the title text
 const c = document.getElementById("c");
 const ctx = c.getContext("2d");
 const img = new Image();

@@ -15,7 +15,7 @@ import se.holyfivr.trainer.model.Item;
 @Service
 public class ItemService {
 
-    private ActiveSessionData activeSessionData;
+    private final ActiveSessionData activeSessionData;
 
     public ItemService(ActiveSessionData activeSessionData) {
         this.activeSessionData = activeSessionData;

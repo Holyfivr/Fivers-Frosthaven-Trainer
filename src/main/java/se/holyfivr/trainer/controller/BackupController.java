@@ -6,12 +6,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
+/**
+ * Controller for handling backup-related requests, including creating new backups and restoring original rulesets.
+ */
 
 @Controller
 public class BackupController {
-    private final BackupService backupService;
 
+    private final BackupService backupService;
     public BackupController(BackupService backupService) {
         this.backupService = backupService;
     }

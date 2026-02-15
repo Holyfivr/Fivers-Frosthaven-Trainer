@@ -4,10 +4,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import se.holyfivr.trainer.service.FileService;
 
+/**
+ * Controller for handling file-related requests, such as opening the ruleset file.
+ */
+
 @Controller
 public class FileController {
-    private final FileService fileService;
 
+    private final FileService fileService;
     public FileController(FileService fileService) {
         this.fileService = fileService;
     }

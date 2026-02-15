@@ -15,6 +15,11 @@ import se.holyfivr.trainer.core.ActiveSessionData;
 import se.holyfivr.trainer.model.Item;
 import se.holyfivr.trainer.service.ItemService;
 
+/**
+ * Controller for handling requests related to items, 
+ * including fetching items by type, fetching details of a specific item, 
+ * and saving/updating item information.
+ */
 
 @Controller
 public class ItemController {

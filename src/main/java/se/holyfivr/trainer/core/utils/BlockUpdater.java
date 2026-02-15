@@ -154,7 +154,7 @@ public class BlockUpdater {
     }
 
 
-    public String updateBlock(String currentBlock, AbilityCard card, Item item, Map<String, AbilityCard> cardMap) {        
+    public String updateCardAndItemBlock(String currentBlock, AbilityCard card, Item item, Map<String, AbilityCard> cardMap) {        
         
         if (card != null) {
             currentBlock = updateAttribute(         currentBlock, CardAttribute.HEAL        .get(),  card.getHealValues(),      null);
@@ -218,7 +218,7 @@ public class BlockUpdater {
     /*                                                                                              */
     /* ============================================================================================ */
     
-    public String updateBlock(String currentBlock, PlayerCharacter character) {
+    public String updateCharacterBlock(String currentBlock, PlayerCharacter character) {
         if (character == null) {
             return currentBlock;
         }
@@ -261,7 +261,7 @@ public class BlockUpdater {
     /*                                                                                                    */
     /* ================================================================================================== */
 
-    public String updateBlock(String currentBlock, String FHItem) {
+    public String updateFHItemBlock(String currentBlock, String FHItem) {
         if (FHItem == null) {
             return currentBlock;
         }
@@ -284,7 +284,7 @@ public class BlockUpdater {
     }
 
 
-    public String updateBlock(String currentBlock, List<String> unlockedClasses) {
+    public String updateUnlockedClassesBlock(String currentBlock, List<String> unlockedClasses) {
         if (unlockedClasses == null || unlockedClasses.isEmpty()) {
             return currentBlock;
         }

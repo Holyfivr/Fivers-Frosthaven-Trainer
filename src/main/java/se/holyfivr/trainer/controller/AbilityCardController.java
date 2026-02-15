@@ -15,6 +15,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 
+/**
+ * Controller for handling requests related to ability cards, 
+ * including fetching all cards, 
+ * fetching cards by class, fetching details of a specific card, 
+ * and saving/updating card information.
+ */
 
 @Controller
 public class AbilityCardController {

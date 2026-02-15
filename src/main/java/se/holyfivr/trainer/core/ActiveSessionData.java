@@ -11,6 +11,17 @@ import org.springframework.stereotype.Service;
 import se.holyfivr.trainer.model.AbilityCard;
 import se.holyfivr.trainer.model.Item;
 import se.holyfivr.trainer.model.PlayerCharacter;
+
+/* ======================================================================== */
+/* This class is used to store all data that is relevant for the current    */
+/* session. The changes made to the data when editing an object will be     */
+/* used to display the changes on the item/character/abilitycard/etc pages. */
+/* Once a session ends, the data from this class will be used to patch      */
+/* together the content-section, and replace any changed parts, before      */
+/* finally saving the updated content to the ruleset-file.                  */
+/* ======================================================================== */
+
+
 @Service
 public class ActiveSessionData {
 

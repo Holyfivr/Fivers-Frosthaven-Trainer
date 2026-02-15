@@ -32,9 +32,11 @@ public class ItemService {
         }
         Map<String, Item> itemTypeList = new LinkedHashMap<>();
         for (Item item : itemMap.values()) {
+
             if (item.getSlot() != null && item.getSlot().equals(itemType)) {
                 itemTypeList.putIfAbsent((item.getItemName()), item);
             }
+
         }
         return itemTypeList;
     }
@@ -49,7 +51,7 @@ public class ItemService {
                     .setCost                 (item.getCost                 ())
                     .setTotalInGame          (item.getTotalInGame          ())
                     .setUsage                (item.getUsage                ())
-                    .setProsperReq(item.getProsperReq())
+                    .setProsperReq           (item.getProsperReq           ())
                     .setConsumes             (item.getConsumes             ())
                     .setInfuse               (item.getInfuse               ())
                     .setHeal                 (item.getHeal                 ())
@@ -108,31 +110,23 @@ public class ItemService {
             case SET_XP                 ->  updateAllItems(Item::getXp,          Item::setXp,            value);
             case SET_TARGET             ->  updateAllItems(Item::getTarget,      Item::setTarget,        value);
             case SET_PIERCE             ->  updateAllItems(Item::getPierce,      Item::setPierce,        value);
-            case SET_DAMAGE             -> {
-                                            updateAllItems(Item::getAttack,      Item::setAttack,        value);
-                                            updateAllItems(Item::getDamage,      Item::setDamage,        value);
-            }
-            case SET_SHIELD             -> {
-                                            updateAllItems(Item::getShield,      Item::setShield,        value);
-                                            updateAllItems(Item::getShieldValue, Item::setShieldValue,   value);
-            }
-            case SET_MOVEMENT           -> {
-                                            updateAllItems(Item::getMove,        Item::setMove,          value);
+            case SET_DAMAGE             -> {updateAllItems(Item::getAttack,      Item::setAttack,        value);
+                                            updateAllItems(Item::getDamage,      Item::setDamage,        value);}
+            case SET_SHIELD             -> {updateAllItems(Item::getShield,      Item::setShield,        value);
+                                            updateAllItems(Item::getShieldValue, Item::setShieldValue,   value);}
+            case SET_MOVEMENT           -> {updateAllItems(Item::getMove,        Item::setMove,          value);
                                             updateAllItems(Item::getOMove,       Item::setOMove,         value);
-                                            updateAllItems(Item::getAMove,       Item::setAMove,         value);
-            }
-            case SET_PROSPERITY_REQ     ->  activeSessionData.setProsperity(value);
+                                            updateAllItems(Item::getAMove,       Item::setAMove,         value);}
+            case SET_PROSPERITY_REQ     ->  activeSessionData.setProsperity(value); 
         }
     }
 
     private void updateAllItems(Function<Item, String> getter, BiConsumer<Item, String> setter, String value) {
-    for (Item item : activeSessionData.getItems().values()) {
-        if (getter.apply(item) != null) {
-            setter.accept(item, value);
+        for (Item item : activeSessionData.getItems().values()) {
+            if (getter.apply(item) != null) {
+                setter.accept(item, value);
+            }
         }
     }
-}
-
-
 
 }

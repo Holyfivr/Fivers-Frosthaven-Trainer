@@ -1,6 +1,5 @@
 package se.holyfivr.trainer.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -10,14 +9,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import se.holyfivr.trainer.service.AuthService;
 
 
+/** 
+ * This class handles decryption of objects.
+ * Intentionally leaving this vague to make reverse-engineering slightly more inconvenient.
+ */
 
 @Controller
 public class AuthController {
 
-    @Autowired
+    
     private AuthService authService;
+    public AuthController(AuthService authService) {
+        this.authService = authService;
+    }
 
-    // Serves obj to frontend
     @GetMapping("/secure-object/items/{filename}")
     public ResponseEntity<byte[]> getItemObject(@PathVariable String filename) {
         try {

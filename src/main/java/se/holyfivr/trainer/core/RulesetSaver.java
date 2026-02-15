@@ -117,18 +117,18 @@ public class RulesetSaver {
         }
     }
 
-    /* ============================================================================================ */
-    /* SAFE WRITE                                                                                   */
-    /*                                                                                              */
-    /* Writes bytes to disk using a temp-file-then-atomic-rename strategy.                         */
-    /* This prevents file corruption if the write is interrupted (crash, power loss, etc).          */
-    /*                                                                                              */
-    /* 1. Writes to a .tmp sibling file                                                             */
-    /* 2. Validates that the temp file is exactly the expected size                                 */
-    /* 3. Atomically replaces the target file with the temp file                                    */
-    /*                                                                                              */
-    /* If validation fails, the temp file is deleted and the original remains untouched.            */
-    /* ============================================================================================ */
+    /* =================================================================================== */
+    /* SAFE WRITE                                                                          */
+    /*                                                                                     */
+    /* Writes bytes to disk using a temp-file-then-atomic-rename strategy.                 */
+    /* This prevents file corruption if the write is interrupted (crash, power loss, etc). */
+    /*                                                                                     */
+    /* 1. Writes to a .tmp sibling file                                                    */
+    /* 2. Validates that the temp file is exactly the expected size                        */
+    /* 3. Atomically replaces the target file with the temp file                           */
+    /*                                                                                     */
+    /* If validation fails, the temp file is deleted and the original remains untouched.   */
+    /* =================================================================================== */
     private void safeWrite(Path targetPath, byte[] data, int expectedSize) throws IOException {
         Path tempPath = targetPath.resolveSibling(targetPath.getFileName() + ".tmp");
 
@@ -195,26 +195,26 @@ public class RulesetSaver {
             if (isParser(currentBlock, PatternRepository.CHARACTER_PARSER_PATTERN)) {
                 String identifier = saveUtils.extractIdentifier(currentBlock, "ID:");
                 PlayerCharacter pc = activeSessionData.getCharacters().get(identifier);
-                currentBlock = blockUpdater.updateBlock(currentBlock, pc); 
+                currentBlock = blockUpdater.updateCharacterBlock(currentBlock, pc); 
             }
 
             // same with gamemode
             if (isParser(currentBlock, PatternRepository.GAMEMODE_PARSER_PATTERN)) {   
                 List<String> unlockedCharacters = activeSessionData.getUnlockedCharacterList();
-                currentBlock = blockUpdater.updateBlock(currentBlock, unlockedCharacters);
+                currentBlock = blockUpdater.updateUnlockedClassesBlock(currentBlock, unlockedCharacters);
             }
 
             // with items
             if (isParser(currentBlock, PatternRepository.ITEM_PARSER_PATTERN)) {
                 String identifier = saveUtils.extractIdentifier(currentBlock, "StringID:");
                 Item item = activeSessionData.getItems().get(identifier);
-                currentBlock = blockUpdater.updateBlock(currentBlock, null, item, null);
+                currentBlock = blockUpdater.updateCardAndItemBlock(currentBlock, null, item, null);
             }
 
             // fh items
             if (isParser(currentBlock, PatternRepository.FH_ITEM_PARSER_PATTERN)) {
                 String identifier = saveUtils.extractIdentifier(currentBlock, "ScenarioItemID:");      
-                currentBlock = blockUpdater.updateBlock(currentBlock, identifier);
+                currentBlock = blockUpdater.updateFHItemBlock(currentBlock, identifier);
             }
 
             // ability cards
@@ -222,7 +222,7 @@ public class RulesetSaver {
                 String identifier = saveUtils.extractIdentifier(currentBlock, "Name:");
                 AbilityCard abilityCard = activeSessionData.getAbilityCards().get(identifier);
                 Map<String, AbilityCard> abilityCardMap = activeSessionData.getAbilityCards();
-                currentBlock = blockUpdater.updateBlock(currentBlock, abilityCard, null, abilityCardMap); 
+                currentBlock = blockUpdater.updateCardAndItemBlock(currentBlock, abilityCard, null, abilityCardMap); 
             }
             
 

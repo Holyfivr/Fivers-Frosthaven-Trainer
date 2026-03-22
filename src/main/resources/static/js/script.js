@@ -162,12 +162,20 @@ function openEditAllCardsModal() {
 
         const altToggle = container.querySelector("#altInitiativeToggle");
         const altInput = container.querySelector("#altInitiativeInput");
-        if (altToggle && altInput) {
+        const initInput = container.querySelector("#initiativeInput");
+        if (altToggle && altInput && initInput) {
             altToggle.checked = false;
             altInput.disabled = true;
             altToggle.addEventListener("change", () => {
                 altInput.disabled = !altToggle.checked;
-                if (!altToggle.checked) altInput.value = "";
+                if (altToggle.checked) {
+                    initInput.required = true;
+                    altInput.required = true;
+                } else {
+                    initInput.required = false;
+                    altInput.required = false;
+                    altInput.value = "";
+                }
             });
         }
 

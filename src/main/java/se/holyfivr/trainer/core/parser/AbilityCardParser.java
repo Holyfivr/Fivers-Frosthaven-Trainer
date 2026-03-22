@@ -139,8 +139,6 @@ public class AbilityCardParser {
         switch (attrEnum) {
             case NAME       -> setName      (abilityCard, value); 
             case INITIATIVE -> setValue     (abilityCard, value, AbilityCard::getInitiative     , AbilityCard::setInitiative);
-            case CONSUMES   -> setValue     (abilityCard, value, AbilityCard::getConsumes       , AbilityCard::setConsumes  );
-            case INFUSE     -> setValue     (abilityCard, value, AbilityCard::getInfuse         , AbilityCard::setInfuse    );
             case HEALTH     -> setValue     (abilityCard, value, AbilityCard::getHealth         , AbilityCard::setHealth    );
             case JUMP       -> setValue     (abilityCard, value, AbilityCard::getJump           , AbilityCard::setJump      );
             case XP         -> setValues    (abilityCard, value, AbilityCard::getXpValues       , AbilityCard::setXP        );
@@ -156,6 +154,8 @@ public class AbilityCardParser {
             case PIERCE     -> setValues    (abilityCard, value, AbilityCard::getPierceValues   , AbilityCard::setPierce    );
             case RETALIATE  -> setValues    (abilityCard, value, AbilityCard::getRetaliateValues, AbilityCard::setRetaliate );
             case LOOT       -> setValues    (abilityCard, value, AbilityCard::getLootValues     , AbilityCard::setLoot      );
+            case CONSUMES   -> setValue     (abilityCard, parseElementValue(value), AbilityCard::getConsumes , AbilityCard::setConsumes);
+            case INFUSE     -> setValue     (abilityCard, parseElementValue(value), AbilityCard::getInfuse   , AbilityCard::setInfuse  );
             case DISCARD    -> abilityCard.setDiscard(null);
         }
     }
@@ -195,6 +195,20 @@ public class AbilityCardParser {
         String trimmedValue = trimmed(value);
         listGetter.apply(card).add(trimmedValue);
         setter.accept(card, trimmedValue);
+    }
+
+    /**
+     * Strips brackets from element values for Infuse/Consumes.
+     * Single element: "[Air]" → "Air". Multiple elements: "[Air, Fire]" → unchanged.
+     */
+    private static String parseElementValue(String value) {
+        if (value.startsWith("[") && value.endsWith("]")) {
+            String inner = value.substring(1, value.length() - 1);
+            if (!inner.contains(",")) {
+                return inner.trim();
+            }
+        }
+        return value;
     }
 
     /**

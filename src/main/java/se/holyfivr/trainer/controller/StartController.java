@@ -22,7 +22,7 @@ public class StartController {
     }
 
     @GetMapping("/start")
-    public String getStart(Model model, @RequestParam(required = false) boolean loaded) {
+    public String getStart(Model model, @RequestParam(required = false, defaultValue = "false") boolean loaded) {
 
         // loads the character map into the model
         model.addAttribute("characterMap", activeSessionData.getCharacters());

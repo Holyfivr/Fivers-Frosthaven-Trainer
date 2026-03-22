@@ -10,9 +10,16 @@
             <div id="cardModalContainer" style="display:flex; flex-direction: row; justify-content: space-between;">
                 <div class="cardModalFrame">
 
-                    <div class="modal-field">
+                    <div class="modal-field initiative">
+                        <div>
                         <label for="initiativeInput">Initiative</label>
-                        <input id="initiativeInput" name="setInitiative" type="number" min="0" placeholder="1-99" />
+                        <input id="initiativeInput" name="setInitiative" type="number" min="0" placeholder="1-99" style="flex: 0.5;" />
+                        </div>
+                        <div>
+                        <label for="altInitiativeInput" style="flex: 0.3; text-align: center;">Alt</label>
+                        <input id="altInitiativeInput" name="setInitiative2" type="number" min="0" placeholder="1-99" style="flex: 0.5;" disabled />
+                        <input id="altInitiativeToggle" type="checkbox" style="margin-left: 8px;" />
+                        </div>
                     </div>
                     <div class="modal-field">
                         <label for="damageInput">Damage</label>

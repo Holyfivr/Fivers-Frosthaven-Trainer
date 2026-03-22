@@ -66,8 +66,13 @@ public class AbilityCardController {
 
     @PostMapping("/update-all-cards")
     public String setCardValues(@RequestParam Map<String, String> allFields) {
+        String init2 = allFields.remove("setInitiative2");
         allFields.forEach((action, value) -> {
-            abilityCardService.updateAllCards(action, value);
+            if (action.equals("setInitiative") && init2 != null && !init2.isBlank()) {
+                abilityCardService.updateAlternatingInitiative(value, init2);
+            } else {
+                abilityCardService.updateAllCards(action, value);
+            }
         });
         return "redirect:/how";
     }

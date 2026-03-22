@@ -155,10 +155,21 @@ function openEditAllItemsModal() {
 function openEditAllCardsModal() {
     openModal("editAllCardsTemplate", (container) => {
         container.querySelectorAll("input").forEach(input => {
-            if (input.type !== "hidden") {
+            if (input.type !== "hidden" && input.type !== "checkbox") {
                 input.value = "";
             }
-        });      
+        });
+
+        const altToggle = container.querySelector("#altInitiativeToggle");
+        const altInput = container.querySelector("#altInitiativeInput");
+        if (altToggle && altInput) {
+            altToggle.checked = false;
+            altInput.disabled = true;
+            altToggle.addEventListener("change", () => {
+                altInput.disabled = !altToggle.checked;
+                if (!altToggle.checked) altInput.value = "";
+            });
+        }
 
         const form = container.querySelector("#editAllCardsForm");
         if (form) {

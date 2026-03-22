@@ -56,6 +56,7 @@ public class ItemService {
                     .setInfuse               (item.getInfuse               ())
                     .setHeal                 (item.getHeal                 ())
                     .setAttack               (item.getDamage               ())
+                    .setDamage               (item.getDamage               ())
                     .setRange                (item.getRange                ())
                     .setTarget               (item.getTarget               ())
                     .setShield               (item.getShield               ())

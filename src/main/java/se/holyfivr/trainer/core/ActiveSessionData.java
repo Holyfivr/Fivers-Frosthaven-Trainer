@@ -3,8 +3,10 @@ package se.holyfivr.trainer.core;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
@@ -21,7 +23,6 @@ import se.holyfivr.trainer.model.PlayerCharacter;
 /* finally saving the updated content to the ruleset-file.                  */
 /* ======================================================================== */
 
-
 @Service
 public class ActiveSessionData {
 
@@ -35,21 +36,18 @@ public class ActiveSessionData {
         this.rulesetPath = rulesetPath;
     }
 
-
     /* ========================================== */
     /* RESET ALL DATA WHEN STARTING A NEW SESSION */
     /* ========================================== */
-     public void reset() {
+    public void reset() {
         clearCharacters();
         clearUnlockedCharacters();
         clearAbilityCards();
         clearItems();
     }
 
-
-
     /* =========================== */
-    /* STORE ALL GAME CHARACTERS */
+    /* STORE ALL GAME CHARACTERS   */
     /* =========================== */
 
     private final Map<String, PlayerCharacter> characters = new LinkedHashMap<>();
@@ -59,11 +57,11 @@ public class ActiveSessionData {
     }
 
     /* ==================================================================== */
-    /* This filters out the tutorial versions of bannerspear. */
-    /* It basically says "if there is no match of the received name */
-    /* add it to the map". There is already a check like this one */
-    /* in the RulesetParser, but having it here as well adds an */
-    /* extra layer of safety. */
+    /* This filters out the tutorial versions of bannerspear.               */
+    /* It basically says "if there is no match of the received name         */
+    /* add it to the map". There is already a check like this one           */
+    /* in the RulesetParser, but having it here as well adds an             */
+    /* extra layer of safety.                                               */
     /* ==================================================================== */
     public void addCharacter(PlayerCharacter character) {
         if (character.getName() != null) {
@@ -73,7 +71,7 @@ public class ActiveSessionData {
 
     public void clearCharacters() {
         characters.clear();
-        
+
     }
 
     /* ============================= */
@@ -110,7 +108,7 @@ public class ActiveSessionData {
 
     public void clearItems() {
         items.clear();
-        
+
     }
 
     public void setID(String value) {
@@ -129,7 +127,6 @@ public class ActiveSessionData {
         }
     }
 
-
     /* ====================== */
     /* STORE ALL ABILITYCARDS */
     /* ====================== */
@@ -141,14 +138,11 @@ public class ActiveSessionData {
     }
 
     public List<String> getCardClasses() {
-
-        List<String> classList = new ArrayList<>();
+        Set<String> classSet = new LinkedHashSet<>();
         for (AbilityCard card : abilityCards.values()) {
-            if (!classList.contains(card.getClassName())) {
-                classList.add(card.getClassName());
-            }
+            classSet.add(card.getClassName());
         }
-        return classList;
+        return new ArrayList<>(classSet);
     }
 
     public void addAbilityCard(AbilityCard abilityCard) {
@@ -159,7 +153,7 @@ public class ActiveSessionData {
 
     public void clearAbilityCards() {
         abilityCards.clear();
-        
+
     }
 
 }

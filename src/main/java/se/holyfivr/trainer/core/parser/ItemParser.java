@@ -57,7 +57,6 @@ public class ItemParser {
                     case USAGE          -> item.setUsage                 (value);
                     case PROSPERITY_REQ -> item.setProsperReq            (value);
                     case PIERCE         -> item.setPierce                (value);
-                    case CONSUMES       -> item.setConsumes              (value);
                     case HEAL           -> item.setHeal                  (value);
                     case ATTACK         -> item.setAttack                (value);
                     case DAMAGE         -> item.setDamage                (value);
@@ -73,7 +72,8 @@ public class ItemParser {
                     case PUSH           -> item.setPush                  (value);
                     case JUMP           -> item.setJump                  (value);
                     case CONDITIONS     -> item.setConditions            (value);
-                    case INFUSE         -> item.setInfuse                (value);
+                    case CONSUMES       -> item.setConsumes              (parseElementValue(value));
+                    case INFUSE         -> item.setInfuse                (parseElementValue(value));
                     case XP             -> item.setXp                    (value);
 
                 }
@@ -81,5 +81,19 @@ public class ItemParser {
         }
         // Store the parsed item in the active session data
         activeSessionData.addItem(item);
+    }
+
+    /**
+     * Strips brackets from element values for Infuse/Consumes.
+     * Single element: "[Air]" → "Air". Multiple elements: "[Air, Fire]" → unchanged.
+     */
+    private static String parseElementValue(String value) {
+        if (value.startsWith("[") && value.endsWith("]")) {
+            String inner = value.substring(1, value.length() - 1);
+            if (!inner.contains(",")) {
+                return inner.trim();
+            }
+        }
+        return value;
     }
 }

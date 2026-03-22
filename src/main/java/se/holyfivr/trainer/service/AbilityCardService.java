@@ -44,7 +44,7 @@ public class AbilityCardService {
 
         switch (cardAttribute) {
             case SET_ATTACK     -> updateAllCards(AbilityCard::getAttack    , AbilityCard::setAttack    , value, AbilityCard::getAttackValues);
-            case SET_DAMAGE     -> updateAllCards(AbilityCard::getAttack    , AbilityCard::setAttack    , value, AbilityCard::getAttackValues);
+            case SET_DAMAGE     -> updateAllCards(AbilityCard::getDamage    , AbilityCard::setDamage    , value, AbilityCard::getDamageValues);
             case SET_HEAL       -> updateAllCards(AbilityCard::getHeal      , AbilityCard::setHeal      , value, AbilityCard::getHealValues);
             case SET_MOVE       -> updateAllCards(AbilityCard::getMove      , AbilityCard::setMove      , value, AbilityCard::getMoveValues);
             case SET_RANGE      -> updateAllCards(AbilityCard::getRange     , AbilityCard::setRange     , value, AbilityCard::getRangeValues);
@@ -132,6 +132,20 @@ public class AbilityCardService {
     }
 
     /**
+     * Sets alternating initiative values on all cards that have an initiative.
+     * Cards alternate between init1 and init2 in iteration order.
+     */
+    public void updateAlternatingInitiative(String init1, String init2) {
+        int i = 0;
+        for (AbilityCard card : activeSessionData.getAbilityCards().values()) {
+            if (card.getInitiative() != null) {
+                card.setInitiative(i % 2 == 0 ? init1 : init2);
+                i++;
+            }
+        }
+    }
+
+    /**
      * Saves changes to a single ability card, typically when the user edits values
      * on the individual card-detail page.
      *
@@ -157,6 +171,7 @@ public class AbilityCardService {
                 .setXP              (abilityCard.getXP())
                 .setHeal            (abilityCard.getHeal())
                 .setAttack          (abilityCard.getAttack())
+                .setDamage          (abilityCard.getDamage())
                 .setRange           (abilityCard.getRange())
                 .setTarget          (abilityCard.getTarget())
                 .setShield          (abilityCard.getShield())

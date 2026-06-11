@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Troubleshooting</title>
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/troubleshooting.css">
     <script src="../js/script.js" type="text/javascript" defer></script>
     <script src="../js/copy.js" type="text/javascript" defer></script>
 </head>
@@ -16,76 +17,136 @@
         <canvas id="c" width="1400" height="350" style="margin-top: -20px;"></canvas>
         <script src="../js/animatedtextbg.js"></script>
 
-        <div style="margin: 0 auto; margin-top: -50px; text-align: left; width:700px;">
+        <div class="troubleshooting-wrapper">
 
-            <h2>Ruleset size mismatch</h2>
-            <p>
-                When you open a ruleset file, the program compares its size to your original backup. If they
-                differ, the file was changed outside this tool. This happens for one of two reasons:
-            </p>
-            <ul>
-                <li style="margin-bottom: 10px;">
-                    <b>The game was patched.</b> A game update rewrites <b>Base.ruleset</b>, so the opened file is
-                    new and valid, but your old backup is now outdated. Choose
-                    <b>"create a new backup from this file"</b> in the warning.
-                </li>
-                <li>
-                    <b>The file is corrupted.</b> The opened file is broken and your backup is still good. Choose
-                    <b>"restore from the old backup"</b> in the warning.
-                </li>
-            </ul>
-            <p>
-                To tell which one it is: close this program and launch Frosthaven. If the game starts normally it
-                was patched. If the game won't load or behaves strangely, the file is corrupted.
-            </p>
+            <!-- ============================ GAME DOESN'T LOAD ============================ -->
+            <div class="accordion" id="game-doesnt-load">
+                <button class="accordion-header" type="button">Game doesn't load</button>
+                <div class="accordion-panel">
+                    <div class="accordion-panel-inner">
+                        <p>
+                            If Frosthaven won't start after you've used this tool, the ruleset file is most likely
+                            corrupted. This can happen if a value was pushed too far and the file could no longer be kept byte-perfect.
+                        </p>
+       
+  
+                        <p>
+                            The quickest fix is to reload the clean copy the program made for you. In the menu bar,
+                            choose <b>"File" &rarr; "Restore Original"</b>. This copies your backup back over
+                            <b>Base.ruleset</b>, undoing the bad changes.
+                        </p>
+                        <p>
+                            If your backup is missing, was overwritten, or is also unusable, you'll need to restore
+                            the game's own files instead. See
+                            <a class="accordion-link" onclick="openAccordion('restore-game-files'); return false;">Restore
+                                game files</a>.
+                        </p>
+                    </div>
+                </div>
+            </div>
 
-            <hr>
+            <!-- ============================ RULESET SIZE MISMATCH ============================ -->
+            <div class="accordion" id="ruleset-size-mismatch">
+                <button class="accordion-header" type="button">Ruleset size mismatch</button>
+                <div class="accordion-panel">
+                    <div class="accordion-panel-inner">
+                        <p>
+                            When you open a ruleset file, the program compares its size to your original backup. If
+                            they differ, the file was changed outside this tool. This happens for one of two reasons:
+                        </p>
+                        <ul>
+                            <li style="margin-bottom: 10px;">
+                                <b>The game was patched.</b> A game update rewrites <b>Base.ruleset</b>, so the opened
+                                file is new and valid, but your old backup is now outdated.
+                            </li>
+                            <li>
+                                <b>The file is corrupted.</b> The opened file is broken and your backup is still good.
+                            </li>
+                        </ul>
+                        <p>To tell which one it is, close this program and launch Frosthaven:</p>
+                        <table class="troubleshooting-table">
+                            <tr>
+                                <th style="width: 35%;">Result</th>
+                                <th style="width: 65%;">Action</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Game starts normally<br>
+                                    <i>(game was patched)</i>
+                                </td>
+                                <td style="text-align: left;">
+                                    Select <b>"create a new backup from this file"</b>.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Game can't load<br>
+                                    <i>(file is corrupted)</i>
+                                </td>
+                                <td style="text-align: left;">
+                                    Select <b>"restore from the old backup"</b>.
+                                </td>
+                            </tr>
+                        </table>
+                        <p>
+                            If both the file <b>and</b> your backup are unusable, see
+                            <a class="accordion-link" onclick="openAccordion('restore-game-files'); return false;">Restore
+                                game files</a>.
+                        </p>
+                    </div>
+                </div>
+            </div>
 
-            <h2>Last resort: both files unusable</h2>
-            <p>
-                If both the ruleset file <b>and</b> your backup are broken or mismatched, you can let Steam restore
-                a clean original copy of the ruleset.
-            </p>
-            <p style="color: red;">
-                <b>Note:</b> verifying game files restores the original ruleset, which also removes any changes
-                you have made with this tool.
-            </p>
-            <ol>
-                <li style="margin-bottom: 10px;">
-                    Close this program and the game.
-                </li>
-                <li style="margin-bottom: 10px;">
-                    Delete the old backup so the program does not reuse it. It is located in the
-                    <b>"original ruleset"</b> folder next to your ruleset file, named
-                    <b>ORIGINAL_BACKUP.ruleset</b>.
-                </li>
-                <li style="margin-bottom: 10px;">
-                    In Steam, right-click <b>Frosthaven</b> &rarr; <b>Properties</b> &rarr;
-                    <b>Installed Files</b> &rarr; <b>Verify integrity of game files</b>.
-                </li>
-                <li style="margin-bottom: 10px;">
-                    Launch the game once so a fresh <b>Base.ruleset</b> is in place.
-                </li>
-                <li>
-                    Open the program again. It will create a new clean backup from the restored file.
-                </li>
-            </ol>
+            <!-- ============================ RESTORE GAME FILES ============================ -->
+            <div class="accordion" id="restore-game-files">
+                <button class="accordion-header" type="button">Restore game files</button>
+                <div class="accordion-panel">
+                    <div class="accordion-panel-inner">
+                        <p>
+                            If both the ruleset file <b>and</b> your backup are broken or mismatched, you can let Steam
+                            restore a clean original copy of the ruleset.
+                        </p>
+                        <p class="ts-note">
+                            <b>Note:</b> verifying game files restores the original ruleset, which also removes any
+                            changes you have made with this tool.
+                        </p>
+                        <ol>
+                            <li style="margin-bottom: 10px;">
+                                Close this program and the game.
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                Delete the old backup so the program does not reuse it. It is located in the
+                                <b>"original ruleset"</b> folder next to your ruleset file, named
+                                <b>ORIGINAL_BACKUP.ruleset</b>.
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                In Steam, right-click <b>Frosthaven</b> &rarr; <b>Properties</b> &rarr;
+                                <b>Installed Files</b> &rarr; <b>Verify integrity of game files</b>.
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                Launch the game once so a fresh <b>Base.ruleset</b> is in place.
+                            </li>
+                            <li>
+                                Open the program again. It will create a new clean backup from the restored file.
+                            </li>
+                        </ol>
+                        <p>
+                            Your ruleset files are stored in:<br>
+                            <b>...\Steam\steamapps\common\Frosthaven\Frosthaven_Data\StreamingAssets\Rulesets</b>
+                        </p>
+                    </div>
+                </div>
+            </div>
 
-            <p>
-                Your ruleset files are stored in:<br>
-                <b>...\Steam\steamapps\common\Frosthaven\Frosthaven_Data\StreamingAssets\Rulesets</b>
-            </p>
-
-            <hr>
-
-            <center>
-                Still stuck? Open an issue with your latest <b>player.log</b>
-                (found in <b>...\AppData\LocalLow\Snapshot Games Inc\Frosthaven\</b>) at
-                <b><a href="#" class="btn" style="border: none;"
+            <div class="ts-footer">
+                Still stuck? Open an issue on<b><a href="#" class="btn" style="border: none;"
                         onclick="copyToClipboard('https://github.com/Holyfivr/Fivers-Frosthaven-Trainer/issues')">github.com/Holyfivr/Fivers-Frosthaven-Trainer/issues</a></b>
                 (click to copy the link).
-            </center>
-            <br>
+
+                Include your latest <b>player.log</b> file, located in 
+                <b>...\AppData\LocalLow\Snapshot Games Inc\Frosthaven\</b>
+                
+            </div>
 
         </div>
     </div>

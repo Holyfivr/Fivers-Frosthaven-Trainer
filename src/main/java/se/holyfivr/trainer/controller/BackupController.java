@@ -34,4 +34,13 @@ public class BackupController {
         return backupService.restoreBackup();
     }
 
+    /* ====================================================================== */
+    /* Handles request to replace the original backup with the current file.  */
+    /* Used when the game was patched and the old backup is outdated.          */
+    /* ====================================================================== */
+    @PostMapping("/replace-backup")
+    public String replaceBackup() {
+        return backupService.replaceOriginalBackup();
+    }
+
 }

@@ -78,14 +78,27 @@ public class FileService {
                     e.printStackTrace();
                 }
             }
+            // Compare the opened file against the existing original backup.
+            // A size difference means the file was changed outside this tool:
+            // either the game was patched (new, valid file) or the file is corrupted.
+            // We can't tell which here, so we flag it and let the user decide on /start.
+            boolean sizeMismatch = false;
             if (Files.notExists(backupFile)) {
                 try {
                     Files.copy(original, backupFile);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            } else {
+                try {
+                    sizeMismatch = Files.size(original) != Files.size(backupFile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
             rulesetLoader.loadRuleset();
+            // Set the flag after loading, since loading resets parsed session data.
+            activeSessionData.setSizeMismatchWarning(sizeMismatch);
             saveLastUsedDirectory(selectedFile.getParentFile());
         }
     }

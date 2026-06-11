@@ -18,6 +18,9 @@
     <!-- Hidden flag to communicate if file was successfully loaded to JS -->
     <input type="hidden" id="rulesetLoadedCheck" th:value="${rulesetLoaded}" />
 
+    <!-- Hidden flag: opened file size differs from the original backup -->
+    <input type="hidden" id="sizeMismatchCheck" th:value="${showSizeMismatchModal}" />
+
     <nav class="menu-bar">
         <ul class="menu">
 

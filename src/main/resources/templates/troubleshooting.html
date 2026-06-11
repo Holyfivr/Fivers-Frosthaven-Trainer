@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Troubleshooting</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../js/script.js" type="text/javascript" defer></script>
+    <script src="../js/copy.js" type="text/javascript" defer></script>
+</head>
+
+<body>
+
+    <div id="aboutContainer">
+        <canvas id="c" width="1400" height="350" style="margin-top: -20px;"></canvas>
+        <script src="../js/animatedtextbg.js"></script>
+
+        <div style="margin: 0 auto; margin-top: -50px; text-align: left; width:700px;">
+
+            <h2>Ruleset size mismatch</h2>
+            <p>
+                When you open a ruleset file, the program compares its size to your original backup. If they
+                differ, the file was changed outside this tool. This happens for one of two reasons:
+            </p>
+            <ul>
+                <li style="margin-bottom: 10px;">
+                    <b>The game was patched.</b> A game update rewrites <b>Base.ruleset</b>, so the opened file is
+                    new and valid, but your old backup is now outdated. Choose
+                    <b>"create a new backup from this file"</b> in the warning.
+                </li>
+                <li>
+                    <b>The file is corrupted.</b> The opened file is broken and your backup is still good. Choose
+                    <b>"restore from the old backup"</b> in the warning.
+                </li>
+            </ul>
+            <p>
+                To tell which one it is: close this program and launch Frosthaven. If the game starts normally it
+                was patched. If the game won't load or behaves strangely, the file is corrupted.
+            </p>
+
+            <hr>
+
+            <h2>Last resort: both files unusable</h2>
+            <p>
+                If both the ruleset file <b>and</b> your backup are broken or mismatched, you can let Steam restore
+                a clean original copy of the ruleset.
+            </p>
+            <p style="color: red;">
+                <b>Note:</b> verifying game files restores the original ruleset, which also removes any changes
+                you have made with this tool.
+            </p>
+            <ol>
+                <li style="margin-bottom: 10px;">
+                    Close this program and the game.
+                </li>
+                <li style="margin-bottom: 10px;">
+                    Delete the old backup so the program does not reuse it. It is located in the
+                    <b>"original ruleset"</b> folder next to your ruleset file, named
+                    <b>ORIGINAL_BACKUP.ruleset</b>.
+                </li>
+                <li style="margin-bottom: 10px;">
+                    In Steam, right-click <b>Frosthaven</b> &rarr; <b>Properties</b> &rarr;
+                    <b>Installed Files</b> &rarr; <b>Verify integrity of game files</b>.
+                </li>
+                <li style="margin-bottom: 10px;">
+                    Launch the game once so a fresh <b>Base.ruleset</b> is in place.
+                </li>
+                <li>
+                    Open the program again. It will create a new clean backup from the restored file.
+                </li>
+            </ol>
+
+            <p>
+                Your ruleset files are stored in:<br>
+                <b>...\Steam\steamapps\common\Frosthaven\Frosthaven_Data\StreamingAssets\Rulesets</b>
+            </p>
+
+            <hr>
+
+            <center>
+                Still stuck? Open an issue with your latest <b>player.log</b>
+                (found in <b>...\AppData\LocalLow\Snapshot Games Inc\Frosthaven\</b>) at
+                <b><a href="#" class="btn" style="border: none;"
+                        onclick="copyToClipboard('https://github.com/Holyfivr/Fivers-Frosthaven-Trainer/issues')">github.com/Holyfivr/Fivers-Frosthaven-Trainer/issues</a></b>
+                (click to copy the link).
+            </center>
+            <br>
+
+        </div>
+    </div>
+</body>
+
+</html>

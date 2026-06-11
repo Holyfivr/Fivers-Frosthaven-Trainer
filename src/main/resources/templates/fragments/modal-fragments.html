@@ -125,6 +125,46 @@
         </template>
 
 
+        <!------------------------------------------------------ SIZE MISMATCH WARNING ------------------------------------------------------------->
+        <template id="sizeMismatchTemplate">
+            <div style="text-align: center;">
+                <h2 style="color: red;">Ruleset size mismatch</h2>
+                <p>
+                    The file you opened is a different size than your original backup.<br>
+                    The program can't tell why, so you need to check it yourself:
+                </p>
+                <p><b>Close this program and launch Frosthaven.</b></p>
+                <div style="text-align: left; width: 460px; margin: 0 auto;">
+                    <ul>
+                        <li style="margin-bottom: 10px;">
+                            <b>The game starts normally</b> &rarr; it was patched. The opened file is fine; your
+                            backup is just outdated and should be replaced with a fresh one.
+                        </li>
+                        <li>
+                            <b>The game won't load or behaves wrong</b> &rarr; the file is corrupted. Restore it
+                            from your backup.
+                        </li>
+                    </ul>
+                </div>
+                <div class="sidenote">(If patched: do this right after patching, before making any changes, so the new backup stays clean.)</div>
+                <br>
+                <form th:action="@{/restore-backup}" method="POST" style="display:inline;"
+                    onsubmit="registerPendingAction('backupRestored')">
+                    <button class="btn" type="submit">The game is broken — restore from the old backup</button>
+                </form>
+                <form th:action="@{/replace-backup}" method="POST" style="display:inline;"
+                    onsubmit="registerPendingAction('backupReplaced')">
+                    <button class="warning-btn btn" type="submit">The game started — create a new backup from this file</button>
+                </form>
+                <br><br>
+                <div class="sidenote">
+                    Both files unusable? See
+                    <a th:href="@{/troubleshooting}" target="contentFrame" onclick="closeModal()">Troubleshooting</a>.
+                </div>
+            </div>
+        </template>
+
+
     </div>
 </body>
 

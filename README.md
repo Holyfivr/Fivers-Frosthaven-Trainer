@@ -106,16 +106,20 @@ Making changes in the ruleset file will effectively change the game rules, this 
 Your computer may alert you when you try to run the application and say "Windows protected your PC". This is because the application is not signed with a verified certificate. To proceed, click on "More info" and then "Run anyway".<br>
 Getting a certificate costs money, and since I am a student working on this project when I have spare time (which is not much), I don't intend on getting one.
 </div>
+
+## Known Isssues
+* Values on item cards are not updated in game. It might be impossible for me to fix this without using external software. The values are implemented, just not visible on the cards.
    
 ## Building from Source
 1.  Ensure you have Java Development Kit (JDK) 11 or higher installed.
 2.  Clone this repository to your local machine.
 3.  Navigate to the project directory.
-4.  Build the project using your preferred IDE or build tool.
+4.  Build the project with ```./mvnw clean package```.
+    *If you plan on building the project several times after making changes, make sure to delete the target\dist directory first, or JPackage won't be able to delete the previous build.*
 5.  After building the project, there will be a directory named `target\dist\FiversFrosthavenTrainer\` placed in the root of the project directory. In this folder you will find the executable `FrosthavenTrainer.exe`.
 
 ## Troubleshooting
-Common problems (the game not loading, a ruleset size mismatch, or recovering when both your file and backup are unusable) are covered in **[TROUBLESHOOTING.md](TROUBLESHOOTING.md)**. The same guide is available inside the program under **More → Troubleshooting**.
+Potential problems (the game not loading, a ruleset size mismatch, or recovering when both your file and backup are unusable) are covered in **[TROUBLESHOOTING.md](TROUBLESHOOTING.md)**. The same guide is available inside the program under **More → Troubleshooting**.
 
 If your issue isn't covered there, please open a [GitHub Issue](https://github.com/Holyfivr/Fivers-Frosthaven-Trainer/issues) in the repository with a detailed description of the problem.
 Include the latest player.log located in `..\AppData\LocalLow\Snapshot Games Inc\Frosthaven\`

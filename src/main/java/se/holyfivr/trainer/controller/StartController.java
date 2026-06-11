@@ -37,6 +37,10 @@ public class StartController {
         // if not, appropriate menu-options are disabled
         model.addAttribute("rulesetLoaded", activeSessionData.getRulesetPath() != null);
 
+        // Tells the frontend whether to show the size-mismatch warning modal
+        // (set when the opened file differs in size from the original backup)
+        model.addAttribute("showSizeMismatchModal", activeSessionData.isSizeMismatchWarning());
+
         // If the file was just loaded, we show the success modal
         if (loaded) {
             model.addAttribute("showSuccessModal", true);
@@ -73,6 +77,11 @@ public class StartController {
     @GetMapping("/why")
     public String redirectWhy() {
         return "why";
+    }
+
+    @GetMapping("/troubleshooting")
+    public String redirectTroubleshooting() {
+        return "troubleshooting";
     }
 
 }

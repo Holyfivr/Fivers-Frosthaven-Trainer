@@ -36,6 +36,23 @@ public class ActiveSessionData {
         this.rulesetPath = rulesetPath;
     }
 
+    /* ========================================================================= */
+    /* Flag that signals the opened ruleset file differs in size from the        */
+    /* original backup. This means the file was changed outside this tool, which */
+    /* is either a game patch (new, valid file) or file corruption. We can't     */
+    /* tell which, so we raise this flag and let the user decide on the /start    */
+    /* page via a warning modal.                                                 */
+    /* ========================================================================= */
+    private boolean sizeMismatchWarning;
+
+    public boolean isSizeMismatchWarning() {
+        return sizeMismatchWarning;
+    }
+
+    public void setSizeMismatchWarning(boolean sizeMismatchWarning) {
+        this.sizeMismatchWarning = sizeMismatchWarning;
+    }
+
     /* ========================================== */
     /* RESET ALL DATA WHEN STARTING A NEW SESSION */
     /* ========================================== */

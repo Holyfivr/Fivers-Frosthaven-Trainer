@@ -58,6 +58,28 @@ public class BackupService {
         } else {
             System.out.println("Could not restore: No backup file found.");
         }
+        activeSessionData.setSizeMismatchWarning(false);
+        return REDIRECT_START;
+    }
+
+    /* ==================================================================== */
+    /* This method replaces the original backup with the currently opened   */
+    /* ruleset file. It is used when the game has been patched: the opened   */
+    /* file is the new, valid ruleset, while the old backup is now outdated. */
+    /* The user confirms the game launches correctly before reaching here.   */
+    /* ==================================================================== */
+    public String replaceOriginalBackup() {
+        Path path = activeSessionData.getRulesetPath();
+        Path backupDir = path.getParent().resolve("original ruleset");
+        Path backupPath = backupDir.resolve(RulesetFileName.ORIGINAL_BACKUP.getFileName());
+        try {
+            Files.createDirectories(backupDir);
+            Files.copy(path, backupPath, StandardCopyOption.REPLACE_EXISTING);
+            System.out.println("Original backup replaced with the current ruleset file.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        activeSessionData.setSizeMismatchWarning(false);
         return REDIRECT_START;
     }
 }

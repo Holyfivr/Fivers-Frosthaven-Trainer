@@ -52,6 +52,7 @@ function showSuccessMessage(action) {
             return;
         case "backupCreated"    : message = "Backup Created Successfully!"       ; break;
         case "backupRestored"   : message = "Original Backup Restored!"          ; break;
+        case "backupReplaced"   : message = "New Original Backup Created!"       ; break;
         case "rulesetSaved"     : message = "Ruleset Saved Successfully!"        ; break;
         case "linkCopied"       : message = "Link Copied to Clipboard!"          ; break;
         case "hpMaxed"          : message = "All Characters Max HP Set to 99!"   ; break;
@@ -187,4 +188,15 @@ function openEditAllCardsModal() {
             });
         }
     });
+}
+
+// ==========================================
+//  SIZE MISMATCH WARNING
+// ==========================================
+// If the opened ruleset file differs in size from the original backup,
+// auto-open the warning modal so the user can decide what to do.
+// Placed at the end so openModal and the modal elements are already defined.
+const sizeMismatchCheck = document.getElementById("sizeMismatchCheck");
+if (sizeMismatchCheck?.value === "true") {
+    openModal("sizeMismatchTemplate");
 }

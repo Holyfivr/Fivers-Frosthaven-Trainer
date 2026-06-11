@@ -200,3 +200,29 @@ const sizeMismatchCheck = document.getElementById("sizeMismatchCheck");
 if (sizeMismatchCheck?.value === "true") {
     openModal("sizeMismatchTemplate");
 }
+
+// ==========================================
+//  ACCORDIONS (troubleshooting page)
+// ==========================================
+// Toggles a single accordion open/closed when its header is clicked.
+function toggleAccordion(header) {
+    header.classList.toggle("open");
+    const panel = header.nextElementSibling;
+    if (panel) panel.classList.toggle("open");
+}
+
+// Opens a specific accordion by id and scrolls to it.
+// Used by cross-reference links between sections.
+function openAccordion(id) {
+    const accordion = document.getElementById(id);
+    if (!accordion) return;
+    const header = accordion.querySelector(".accordion-header");
+    const panel = accordion.querySelector(".accordion-panel");
+    if (header) header.classList.add("open");
+    if (panel) panel.classList.add("open");
+    accordion.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+document.querySelectorAll(".accordion-header").forEach(header => {
+    header.addEventListener("click", () => toggleAccordion(header));
+});

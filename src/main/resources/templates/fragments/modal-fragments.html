@@ -150,11 +150,11 @@
                 <br>
                 <form th:action="@{/restore-backup}" method="POST" style="display:inline;"
                     onsubmit="registerPendingAction('backupRestored')">
-                    <button class="btn" type="submit">The game is broken — restore from the old backup</button>
+                    <button class="warning-btn btn" type="submit">The game is broken. Restore the file from the old backup</button>
                 </form>
                 <form th:action="@{/replace-backup}" method="POST" style="display:inline;"
                     onsubmit="registerPendingAction('backupReplaced')">
-                    <button class="warning-btn btn" type="submit">The game started — create a new backup from this file</button>
+                    <button class="btn" type="submit">The game started. Create a new backup from this file</button>
                 </form>
                 <br><br>
                 <div class="sidenote">

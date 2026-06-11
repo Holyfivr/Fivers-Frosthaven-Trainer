@@ -34,7 +34,8 @@ So please be patient if updates are slow, as I am balancing this with my studies
 
 ## Upcoming Features
 *   **Enchantment Editing:** Change enchantment effects and values.
-*   **Town Editing**: Adjust things like prosperity/morale/available buildings.
+*   **Town Editing:** Adjust things like prosperity/morale/available buildings.
+*   **Summon Cards:** Fix so summon cards work. Currently summons are unaffected by any changes in the program.
 </div>
 
 <hr>
@@ -43,15 +44,13 @@ So please be patient if updates are slow, as I am balancing this with my studies
 <div style="max-width: 1000px; margin: auto; font-size: 1.1em; line-height: 1.6em;">
 
 1.  Start the application.
-2.  The application will open in its own window (it runs as a desktop application).
-3.  Click on **File -> Open Ruleset** in the top menu bar and select your `Base.ruleset` file. 
+2.  Click on **File -> Open Ruleset** in the top menu bar and select your `Base.ruleset` file. 
 (Default location: `..\Steam\steamapps\common\Frosthaven\Frosthaven_Data\StreamingAssets\Rulesets\Base.ruleset`)
-1.  The first time you open the file, a backup will be created of the original.
-2.  Select an option from the menu that you want to edit.
-3.  Make your changes.
-4.  Click on **Save**.
-5.  The application saves the changes directly to the file on your disk.
-6.  Open Frosthaven and enjoy your modified game!
+3.  The first time you open the file, a backup will be created of the original.
+4.  Select an option from the menu that you want to edit.
+5.  Make your changes.
+6.  Click on **Save**.
+7.  Open Frosthaven and enjoy your modified game!
 </div>
 
 <h2 style="max-width: 1000px; margin: auto; text-align: center; color: red; font-weight: bold;"> Important!</h2>

@@ -116,7 +116,9 @@ Getting a certificate costs money, and since I am a student working on this proj
 5.  After building the project, there will be a directory named `target\dist\FiversFrosthavenTrainer\` placed in the root of the project directory. In this folder you will find the executable `FrosthavenTrainer.exe`.
 
 ## Troubleshooting
-If you encounter any issues while using the Frosthaven Trainer, please open a [GitHub Issue](https://github.com/Holyfivr/Fivers-Frosthaven-Trainer/issues) in the repository with a detailed description of the problem.
+Common problems (the game not loading, a ruleset size mismatch, or recovering when both your file and backup are unusable) are covered in **[TROUBLESHOOTING.md](TROUBLESHOOTING.md)**. The same guide is available inside the program under **More → Troubleshooting**.
+
+If your issue isn't covered there, please open a [GitHub Issue](https://github.com/Holyfivr/Fivers-Frosthaven-Trainer/issues) in the repository with a detailed description of the problem.
 Include the latest player.log located in `..\AppData\LocalLow\Snapshot Games Inc\Frosthaven\`
 
 ## Contributing

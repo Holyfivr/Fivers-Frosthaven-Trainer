@@ -31,18 +31,45 @@
                     </tr>
                     <tr th:each="val,iter : ${abilityCard.healValues}">
                         <td class="object-attribute-td">Heal <span th:text="${iter.index + 1}"></span>:</td>
-                        <td><input required type="number" th:name="|healValues[${iter.index}]|" th:value="${val}"
-                                max="99" min="1"></td>
+                        <td>
+                            <span th:if="${val lt '0'}">
+                                <input required type="number" th:name="|healValues[${iter.index}]|" th:value="${val}"
+                                    max="99" th:min="${val}">
+                            </span>
+                            <span th:unless="${val lt '0'}">
+                                <input required type="number" th:name="|healValues[${iter.index}]|" th:value="${val}"
+                                    max="99" min="1">
+                            </span>
+                        </td>
                     </tr>
                     <tr th:each="val,iter : ${abilityCard.attackValues}">
                         <td class="object-attribute-td">Attack <span th:text="${iter.index + 1}"></span>:</td>
-                        <td><input required type="number" th:name="|attackValues[${iter.index}]|" th:value="${val}"
-                                max="99" min="1"></td>
+                        <td>
+                            <span th:if="${val lt '0'}">
+                                <input required type="number" th:name="|attackValues[${iter.index}]|" th:value="${val}"
+                                    max="99" th:min="${val}">
+                            </span>
+                            <span th:unless="${val lt '0'}">
+                                <input required type="number" th:name="|attackValues[${iter.index}]|" th:value="${val}"
+                                    max="99" min="1">
+                            </span>
+                        </td>
                     </tr>
                     <tr th:each="val,iter : ${abilityCard.damageValues}">
                         <td class="object-attribute-td">Damage <span th:text="${iter.index + 1}"></span>:</td>
-                        <td><input required type="number" th:name="|damageValues[${iter.index}]|" th:value="${val}"
-                                max="99" min="0"></td>
+                        <td>
+
+                            <span th:if="${val lt '0'}">
+                                <input required type="number" th:name="|damageValues[${iter.index}]|" th:value="${val}"
+                                    max="99" th:min="${val}">
+                            </span>
+                            <span th:unless="${val lt '0'}">
+                                <input required type="number" th:name="|damageValues[${iter.index}]|" th:value="${val}"
+                                    max="99" min="0">
+                            </span>
+
+
+                        </td>
                     </tr>
                     <tr th:each="val,iter : ${abilityCard.rangeValues}">
                         <td class="object-attribute-td">Range <span th:text="${iter.index + 1}"></span>:</td>
@@ -94,11 +121,63 @@
                         <td><input required type="number" th:name="|retaliateValues[${iter.index}]|" th:value="${val}"
                                 max="99" min="0"></td>
                     </tr>
-                    <tr th:each="val,iter : ${abilityCard.moveValues}">
-                        <td class="object-attribute-td">Move <span th:text="${iter.index + 1}"></span>:</td>
-                        <td><input required type="number" th:name="|moveValues[${iter.index}]|" th:value="${val}"
-                                max="99" min="0"></td>
-                    </tr>
+
+
+
+                    <!-- 1. Spara storleken på listorna i variabler för att kunna räkna ut den löpande numreringen -->
+                    <th:block th:with="
+    s1=${abilityCard.moveValues != null ? abilityCard.moveValues.size() : 0},
+    s2=${abilityCard.tMoveValues != null ? abilityCard.tMoveValues.size() : 0},
+    s3=${abilityCard.bMoveValues != null ? abilityCard.bMoveValues.size() : 0}
+">
+
+                        <!-- 1. Standard Move-listan -->
+                        <tr th:each="val, iter : ${abilityCard.moveValues}">
+                            <!-- Numreringen blir helt enkelt: nuvarande index + 1 -->
+                            <td class="object-attribute-td">Move <span th:text="${iter.index + 1}"></span>:</td>
+                            <td>
+                                <input required type="number" th:name="|moveValues[${iter.index}]|" th:value="${val}"
+                                    max="99" th:min="${val lt '0' ? T(java.lang.Integer).parseInt(val) : 0}">
+                            </td>
+                        </tr>
+
+                        <!-- 2. Top Move-listan -->
+                        <tr th:each="val, iter : ${abilityCard.tMoveValues}">
+                            <!-- Numreringen blir: föregående listas storlek + nuvarande index + 1 -->
+                            <td class="object-attribute-td">Move <span th:text="${s1 + iter.index + 1}"></span>:</td>
+                            <td>
+                                <input required type="number" th:name="|tMoveValues[${iter.index}]|" th:value="${val}"
+                                    max="99" th:min="${val lt '0' ? T(java.lang.Integer).parseInt(val) : 0}">
+                            </td>
+                        </tr>
+
+                        <!-- 3. Bottom Move-listan -->
+                        <tr th:each="val, iter : ${abilityCard.bMoveValues}">
+                            <!-- Numreringen blir: alla föregående listors storlek + nuvarande index + 1 -->
+                            <td class="object-attribute-td">Move <span th:text="${s1 + s2 + iter.index + 1}"></span>:
+                            </td>
+                            <td>
+                                <input required type="number" th:name="|bMoveValues[${iter.index}]|" th:value="${val}"
+                                    max="99" th:min="${val lt '0' ? T(java.lang.Integer).parseInt(val) : 0}">
+                            </td>
+                        </tr>
+
+                        <!-- 4. Effect Move-listan -->
+                        <tr th:each="val, iter : ${abilityCard.bMoveAgainValues}">
+                            <!-- Numreringen blir: alla föregående listors storlek + nuvarande index + 1 -->
+                            <td class="object-attribute-td">Move <span
+                                    th:text="${s1 + s2 + s3 + iter.index + 1}"></span>:</td>
+                            <td>
+                                <input required type="number" th:name="|bMoveAgainValues[${iter.index}]|"
+                                    th:value="${val}" max="99"
+                                    th:min="${val lt '0' ? T(java.lang.Integer).parseInt(val) : 0}">
+                            </td>
+                        </tr>
+
+                    </th:block>
+
+
+
                     <tr th:each="val,iter : ${abilityCard.pierceValues}">
                         <td class="object-attribute-td">Pierce <span th:text="${iter.index + 1}"></span>:</td>
                         <td><input required type="number" th:name="|pierceValues[${iter.index}]|" th:value="${val}"
@@ -151,11 +230,22 @@
                             </select>
                         </td>
                     </tr>
+
                     <tr th:each="val,iter : ${abilityCard.xpValues}">
                         <td class="object-attribute-td">XP <span th:text="${iter.index + 1}"></span>:</td>
-                        <td><input required type="number" th:name="|xpValues[${iter.index}]|" th:value="${val}" max="99"
-                                min="0"></td>
+                        <td>
+                            <span th:if="${val lt '0'}">
+                                <input required type="number" th:name="|xpValues[${iter.index}]|" th:value="${val}"
+                                    max="99" th:min="${val}">
+                            </span>
+                            <span th:unless="${val lt '0'}">
+                                <input required type="number" th:name="|xpValues[${iter.index}]|" th:value="${val}"
+                                    max="99" min="0">
+                            </span>
+
+                        </td>
                     </tr>
+
                     <tr>
                         <td class="object-attribute-td">Discard</td>
                         <td>

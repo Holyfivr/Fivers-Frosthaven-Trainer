@@ -13,6 +13,9 @@ public enum CardAttribute {
     ATTACK          ("Attack"),
     HEAL            ("Heal"),
     MOVE            ("Move"),
+    BMOVEAGAIN      ("BMoveAgain"),
+    BMOVE           ("BMove"),
+    TMOVE           ("TMove"),
     RANGE           ("Range"),
     SHIELD          ("Shield"),
     HEALTH          ("Health"),
@@ -21,7 +24,7 @@ public enum CardAttribute {
     TARGET          ("Target"),
     LOOT            ("Loot"),
     JUMP            ("Jump"),
-    INFUSE          ("Infuse");
+    INFUSE          ("Infuse"),;
 
     private final String attribute;
 

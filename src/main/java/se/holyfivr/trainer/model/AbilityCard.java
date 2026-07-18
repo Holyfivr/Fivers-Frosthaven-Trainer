@@ -18,6 +18,9 @@ public class AbilityCard {
     private String range;
     private String attack;
     private String move;
+    private String bMoveAgain;
+    private String bMove;
+    private String tMove;
     private String jump;
     private String target;
     private String pull;
@@ -45,6 +48,9 @@ public class AbilityCard {
     private List<String> pierceValues    = new ArrayList<>();
     private List<String> xpValues        = new ArrayList<>();
     private List<String> lootValues      = new ArrayList<>();
+    private List<String> bMoveAgainValues = new ArrayList<>();
+    private List<String> bMoveValues     = new ArrayList<>();
+    private List<String> tMoveValues     = new ArrayList<>();
 
     // unused for now
     private List<String> consumeValues   = new ArrayList<>();
@@ -138,6 +144,33 @@ public class AbilityCard {
 
     public AbilityCard setMove(String move) {
         this.move = move;
+        return this;
+    }
+
+    public String getBmoveAgain() {
+        return bMoveAgain;
+    }
+    
+    public AbilityCard setBmoveAgain(String bMoveAgain) {
+        this.bMoveAgain = bMoveAgain;
+        return this;
+    }
+
+    public String getBmove() {
+        return bMove;
+    }
+
+    public AbilityCard setBmove(String bMove) {
+        this.bMove = bMove;
+        return this;
+    }
+
+    public String getTmove() {
+        return tMove;
+    }
+
+    public AbilityCard setTmove(String tMove) {
+        this.tMove = tMove;
         return this;
     }
 
@@ -307,6 +340,33 @@ public class AbilityCard {
         return this;
     }
 
+    public List<String> getBMoveAgainValues() {
+        return bMoveAgainValues;
+    }
+
+    public AbilityCard setBMoveAgainValues(List<String> bMoveAgainValues) {
+        this.bMoveAgainValues = bMoveAgainValues;
+        return this;
+    }
+
+    public List<String> getBMoveValues() {
+        return bMoveValues;
+    }
+
+    public AbilityCard setBMoveValues(List<String> bMoveValues) {
+        this.bMoveValues = bMoveValues;
+        return this;
+    }
+
+    public List<String> getTMoveValues() {
+        return tMoveValues;
+    }
+
+    public AbilityCard setTMoveValues(List<String> tMoveValues) {
+        this.tMoveValues = tMoveValues;
+        return this;
+    }
+
     public List<String> getRangeValues() {
         return rangeValues;
     }
@@ -409,5 +469,7 @@ public class AbilityCard {
     }  
     //
     
+
+
 
 }

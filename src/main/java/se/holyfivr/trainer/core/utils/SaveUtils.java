@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 import org.springframework.stereotype.Component;
 
 
@@ -94,7 +95,7 @@ public class SaveUtils {
     /* Parses a value to integer and verifies that it matches the regex expression. */
     public boolean isValidInteger(String value) {
         try {
-            return value != null && Integer.parseInt(value.trim()) > 0 ? IS_INTEGER.matcher(value).matches() : false;    
+            return value != null && Integer.parseInt(value.trim()) > -100 ? IS_INTEGER.matcher(value).matches() : false;    
         } catch (NumberFormatException e) {
             return false;
         }

@@ -164,6 +164,9 @@ public class BlockUpdater {
             currentBlock = updateAttribute(         currentBlock, CardAttribute.SHIELD      .get(),  card.getShieldValues(),    null);
             currentBlock = updateAttribute(         currentBlock, CardAttribute.RETALIATE   .get(),  card.getRetaliateValues(), null);
             currentBlock = updateAttribute(         currentBlock, CardAttribute.MOVE        .get(),  card.getMoveValues(),      null);
+            currentBlock = updateAttribute(         currentBlock, CardAttribute.BMOVE       .get(),  card.getBMoveValues(),     null);
+            currentBlock = updateAttribute(         currentBlock, CardAttribute.TMOVE       .get(),  card.getTMoveValues(),      null);
+            currentBlock = updateAttribute(         currentBlock, CardAttribute.BMOVEAGAIN  .get(),  card.getBMoveAgainValues(), null);
             currentBlock = updateAttribute(         currentBlock, CardAttribute.PULL        .get(),  card.getPullValues(),      null);
             currentBlock = updateAttribute(         currentBlock, CardAttribute.PUSH        .get(),  card.getPushValues(),      null);
             currentBlock = updateAttribute(         currentBlock, CardAttribute.DAMAGE      .get(),  card.getDamageValues(),    null);

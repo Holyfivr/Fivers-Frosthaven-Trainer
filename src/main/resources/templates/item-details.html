@@ -112,22 +112,38 @@
                         <td class="object-attribute-td">Target: </td>
                         <td>
                             <div data-target-aoe>
-                                <input type="hidden" name="target" data-target-aoe-hidden th:value="${item.target}">             
-                                <input th:if="${item.target == '-1'}" type="text" data-target-aoe-number th:value="AoE" disabled>
-                                <input th:unless="${item.target == '-1'}" type="number" data-target-aoe-number th:value="${item.target}" max="99" min="1">
+                                <input type="hidden" name="target" data-target-aoe-hidden th:value="${item.target}">
+                                <input th:if="${item.target == '-1'}" type="text" data-target-aoe-number th:value="AoE"
+                                    disabled>
+                                <input th:unless="${item.target == '-1'}" type="number" data-target-aoe-number
+                                    th:value="${item.target}" max="99" min="1">
 
-                                
+
                             </div>
                         </td>
                     </tr>
                     <tr th:if="${item.shield != null}">
                         <td class="object-attribute-td">Shield: </td>
-                        <td><input type="number" name="shield" th:value="${item.shield}" max="99" min="1"></td>
+                        <td>
+                            <span th:if="${item.shield lt '0'}">
+                                <input type="number" name="shield" th:value="${item.shield}" max="99" th:min="${item.shield}">
+                            </span>
+                            <span th:unless="${item.shield lt '0'}">
+                                <input type="number" name="shield" th:value="${item.shield}" max="99" min="1">
+                            </span>
+                        </td>
                     </tr>
                     <tr th:if="${item.shieldValue != null}">
                         <td class="object-attribute-td">Shield Value: </td>
-                        <td><input type="number" name="shieldValue" th:value="${item.shieldValue}" max="99" min="0">
+                        <td>
+                            <span th:if="${item.shieldValue lt '0'}">
+                                <input type="number" name="shieldValue" th:value="${item.shieldValue}" max="99" th:min="${item.shieldValue}">
+                            </span>
+                            <span th:unless="${item.shieldValue lt '0'}">
+                                <input type="number" name="shieldValue" th:value="${item.shieldValue}" max="99" min="0">
+                            </span>
                         </td>
+
                     </tr>
                     <tr th:if="${item.retaliate != null}">
                         <td class="object-attribute-td">Retaliate: </td>

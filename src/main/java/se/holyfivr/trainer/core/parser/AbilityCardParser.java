@@ -25,7 +25,7 @@ public class AbilityCardParser {
     // List of valid "stat"-keys. These are use when looping through the ruleset when finding abilities to change
     private static final List<String> VALID_STAT_KEYS = List.of(
             "Attack", "Damage", "Heal", "Move", "Range", "Shield", "Target",
-            "Loot", "Pull", "Push", "Retaliate", "Pierce", "XP", "Consumes", "Consume", "Infuse"
+            "Loot", "Pull", "Push", "Retaliate", "Pierce", "XP", "Consumes", "Consume", "Infuse", "BMoveAgain", "BMove", "TMove"
     );
     
     // Pattern to make name-key only accept root-level card-names
@@ -138,22 +138,25 @@ public class AbilityCardParser {
         // set values to the current abilityCard, based on the attrEnum connected to the keys retrieved
         switch (attrEnum) {
             case NAME       -> setName      (abilityCard, value); 
-            case INITIATIVE -> setValue     (abilityCard, value, AbilityCard::getInitiative     , AbilityCard::setInitiative);
-            case HEALTH     -> setValue     (abilityCard, value, AbilityCard::getHealth         , AbilityCard::setHealth    );
-            case JUMP       -> setValue     (abilityCard, value, AbilityCard::getJump           , AbilityCard::setJump      );
-            case XP         -> setValues    (abilityCard, value, AbilityCard::getXpValues       , AbilityCard::setXP        );
-            case ATTACK     -> setValues    (abilityCard, value, AbilityCard::getAttackValues   , AbilityCard::setAttack    );
-            case HEAL       -> setValues    (abilityCard, value, AbilityCard::getHealValues     , AbilityCard::setHeal      );
-            case DAMAGE     -> setValues    (abilityCard, value, AbilityCard::getDamageValues   , AbilityCard::setDamage    );
-            case MOVE       -> setValues    (abilityCard, value, AbilityCard::getMoveValues     , AbilityCard::setMove      );
-            case RANGE      -> setValues    (abilityCard, value, AbilityCard::getRangeValues    , AbilityCard::setRange     );
-            case SHIELD     -> setValues    (abilityCard, value, AbilityCard::getShieldValues   , AbilityCard::setShield    );
-            case TARGET     -> setValues    (abilityCard, value, AbilityCard::getTargetValues   , AbilityCard::setTarget    );
-            case PULL       -> setValues    (abilityCard, value, AbilityCard::getPullValues     , AbilityCard::setPull      );
-            case PUSH       -> setValues    (abilityCard, value, AbilityCard::getPushValues     , AbilityCard::setPush      );
-            case PIERCE     -> setValues    (abilityCard, value, AbilityCard::getPierceValues   , AbilityCard::setPierce    );
-            case RETALIATE  -> setValues    (abilityCard, value, AbilityCard::getRetaliateValues, AbilityCard::setRetaliate );
-            case LOOT       -> setValues    (abilityCard, value, AbilityCard::getLootValues     , AbilityCard::setLoot      );
+            case INITIATIVE -> setValue     (abilityCard, value, AbilityCard::getInitiative      , AbilityCard::setInitiative);
+            case HEALTH     -> setValue     (abilityCard, value, AbilityCard::getHealth          , AbilityCard::setHealth    );
+            case JUMP       -> setValue     (abilityCard, value, AbilityCard::getJump            , AbilityCard::setJump      );
+            case XP         -> setValues    (abilityCard, value, AbilityCard::getXpValues        , AbilityCard::setXP        );
+            case ATTACK     -> setValues    (abilityCard, value, AbilityCard::getAttackValues    , AbilityCard::setAttack    );
+            case HEAL       -> setValues    (abilityCard, value, AbilityCard::getHealValues      , AbilityCard::setHeal      );
+            case DAMAGE     -> setValues    (abilityCard, value, AbilityCard::getDamageValues    , AbilityCard::setDamage    );
+            case MOVE       -> setValues    (abilityCard, value, AbilityCard::getMoveValues      , AbilityCard::setMove      );
+            case RANGE      -> setValues    (abilityCard, value, AbilityCard::getRangeValues     , AbilityCard::setRange     );
+            case SHIELD     -> setValues    (abilityCard, value, AbilityCard::getShieldValues    , AbilityCard::setShield    );
+            case TARGET     -> setValues    (abilityCard, value, AbilityCard::getTargetValues    , AbilityCard::setTarget    );
+            case PULL       -> setValues    (abilityCard, value, AbilityCard::getPullValues      , AbilityCard::setPull      );
+            case PUSH       -> setValues    (abilityCard, value, AbilityCard::getPushValues      , AbilityCard::setPush      );
+            case PIERCE     -> setValues    (abilityCard, value, AbilityCard::getPierceValues    , AbilityCard::setPierce    );
+            case RETALIATE  -> setValues    (abilityCard, value, AbilityCard::getRetaliateValues , AbilityCard::setRetaliate );
+            case LOOT       -> setValues    (abilityCard, value, AbilityCard::getLootValues      , AbilityCard::setLoot      );
+            case BMOVEAGAIN -> setValues    (abilityCard, value, AbilityCard::getBMoveAgainValues, AbilityCard::setBmoveAgain);
+            case BMOVE      -> setValues    (abilityCard, value, AbilityCard::getBMoveValues     , AbilityCard::setBmove     );
+            case TMOVE      -> setValues    (abilityCard, value, AbilityCard::getTMoveValues     , AbilityCard::setTmove     );
             case CONSUMES   -> setValue     (abilityCard, parseElementValue(value), AbilityCard::getConsumes , AbilityCard::setConsumes);
             case INFUSE     -> setValue     (abilityCard, parseElementValue(value), AbilityCard::getInfuse   , AbilityCard::setInfuse  );
             case DISCARD    -> abilityCard.setDiscard(null);

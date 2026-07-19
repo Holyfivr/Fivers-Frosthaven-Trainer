@@ -25,7 +25,8 @@ public class AbilityCardParser {
     // List of valid "stat"-keys. These are use when looping through the ruleset when finding abilities to change
     private static final List<String> VALID_STAT_KEYS = List.of(
             "Attack", "Damage", "Heal", "Move", "Range", "Shield", "Target",
-            "Loot", "Pull", "Push", "Retaliate", "Pierce", "XP", "Consumes", "Consume", "Infuse", "BMoveAgain", "BMove", "TMove"
+            "Loot", "Pull", "Push", "Retaliate", "Pierce", "XP", "Consumes", "Consume", "Infuse", 
+            "BMoveAgain", "BMove", "TMove", "Tattack", "TAttack1", "TAttack2", "BAttack"
     );
     
     // Pattern to make name-key only accept root-level card-names
@@ -143,6 +144,10 @@ public class AbilityCardParser {
             case JUMP       -> setValue     (abilityCard, value, AbilityCard::getJump            , AbilityCard::setJump      );
             case XP         -> setValues    (abilityCard, value, AbilityCard::getXpValues        , AbilityCard::setXP        );
             case ATTACK     -> setValues    (abilityCard, value, AbilityCard::getAttackValues    , AbilityCard::setAttack    );
+            case TATTACK    -> setValues    (abilityCard, value, AbilityCard::gettAttackValues   , AbilityCard::settAttack   );
+            case TATTACK1   -> setValues    (abilityCard, value, AbilityCard::gettAttack1Values  , AbilityCard::settAttack1  );
+            case TATTACK2   -> setValues    (abilityCard, value, AbilityCard::gettAttack2Values  , AbilityCard::settAttack2  );
+            case BATTACK    -> setValues    (abilityCard, value, AbilityCard::getbAttackValues   , AbilityCard::setbAttack   );
             case HEAL       -> setValues    (abilityCard, value, AbilityCard::getHealValues      , AbilityCard::setHeal      );
             case DAMAGE     -> setValues    (abilityCard, value, AbilityCard::getDamageValues    , AbilityCard::setDamage    );
             case MOVE       -> setValues    (abilityCard, value, AbilityCard::getMoveValues      , AbilityCard::setMove      );

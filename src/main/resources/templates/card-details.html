@@ -38,10 +38,21 @@
                             </span>
                             <span th:unless="${val lt '0'}">
                                 <input required type="number" th:name="|healValues[${iter.index}]|" th:value="${val}"
-                                    max="99" min="1">
+                                    max="99" min="0">
                             </span>
                         </td>
                     </tr>
+
+
+                    <th:block th:with="
+    s1=${abilityCard.attackValues != null ? abilityCard.attackValues.size() : 0},
+    s2=${abilityCard.tAttackValues != null ? abilityCard.tAttackValues.size() : 0},
+    s3=${abilityCard.tAttack1Values != null ? abilityCard.tAttack1Values.size() : 0},
+    s4=${abilityCard.tAttack2Values != null ? abilityCard.tAttack2Values.size() : 0},
+    s5=${abilityCard.bAttackValues != null ? abilityCard.bAttackValues.size() : 0}
+">
+
+
                     <tr th:each="val,iter : ${abilityCard.attackValues}">
                         <td class="object-attribute-td">Attack <span th:text="${iter.index + 1}"></span>:</td>
                         <td>
@@ -51,10 +62,72 @@
                             </span>
                             <span th:unless="${val lt '0'}">
                                 <input required type="number" th:name="|attackValues[${iter.index}]|" th:value="${val}"
-                                    max="99" min="1">
+                                    max="99" min="0">
                             </span>
                         </td>
                     </tr>
+
+                    <tr th:each="val,iter : ${abilityCard.tAttackValues}">
+                        <td class="object-attribute-td">Attack <span th:text="${s1 +iter.index + 1}"></span>:</td>
+                        <td>
+                            <span th:if="${val lt '0'}">
+                                <input required type="number" th:name="|tAttackValues[${iter.index}]|" th:value="${val}"
+                                    max="99" th:min="${val}">
+                            </span>
+                            <span th:unless="${val lt '0'}">
+                                <input required type="number" th:name="|tAttackValues[${iter.index}]|" th:value="${val}"
+                                    max="99" min="0">
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr th:each="val,iter : ${abilityCard.tAttack1Values}">
+                        <td class="object-attribute-td">Attack <span th:text="${s1 + s2 + iter.index + 1}"></span>:</td>
+                        <td>
+                            <span th:if="${val lt '0'}">
+                                <input required type="number" th:name="|tAttack1Values[${iter.index}]|" th:value="${val}"
+                                    max="99" th:min="${val}">
+                            </span>
+                            <span th:unless="${val lt '0'}">
+                                <input required type="number" th:name="|tAttack1Values[${iter.index}]|" th:value="${val}"
+                                    max="99" min="0">
+                            </span>
+                        </td>
+
+                    </tr>
+
+                    <tr th:each="val,iter : ${abilityCard.tAttack2Values}">
+                        <td class="object-attribute-td">Attack <span th:text="${s1 + s2 + s3 + iter.index + 1}"></span>:</td>
+                        <td>
+                            <span th:if="${val lt '0'}">
+                                <input required type="number" th:name="|tAttack2Values[${iter.index}]|" th:value="${val}"
+                                    max="99" th:min="${val}">
+                            </span>
+                            <span th:unless="${val lt '0'}">
+                                <input required type="number" th:name="|tAttack2Values[${iter.index}]|" th:value="${val}"
+                                    max="99" min="0">
+                            </span>
+                        </td>
+
+                    </tr>
+
+                    <tr th:each="val,iter : ${abilityCard.bAttackValues}">
+                        <td class="object-attribute-td">Attack <span th:text="${s1 + s2 + s3 + s4 + iter.index + 1}"></span>:</td>
+                        <td>
+                            <span th:if="${val lt '0'}">
+                                <input required type="number" th:name="|bAttackValues[${iter.index}]|" th:value="${val}"
+                                    max="99" th:min="${val}">
+                            </span>
+                            <span th:unless="${val lt '0'}">
+                                <input required type="number" th:name="|bAttackValues[${iter.index}]|" th:value="${val}"
+                                    max="99" min="0">
+                            </span>
+                        </td>
+
+</th:block>
+
+
+
                     <tr th:each="val,iter : ${abilityCard.damageValues}">
                         <td class="object-attribute-td">Damage <span th:text="${iter.index + 1}"></span>:</td>
                         <td>

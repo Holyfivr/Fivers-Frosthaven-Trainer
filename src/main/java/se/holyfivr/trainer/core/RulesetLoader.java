@@ -69,8 +69,8 @@ public class RulesetLoader {
     /* It provides all necessary data, including the original file structure and the modified       */
     /* character data.                                                                              */
     /* ============================================================================================ */
-    public void saveRuleset() {
-        rulesetSaver.saveRuleset(
+    public boolean saveRuleset() {
+        return rulesetSaver.saveRuleset(
             activeSession.getRulesetPath(),
             headerBytes,
             footerBytes,

@@ -62,7 +62,7 @@ public class RulesetSaver {
     /* optimizes it to save space, creates a "filler block" to match the original file size,        */
     /* and finally writes the binary-safe result back to disk.                                      */
     /* ============================================================================================ */
-    public void saveRuleset(Path filePath,
+    public boolean saveRuleset(Path filePath,
             // these are all the original parts of the file needed for safe saving
             byte[] headerBytes,
             byte[] footerBytes,
@@ -70,7 +70,7 @@ public class RulesetSaver {
             String originalContentString,  // content as string
             int originalTotalSize)        // original total file size
     {
-           
+
         try {
 
             // First we reconstruct the content string with updated values from ActiveSessionData.
@@ -112,9 +112,14 @@ public class RulesetSaver {
                 Files.copy(filePath, filePath.resolveSibling(RulesetFileName.BASE_RULESET.getFileName()), StandardCopyOption.REPLACE_EXISTING);
             }
             System.out.println("File saved successfully!"); // debug
+            return true;
 
-        } catch (IOException e) {
+        } catch (IOException | RuntimeException e) {
+            // Covers a locked/read-only file (IOException), a byte-size mismatch
+            // (SecurityException) and a block that couldn't be size-compensated
+            // (RuntimeException). We report failure instead of crashing the request.
             System.err.println("Failed to save ruleset: " + e.getMessage()); // debug
+            return false;
         }
     }
 
@@ -223,9 +228,8 @@ public class RulesetSaver {
                 String identifier = saveUtils.extractIdentifier(currentBlock, "Name:");
                 AbilityCard abilityCard = activeSessionData.getAbilityCards().get(identifier);
                 Map<String, AbilityCard> abilityCardMap = activeSessionData.getAbilityCards();
-                currentBlock = blockUpdater.updateCardAndItemBlock(currentBlock, abilityCard, null, abilityCardMap); 
+                currentBlock = blockUpdater.updateCardAndItemBlock(currentBlock, abilityCard, null, abilityCardMap);
             }
-            
 
             // Checks for potentially duped comments and removes them
             currentBlock = saveUtils.stripDoubleHashComments(currentBlock);

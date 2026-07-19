@@ -80,7 +80,7 @@ public class RulesetParser {
 
         } else if (block.startsWith("AbilityCard")) {
             abilityCardParser.parseAbilityCardBlock(block);
-        }
+        } 
     }
     
 }

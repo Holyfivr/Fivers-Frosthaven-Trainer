@@ -19,6 +19,42 @@
 
         <div class="troubleshooting-wrapper">
 
+            <!-- ============================ FILE COULDN'T BE SAVED ============================ -->
+            <div class="accordion" id="save-failed">
+                <button class="accordion-header" type="button">File couldn't be saved</button>
+                <div class="accordion-panel">
+                    <div class="accordion-panel-inner">
+                        <p>If the program reports that the file couldn't be saved, it means the write to
+                            <b>Base.ruleset</b> was refused or aborted. Common reasons:</p>
+                        <ul>
+                            <li style="margin-bottom: 10px;">
+                                <b>The game is running.</b> Frosthaven locks the ruleset file while it's open, so it
+                                can't be overwritten. Fully close the game, then save again.
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                <b>Another program is using the file.</b> Antivirus scans, cloud sync (OneDrive,
+                                Dropbox, Steam Cloud), or the file being open in another editor can all lock it.
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                <b>The changes didn't fit.</b> Every edit has to be squeezed back into the file at its
+                                exact original size. If a value was increased too much, there wasn't enough spare space
+                                to reclaim, and the save is aborted to avoid corrupting the file. Try smaller values.
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                <b>Size mismatch.</b> If the file on disk was changed after you opened it (for example a
+                                game patch), the save can no longer line up with it. Re-open the file and try again. See
+                                <a class="accordion-link" onclick="openAccordion('ruleset-size-mismatch'); return false;">Ruleset
+                                    size mismatch</a>.
+                            </li>
+                            <li>
+                                <b>Permissions.</b> The file is read-only, or you don't have permission to write to the
+                                folder. Make sure the game folder isn't marked read-only.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
             <!-- ============================ GAME DOESN'T LOAD ============================ -->
             <div class="accordion" id="game-doesnt-load">
                 <button class="accordion-header" type="button">Game doesn't load</button>

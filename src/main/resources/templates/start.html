@@ -8,7 +8,6 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/css/menu.css}">
     <link rel="stylesheet" th:href="@{/css/modal.css}">
-    <link rel="stylesheet" th:href="@{/css/ability-menu.css}">
     <script th:src="@{/js/script.js}" type="text/javascript" defer></script>
     <script th:src="@{/js/copy.js}" type="text/javascript" defer></script>
 </head>
@@ -20,6 +19,9 @@
 
     <!-- Hidden flag: opened file size differs from the original backup -->
     <input type="hidden" id="sizeMismatchCheck" th:value="${showSizeMismatchModal}" />
+
+    <!-- Hidden flag: the last save attempt failed -->
+    <input type="hidden" id="saveErrorCheck" th:value="${saveError}" />
 
     <nav class="menu-bar">
         <ul class="menu">

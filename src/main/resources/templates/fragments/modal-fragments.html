@@ -125,6 +125,20 @@
         </template>
 
 
+        <!------------------------------------------------------ SAVE ERROR ------------------------------------------------------------->
+        <template id="saveErrorTemplate">
+            <div style="text-align: center;">
+                <h2 style="color: red;">Save failed</h2>
+                <p>The file couldn't be saved.<br>
+                    Check the
+                    <a th:href="@{/troubleshooting}" target="contentFrame" onclick="closeModal()">Troubleshooting</a>
+                    guide for a list of possible reasons.</p>
+                <br>
+                <a class="btn" href="#" onclick="closeModal()">Close</a>
+            </div>
+        </template>
+
+
         <!------------------------------------------------------ SIZE MISMATCH WARNING ------------------------------------------------------------->
         <template id="sizeMismatchTemplate">
             <div style="text-align: center;">

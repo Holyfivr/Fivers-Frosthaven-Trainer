@@ -67,6 +67,12 @@ function showSuccessMessage(action) {
     }
 }
 
+// If the last save failed, drop the optimistic "saved!" action so we don't
+// show a false success (the save-failed modal is shown further down instead).
+if (document.getElementById("saveErrorCheck")?.value === "true") {
+    sessionStorage.removeItem("pendingAction");
+}
+
 // Check on load
 const pendingAction = sessionStorage.getItem("pendingAction");
 if (pendingAction) {
@@ -199,6 +205,14 @@ function openEditAllCardsModal() {
 const sizeMismatchCheck = document.getElementById("sizeMismatchCheck");
 if (sizeMismatchCheck?.value === "true") {
     openModal("sizeMismatchTemplate");
+}
+
+// ==========================================
+//  SAVE FAILED
+// ==========================================
+// If the last save attempt didn't write, show the error modal.
+if (document.getElementById("saveErrorCheck")?.value === "true") {
+    openModal("saveErrorTemplate");
 }
 
 // ==========================================

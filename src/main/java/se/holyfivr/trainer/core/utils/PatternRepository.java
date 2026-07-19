@@ -58,13 +58,13 @@ public final class PatternRepository {
      * Identifies FHItem blocks.
      */
     public static final Pattern FH_ITEM_PARSER_PATTERN =
-            Pattern.compile("(?s)(?m).*^\\s*FHItem\\s*$.*");
+           Pattern.compile("(?s)(?m).*^\\s*FHItem\\s*$.*");
 
     /**
      * Identifies AbilityCard blocks.
      */
     public static final Pattern ABILITY_CARD_PARSER_PATTERN =
-            Pattern.compile("(?s)(?m).*^\\s*AbilityCard\\s*$.*");
+           Pattern.compile("(?s)(?m).*^\\s*AbilityCard\\s*$.*");
 
 
     /* ====================================================================== */

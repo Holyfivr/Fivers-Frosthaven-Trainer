@@ -3,16 +3,16 @@
 
 <body>
 
-    <li th:classappend="${!rulesetLoaded} ? 'inactive'" th:fragment="ability-card-menu" class="ability-menu-item">
+    <li th:classappend="${!rulesetLoaded} ? 'inactive'" th:fragment="ability-card-menu">
         Ability Cards
-        <ul class="ability-dropdown">
+        <ul class="dropdown">
                         <li>
                 <a onclick="openEditAllCardsModal()">
                     <div style="font-weight: bold;">Mass Edit</div>
                 </a>
             </li>
             <hr>
-            <li class="has-submenu">
+            <li>
                 <a th:href="@{/ability-cards/all}" target="contentFrame">All Cards</a>
             </li>
 

@@ -22,7 +22,9 @@ public class StartController {
     }
 
     @GetMapping("/start")
-    public String getStart(Model model, @RequestParam(required = false, defaultValue = "false") boolean loaded) {
+    public String getStart(Model model,
+            @RequestParam(required = false, defaultValue = "false") boolean loaded,
+            @RequestParam(required = false, defaultValue = "false") boolean saveError) {
 
         // loads the character map into the model
         model.addAttribute("characterMap", activeSessionData.getCharacters());
@@ -46,13 +48,16 @@ public class StartController {
             model.addAttribute("showSuccessModal", true);
         }
 
+        // Tells the frontend whether the last save attempt failed
+        model.addAttribute("saveError", saveError);
+
         return "start";
     }
 
     @PostMapping("/save")
     public String saveRuleset() {
-        rulesetLoader.saveRuleset();
-        return "redirect:/start";
+        boolean saved = rulesetLoader.saveRuleset();
+        return saved ? "redirect:/start" : "redirect:/start?saveError=true";
     }
 
     @GetMapping("/exit")

@@ -8,6 +8,26 @@ The same information is available inside the program under **More → Troublesho
 
 ---
 
+## File couldn't be saved
+
+If the program reports that the file couldn't be saved, the write to `Base.ruleset` was refused or
+aborted. Common reasons:
+
+- **The game is running.** Frosthaven locks the ruleset file while it's open, so it can't be
+  overwritten. Fully close the game, then save again.
+- **Another program is using the file.** Antivirus scans, cloud sync (OneDrive, Dropbox, Steam
+  Cloud), or the file being open in another editor can all lock it.
+- **The changes didn't fit.** Every edit has to be squeezed back into the file at its exact original
+  size. If a value was increased too much, there wasn't enough spare space to reclaim, and the save
+  is aborted to avoid corrupting the file. Try smaller values.
+- **Size mismatch.** If the file on disk was changed after you opened it (for example a game patch),
+  the save can no longer line up with it. Re-open the file and try again — see
+  [Ruleset size mismatch](#ruleset-size-mismatch).
+- **Permissions.** The file is read-only, or you don't have permission to write to the folder. Make
+  sure the game folder isn't marked read-only.
+
+---
+
 ## Game doesn't load
 
 If Frosthaven won't start after you've used this tool, the ruleset file is most likely corrupted.

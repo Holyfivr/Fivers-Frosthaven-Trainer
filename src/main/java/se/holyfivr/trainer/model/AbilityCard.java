@@ -17,6 +17,10 @@ public class AbilityCard {
     private String shield;
     private String range;
     private String attack;
+    private String tAttack;
+    private String tAttack1;
+    private String tAttack2;
+    private String bAttack;
     private String move;
     private String bMoveAgain;
     private String bMove;
@@ -36,6 +40,10 @@ public class AbilityCard {
 
     // MVP multi-attribute support: store every occurrence in the block, in order.
     private List<String> attackValues    = new ArrayList<>();
+    private List<String> tAttackValues   = new ArrayList<>();
+    private List<String> tAttack1Values  = new ArrayList<>();
+    private List<String> tAttack2Values  = new ArrayList<>();
+    private List<String> bAttackValues   = new ArrayList<>();
     private List<String> damageValues    = new ArrayList<>();
     private List<String> healValues      = new ArrayList<>();
     private List<String> moveValues      = new ArrayList<>();
@@ -468,6 +476,143 @@ public class AbilityCard {
         return this;
     }  
     //
+
+    public String gettAttack() {
+        return tAttack;
+    }
+
+    public AbilityCard settAttack(String tAttack) {
+        this.tAttack = tAttack;
+        return this;
+    }
+
+
+    public String gettAttack1() {
+        return tAttack1;
+    }
+
+    public AbilityCard settAttack1(String tAttack1) {
+        this.tAttack1 = tAttack1;
+        return this;
+    }
+
+
+    public String gettAttack2() {
+        return tAttack2;
+    }
+
+    public AbilityCard settAttack2(String tAttack2) {
+        this.tAttack2 = tAttack2;
+        return this;
+    }
+
+
+    public String getbAttack() {
+        return bAttack;
+    }
+
+    public AbilityCard setbAttack(String bAttack) {
+        this.bAttack = bAttack;
+        return this;
+    }
+
+
+    public String getbMoveAgain() {
+        return bMoveAgain;
+    }
+
+    public AbilityCard setbMoveAgain(String bMoveAgain) {
+        this.bMoveAgain = bMoveAgain;
+        return this;
+    }
+
+
+    public String getbMove() {
+        return bMove;
+    }
+
+    public AbilityCard setbMove(String bMove) {
+        this.bMove = bMove;
+        return this;
+    }
+
+
+    public String gettMove() {
+        return tMove;
+    }
+
+    public AbilityCard settMove(String tMove) {
+        this.tMove = tMove;
+        return this;
+    }
+
+
+    public List<String> gettAttackValues() {
+        return tAttackValues;
+    }
+
+    public AbilityCard settAttackValues(List<String> tAttackValues) {
+        this.tAttackValues = tAttackValues;
+        return this;
+    }
+
+
+    public List<String> gettAttack1Values() {
+        return tAttack1Values;
+    }
+
+    public AbilityCard settAttack1Values(List<String> tAttack1Values) {
+        this.tAttack1Values = tAttack1Values;
+        return this;
+    }
+
+
+    public List<String> gettAttack2Values() {
+        return tAttack2Values;
+    }
+
+    public AbilityCard settAttack2Values(List<String> tAttack2Values) {
+        this.tAttack2Values = tAttack2Values;
+        return this;
+    }
+
+    public List<String> getbAttackValues() {
+        return bAttackValues;
+    }
+
+    public AbilityCard setbAttackValues(List<String> bAttackValues) {
+        this.bAttackValues = bAttackValues;
+        return this;
+    }
+
+    public List<String> getbMoveAgainValues() {
+        return bMoveAgainValues;
+    }
+
+    public AbilityCard setbMoveAgainValues(List<String> bMoveAgainValues) {
+        this.bMoveAgainValues = bMoveAgainValues;
+        return this;
+    }
+
+    public List<String> getbMoveValues() {
+        return bMoveValues;
+    }
+
+    public AbilityCard setbMoveValues(List<String> bMoveValues) {
+        this.bMoveValues = bMoveValues;
+        return this;
+    }
+
+
+    public List<String> gettMoveValues() {
+        return tMoveValues;
+    }
+
+    public AbilityCard settMoveValues(List<String> tMoveValues) {
+        this.tMoveValues = tMoveValues;
+        return this;
+    }
+
     
 
 

@@ -159,6 +159,10 @@ public class BlockUpdater {
         if (card != null) {
             currentBlock = updateAttribute(         currentBlock, CardAttribute.HEAL        .get(),  card.getHealValues(),      null);
             currentBlock = updateAttribute(         currentBlock, CardAttribute.ATTACK      .get(),  card.getAttackValues(),    null);
+            currentBlock = updateAttribute(         currentBlock, CardAttribute.TATTACK     .get(),  card.gettAttackValues(),   null);
+            currentBlock = updateAttribute(         currentBlock, CardAttribute.TATTACK1    .get(),  card.gettAttack1Values(),  null);
+            currentBlock = updateAttribute(         currentBlock, CardAttribute.TATTACK2    .get(),  card.gettAttack2Values(),  null);
+            currentBlock = updateAttribute(         currentBlock, CardAttribute.BATTACK     .get(),  card.getbAttackValues(),   null);
             currentBlock = updateAttribute(         currentBlock, CardAttribute.RANGE       .get(),  card.getRangeValues(),     null);
             currentBlock = updateAttribute(         currentBlock, CardAttribute.TARGET      .get(),  card.getTargetValues(),    null);
             currentBlock = updateAttribute(         currentBlock, CardAttribute.SHIELD      .get(),  card.getShieldValues(),    null);

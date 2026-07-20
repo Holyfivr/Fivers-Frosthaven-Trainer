@@ -1,0 +1,117 @@
+/* ============================= */
+/*   SAVE FILE EDITOR PAGE       */
+/* ============================= */
+
+#savefileContainer {
+    background-color: var(--color-cream);
+    width: 800px;
+    margin: 10px auto;
+    border: 3px solid var(--color-light-blue);
+    border-radius: 5px;
+    box-shadow: 0px 4px 5px var(--color-shadow);
+    color: var(--color-mid-blue);
+    text-align: center;
+    padding-bottom: 10px;
+}
+
+#savefileHeader h1 {
+    margin-bottom: 0;
+}
+
+#savefileName {
+    font-style: italic;
+    margin-bottom: 10px;
+}
+
+/* Tab bar */
+#tabBar {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 4px;
+    border-bottom: 2px solid var(--color-light-blue);
+    padding: 0 10px 5px 10px;
+}
+
+.tab-btn {
+    background-color: var(--color-cream);
+    border: 2px solid var(--color-light-blue);
+    border-radius: 3px;
+    color: var(--color-mid-blue);
+    padding: 4px 5px;
+    cursor: pointer;
+    transition: background-color 0.1s linear, color 0.1s linear;
+}
+
+.tab-btn:hover {
+    background-color: var(--color-light-blue);
+    color: var(--color-cream);
+}
+
+.tab-btn.active {
+    background-color: var(--color-mid-blue);
+    border-color: var(--color-mid-blue);
+    color: var(--color-cream);
+}
+
+/* Tab panels: only the active character is visible */
+.tab-panel {
+    display: none;
+}
+
+.tab-panel.active {
+    display: block;
+}
+
+/* Field grid: fills column by column, so tabs with many fields
+   split into two balanced columns instead of growing too tall */
+.field-grid {
+    display: grid;
+    grid-auto-flow: column;
+    justify-content: center;
+    column-gap: 45px;
+    row-gap: 6px;
+    margin: 10px auto;
+}
+
+.field-pair {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    width: 280px;
+}
+
+.field-label {
+    text-align: left;
+    font-weight: bold;
+}
+
+.field-pair input,
+.field-pair select {
+    width: 120px;
+    padding: 3px 5px;
+    border: 1px solid var(--color-light-blue);
+    border-radius: 3px;
+    background-color: var(--color-white);
+}
+
+/* Prosperity at the top level (9): forced to its max and non-interactive,
+   but kept enabled so the value is still submitted */
+.field-pair select.locked {
+    background-color: #e0e0e0;
+    color: #777777;
+    pointer-events: none;
+}
+
+/* Save / close buttons */
+#saveActions {
+    margin-top: 10px;
+}
+
+/* Footer note */
+#savefileNote {
+    margin-top: 10px;
+    font-size: 13px;
+    padding: 0 40px;
+}

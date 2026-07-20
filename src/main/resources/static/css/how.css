@@ -1,0 +1,69 @@
+/* ============================= */
+/*   HOW / START PAGE            */
+/* ============================= */
+
+/* Red warning line at the top */
+#howWarning {
+    color: var(--color-red);
+    font-weight: bold;
+    text-align: center;
+    margin: 0 40px 15px 40px;
+}
+
+/* Two editor cards side by side */
+#editorGrid {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 0 20px;
+}
+
+.editor-card {
+    flex: 1;
+    max-width: 360px;
+    text-align: left;
+    border: 2px solid var(--color-light-blue);
+    border-radius: 5px;
+    padding: 10px 15px;
+    background-color: rgba(255, 255, 255, 0.35);
+}
+
+.editor-card h3 {
+    text-align: center;
+    margin: 5px 0 10px 0;
+    border-bottom: 2px solid var(--color-light-blue);
+    padding-bottom: 5px;
+}
+
+.editor-card p {
+    margin: 8px 0;
+}
+
+/* File path boxes */
+.path-box {
+    font-family: Consolas, monospace;
+    font-size: 12px;
+    background-color: var(--color-cream);
+    border: 1px solid var(--color-light-blue);
+    border-radius: 3px;
+    padding: 5px 8px;
+    word-break: break-all;
+    margin: 5px 0;
+}
+
+/* Shared notes below the cards */
+.how-note {
+    text-align: left;
+    width: 700px;
+    margin: 15px auto 0 auto;
+}
+
+.how-note h4 {
+    margin-bottom: 5px;
+}
+
+#githubNote {
+    text-align: center;
+    margin: 20px auto 10px auto;
+    width: 700px;
+}

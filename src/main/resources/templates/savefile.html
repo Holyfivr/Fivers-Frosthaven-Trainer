@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Save File Editor</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/savefile.css}">
+</head>
+
+<body>
+
+    <div id="savefileContainer">
+
+        <div id="savefileHeader">
+            <h1>Save File Editor</h1>
+            <div id="savefileName" th:text="${saveFileName}"></div>
+        </div>
+
+        <!-- One tab per character found in the save file -->
+        <div id="tabBar">
+            <button type="button" class="tab-btn" th:each="character, stat : ${saveCharacters}"
+                th:classappend="${stat.index == 0} ? 'active'" th:attr="data-tab='tab-' + ${stat.index}"
+                th:text="${character.name}" onclick="openTab(this)"></button>
+        </div>
+
+        <!-- One form holds ALL characters' inputs, so Save & Close writes everything at once -->
+        <form th:action="@{/save-savefile}" method="POST" target="_top"
+            onsubmit="registerPendingAction('savefileSaved')">
+
+            <!-- Fields flow into two balanced columns (column-major), so the Town tab
+                 shows its stats in the left column and the herbs in the right one -->
+            <div class="tab-panel" th:each="character, stat : ${saveCharacters}" th:id="'tab-' + ${stat.index}"
+                th:classappend="${stat.index == 0} ? 'active'">
+                <div class="field-grid"
+                    th:style="'grid-template-rows: repeat(' + ${(character.fields.size() + 1) / 2} + ', auto);'">
+                    <div class="field-pair" th:each="field : ${character.fields}"
+                        th:with="noMax=${T(se.holyfivr.trainer.model.SaveField).NO_MAX}">
+                        <label class="field-label" th:text="${field.name}"></label>
+
+                        <!-- Prosperity: dropdown capped by the current Prosperity Level (filled by JS below) -->
+                        <select th:if="${field.name == 'Prosperity'}" required data-fieldname="Prosperity"
+                            th:attr="data-current=${field.value}" th:name="'field_' + ${field.offset}"></select>
+
+                        <!-- Other town stats: dropdown of 0..max in fixed steps (filled by JS below) -->
+                        <select th:if="${field.name != 'Prosperity' and field.max != noMax}" required class="stat-select"
+                            th:attr="data-fieldname=${field.name},data-current=${field.value},data-max=${field.max},data-step=${field.step}"
+                            th:name="'field_' + ${field.offset}"></select>
+
+                        <!-- Gold, materials and herbs: free number input with a digit cap -->
+                        <input th:if="${field.max == noMax}" type="number" min="0" required class="digit-limited"
+                            th:max="${field.max}" th:attr="data-fieldname=${field.name}"
+                            th:name="'field_' + ${field.offset}" th:value="${field.value}">
+                    </div>
+                </div>
+            </div>
+
+            <div id="saveActions">
+                <button class="btn" type="submit">Save &amp; Close</button>
+                <a class="btn" th:href="@{/close-savefile}" target="_top">Close Without Saving</a>
+            </div>
+        </form>
+
+        <div id="savefileNote" class="sidenote">
+            Close Frosthaven before saving. If Steam Cloud sync is enabled for Frosthaven,
+            it may overwrite your edits — edit right before starting the game, or disable cloud sync.
+        </div>
+
+    </div>
+
+    <script>
+        // Shared with the parent page via sessionStorage: the toast is shown on /start after saving
+        function registerPendingAction(actionName) {
+            sessionStorage.setItem("pendingAction", actionName);
+        }
+
+        // Simple tab switching: show the clicked character's panel, hide the rest
+        function openTab(clickedButton) {
+            document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
+            document.querySelectorAll(".tab-panel").forEach(panel => panel.classList.remove("active"));
+            clickedButton.classList.add("active");
+            document.getElementById(clickedButton.dataset.tab).classList.add("active");
+        }
+
+        // If a required input on a hidden tab is invalid on submit, switch to its
+        // tab so the browser can focus it and show the validation message.
+        document.querySelectorAll(".tab-panel input").forEach(input => {
+            input.addEventListener("invalid", () => {
+                const panel = input.closest(".tab-panel");
+                const tabButton = document.querySelector('.tab-btn[data-tab="' + panel.id + '"]');
+                if (tabButton && !panel.classList.contains("active")) {
+                    openTab(tabButton);
+                }
+            });
+        });
+
+        // ==========================================
+        //  PROSPERITY DROPDOWN
+        // ==========================================
+        // Prosperity fills toward the NEXT level's requirement, so the max for the current
+        // level is the value needed to reach the level above it: level 1 caps at 5 (level 2's
+        // requirement), ... level 8 caps at 26 (level 9's requirement), and level 9 (max) locks
+        // at 26. The leading 0 (level 1's own requirement) is never used as a max.
+        // The dropdown lets you pick 0..max and rebuilds when the Prosperity Level field changes.
+        const PROSPERITY_TABLE = [0, 5, 8, 11, 14, 17, 20, 23, 26];
+
+        function prosperityMaxForLevel(level) {
+            const index = Math.min(Math.max(level, 1), PROSPERITY_TABLE.length - 1);
+            return PROSPERITY_TABLE[index];
+        }
+
+        function rebuildProsperityOptions() {
+            const select = document.querySelector('select[data-fieldname="Prosperity"]');
+            const levelInput = document.querySelector('[data-fieldname="Prosperity Level"]');
+            if (!select || !levelInput) return;
+
+            const level = parseInt(levelInput.value, 10) || 1;
+            const max = prosperityMaxForLevel(level);
+
+            // At the top level (9) prosperity is fixed at its max: the field is forced
+            // to 26 and locked. We keep the <select> enabled (a disabled one wouldn't be
+            // submitted, so 26 would never get written) and just make it non-interactive.
+            const locked = level >= PROSPERITY_TABLE.length;
+
+            // When locked, force the max. Otherwise keep the current selection where possible,
+            // falling back to the value loaded from the save, clamped to the new max.
+            const current = select.value !== ""
+                ? parseInt(select.value, 10)
+                : (parseInt(select.dataset.current, 10) || 0);
+            const selected = locked ? max : Math.min(current, max);
+
+            select.innerHTML = "";
+            for (let v = 0; v <= max; v++) {
+                const option = document.createElement("option");
+                option.value = v;
+                option.textContent = v;
+                if (v === selected) option.selected = true;
+                select.appendChild(option);
+            }
+
+            select.classList.toggle("locked", locked);
+            select.tabIndex = locked ? -1 : 0;
+        }
+
+        // Build the fixed town-stat dropdowns (0..max in steps). The saved value is snapped
+        // down to the nearest step and clamped to max, so an off-grid or over-cap value from
+        // a hand-edited save selects a valid option instead of silently defaulting to 0.
+        function buildStatOptions(select) {
+            const max = parseInt(select.dataset.max, 10);
+            const step = parseInt(select.dataset.step, 10) || 1;
+            const current = parseInt(select.dataset.current, 10) || 0;
+            const selected = Math.floor(Math.min(current, max) / step) * step;
+
+            select.innerHTML = "";
+            for (let v = 0; v <= max; v += step) {
+                const option = document.createElement("option");
+                option.value = v;
+                option.textContent = v;
+                if (v === selected) option.selected = true;
+                select.appendChild(option);
+            }
+        }
+        // Populate the stat dropdowns first, so the Prosperity Level value is set before
+        // the Prosperity dropdown reads it below.
+        document.querySelectorAll("select.stat-select").forEach(buildStatOptions);
+
+        // Prosperity Level is now a dropdown; rebuild the Prosperity options when it changes.
+        const prosperityLevelInput = document.querySelector('[data-fieldname="Prosperity Level"]');
+        if (prosperityLevelInput) {
+            prosperityLevelInput.addEventListener("change", rebuildProsperityOptions);
+        }
+        rebuildProsperityOptions();
+
+        // ==========================================
+        //  DIGIT LIMIT (non-canonical fields)
+        // ==========================================
+        // Gold, materials and herbs have no canonical max, only a digit cap. A number
+        // input ignores the maxlength attribute, so enforce the limit here instead.
+        const MAX_DIGITS = 4;
+        document.querySelectorAll("input.digit-limited").forEach(input => {
+            input.addEventListener("input", () => {
+                if (input.value.length > MAX_DIGITS) {
+                    input.value = input.value.slice(0, MAX_DIGITS);
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>

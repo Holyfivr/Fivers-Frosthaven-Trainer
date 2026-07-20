@@ -33,27 +33,26 @@ function registerPendingAction(actionName) {
     sessionStorage.setItem("pendingAction", actionName);
 }
 
-function showLoadSuccessfulMessage() {
-    const characterMenu = document.getElementById("characterMenu");
-    if (!characterMenu.classList.contains("inactive")) {
-        showToast("File Loaded Successfully!");
-    }
-}
-
 function showSuccessMessage(action) {
     let message = "";
     switch (action) {
+        // The "opened" checks are only true when a file was JUST opened,
+        // so cancelling the file chooser never shows a false success toast.
         case "fileLoaded":
-            const rulesetLoadedCheck = document.getElementById("rulesetLoadedCheck");
-            if (rulesetLoadedCheck?.value === "true") {
-                showLoadSuccessfulMessage();
-                return;
+            if (document.getElementById("fileOpenedCheck")?.value === "true") {
+                showToast("File Loaded Successfully!");
+            }
+            return;
+        case "savefileLoaded":
+            if (document.getElementById("savefileOpenedCheck")?.value === "true") {
+                showToast("Savefile Loaded Successfully!");
             }
             return;
         case "backupCreated"    : message = "Backup Created Successfully!"       ; break;
         case "backupRestored"   : message = "Original Backup Restored!"          ; break;
         case "backupReplaced"   : message = "New Original Backup Created!"       ; break;
         case "rulesetSaved"     : message = "Ruleset Saved Successfully!"        ; break;
+        case "savefileSaved"    : message = "Savefile Saved Successfully!"       ; break;
         case "linkCopied"       : message = "Link Copied to Clipboard!"          ; break;
         case "hpMaxed"          : message = "All Characters Max HP Set to 99!"   ; break;
         case "cardsMaxed"       : message = "Maxed out Available Abilitycards!"  ; break;
@@ -213,6 +212,14 @@ if (sizeMismatchCheck?.value === "true") {
 // If the last save attempt didn't write, show the error modal.
 if (document.getElementById("saveErrorCheck")?.value === "true") {
     openModal("saveErrorTemplate");
+}
+
+// ==========================================
+//  SAVEFILE COULDN'T BE OPENED
+// ==========================================
+// If the chosen file wasn't a valid Frosthaven save, show the error modal.
+if (document.getElementById("savefileErrorCheck")?.value === "true") {
+    openModal("savefileErrorTemplate");
 }
 
 // ==========================================

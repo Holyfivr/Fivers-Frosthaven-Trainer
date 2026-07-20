@@ -24,7 +24,10 @@ public class StartController {
     @GetMapping("/start")
     public String getStart(Model model,
             @RequestParam(required = false, defaultValue = "false") boolean loaded,
-            @RequestParam(required = false, defaultValue = "false") boolean saveError) {
+            @RequestParam(required = false, defaultValue = "false") boolean saveError,
+            @RequestParam(required = false, defaultValue = "false") boolean fileOpened,
+            @RequestParam(required = false, defaultValue = "false") boolean savefileOpened,
+            @RequestParam(required = false, defaultValue = "false") boolean savefileError) {
 
         // loads the character map into the model
         model.addAttribute("characterMap", activeSessionData.getCharacters());
@@ -39,6 +42,10 @@ public class StartController {
         // if not, appropriate menu-options are disabled
         model.addAttribute("rulesetLoaded", activeSessionData.getRulesetPath() != null);
 
+        // Tells the frontend whether a save file (.dat) is open. While one is,
+        // the contentframe shows the save editor and "Save Ruleset" is disabled.
+        model.addAttribute("saveFileLoaded", activeSessionData.isSaveFileLoaded());
+
         // Tells the frontend whether to show the size-mismatch warning modal
         // (set when the opened file differs in size from the original backup)
         model.addAttribute("showSizeMismatchModal", activeSessionData.isSizeMismatchWarning());
@@ -51,12 +58,30 @@ public class StartController {
         // Tells the frontend whether the last save attempt failed
         model.addAttribute("saveError", saveError);
 
+        // Tells the frontend whether a ruleset/save file was JUST opened
+        // (as opposed to already being open). Used for the success toasts,
+        // so cancelling the file chooser doesn't show a false success.
+        model.addAttribute("fileOpened", fileOpened);
+        model.addAttribute("savefileOpened", savefileOpened);
+
+        // Tells the frontend the chosen file couldn't be opened as a valid save
+        model.addAttribute("savefileError", savefileError);
+
         return "start";
     }
 
     @PostMapping("/save")
     public String saveRuleset() {
         boolean saved = rulesetLoader.saveRuleset();
+        if (saved) {
+            // Saving also "closes" the ruleset: ruleset and save file sessions
+            // are mutually exclusive, and this is how a ruleset session ends.
+            // The parsed data stays in memory, but the menus grey out.
+            activeSessionData.setRulesetPath(null);
+            // Clear any pending mismatch warning: with no ruleset open, the
+            // modal's restore/replace actions would have no file to work on.
+            activeSessionData.setSizeMismatchWarning(false);
+        }
         return saved ? "redirect:/start" : "redirect:/start?saveError=true";
     }
 

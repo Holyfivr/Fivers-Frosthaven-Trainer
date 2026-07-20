@@ -10,8 +10,8 @@ The same information is available inside the program under **More → Troublesho
 
 ## File couldn't be saved
 
-If the program reports that the file couldn't be saved, the write to `Base.ruleset` was refused or
-aborted. Common reasons:
+If the program reports that the file couldn't be saved, the write to `Base.ruleset` (or your
+savefile) was refused or aborted. Common reasons:
 
 - **The game is running.** Frosthaven locks the ruleset file while it's open, so it can't be
   overwritten. Fully close the game, then save again.
@@ -59,6 +59,36 @@ To tell which one it is, close the program and launch Frosthaven:
 
 
 If both the file **and** your backup are unusable, see [Restore game files](#restore-game-files).
+
+---
+
+## Savefile edits aren't showing up in-game
+
+If you edited a savefile but the values are unchanged in-game, the game never read your edited
+file. Common reasons:
+
+- **The game was running.** Frosthaven keeps the campaign in memory and autosaves constantly, so
+  anything you edit while it runs gets overwritten. Fully close the game before editing and saving.
+- **Steam Cloud restored the old save.** If cloud sync thinks its copy is newer, it overwrites your
+  edited file when the game launches. To turn it off: in Steam, right-click
+  **Frosthaven → Properties → General** and uncheck **"Keep games saves in the Steam Cloud"**.
+  You can re-enable it later.
+- **The game loaded a different file.** The campaign folder contains many `AutoSave_<number>.dat`
+  files and the game loads the most recent one. Make sure you edited the newest save.
+- **A stray backup copy in the campaign folder.** Any extra `.dat` file in the campaign folder can
+  get picked up by the game instead of your edited save. Keep manual backup copies outside the
+  folder, or use a different file extension. (This program's automatic backups use `.bak` for
+  exactly this reason.)
+
+**Restoring a savefile:** the automatic backup is created next to the save the first time you open
+it, named `<savename>.dat.bak`. To restore it, close the game, delete the broken `.dat` file, and
+remove the `.bak` ending from the backup's filename.
+
+Your savefiles are stored in:
+
+```text
+...\AppData\LocalLow\Snapshot Games Inc\Frosthaven\Steam\<steam_id>\Campaign\<party_name>
+```
 
 ---
 

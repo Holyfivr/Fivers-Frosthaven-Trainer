@@ -2,7 +2,7 @@
 /* ------- MENU FRAME ------- */
 .menu-bar {
     background: var(--color-light-blue);
-    border-bottom: 1px solid #bbb;
+    border-bottom: 1px solid #bbbbbb;
     padding: 0;
     margin: 0;
     font-family: sans-serif;
@@ -37,7 +37,7 @@
     padding: 4px 0;
     margin: 0;
     background: var(--color-cream);
-    border: 1px solid #ccc;
+    border: 1px solid #cccccc;
     border-top: none;
     position: absolute;
     top: 100%;
@@ -58,8 +58,8 @@
 }
 
 .dropdown li:hover {
-    border: 1px solid black;
-    box-shadow: 1px 1px 2px black;
+    border: 1px solid var(--color-black);
+    box-shadow: 1px 1px 2px var(--color-black);
     border-radius: 3px;
     color: var(--color-cream);
     background-color: var(--color-light-blue);
@@ -94,7 +94,7 @@
 }
 
 .dropdown a:hover, .dropdown button:hover {
-    color: #ffffff;
+    color: var(--color-white);
 }
 
 .dropdown div {
@@ -116,21 +116,21 @@
 .inactive {
     pointer-events: none;
     background-color: var(--color-light-blue);
-    color: rgba(109, 147, 157, 0.596);
+    color: var(--color-inactive);
     
 }
 .inactive-dropdown {
     pointer-events: none;
     background-color: var(--color-cream);
-    color: rgba(129, 154, 161, 0.326) !important;
+    color: var(--color-inactive-dropdown) !important;
     
 }
 .inactive a {
-    color: rgba(109, 147, 157, 0.596);
+    color: var(--color-inactive);
 }
 
 .inactive-dropdown a {
-    color: rgba(129, 154, 161, 0.326);
+    color: var(--color-inactive-dropdown);
 }
 
 #allItemsSeparator {

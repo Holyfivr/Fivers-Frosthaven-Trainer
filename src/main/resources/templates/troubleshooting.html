@@ -25,7 +25,7 @@
                 <div class="accordion-panel">
                     <div class="accordion-panel-inner">
                         <p>If the program reports that the file couldn't be saved, it means the write to
-                            <b>Base.ruleset</b> was refused or aborted. Common reasons:</p>
+                            <b>Base.ruleset</b> (or your savefile) was refused or aborted. Common reasons:</p>
                         <ul>
                             <li style="margin-bottom: 10px;">
                                 <b>The game is running.</b> Frosthaven locks the ruleset file while it's open, so it
@@ -169,6 +169,49 @@
                         <p>
                             Your ruleset files are stored in:<br>
                             <b>...\Steam\steamapps\common\Frosthaven\Frosthaven_Data\StreamingAssets\Rulebase</b>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================ SAVEFILE EDITS NOT SHOWING ============================ -->
+            <div class="accordion" id="savefile-edits-missing">
+                <button class="accordion-header" type="button">Savefile edits aren't showing up in-game</button>
+                <div class="accordion-panel">
+                    <div class="accordion-panel-inner">
+                        <p>
+                            If you edited a savefile but the values are unchanged in-game, the game never read your
+                            edited file. Common reasons:
+                        </p>
+                        <ul>
+                            <li style="margin-bottom: 10px;">
+                                <b>The game was running.</b> Frosthaven keeps the campaign in memory and autosaves
+                                constantly, so anything you edit while it runs gets overwritten. Fully close the game
+                                before editing and saving.
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                <b>Steam Cloud restored the old save.</b> If cloud sync thinks its copy is newer, it
+                                overwrites your edited file when the game launches. To turn it off: in Steam,
+                                right-click <b>Frosthaven</b> &rarr; <b>Properties</b> &rarr; <b>General</b> &rarr;
+                                uncheck <b>"Keep games saves in the Steam Cloud"</b>. You can re-enable it later.
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                <b>The game loaded a different file.</b> The campaign folder contains many
+                                <b>AutoSave_&lt;number&gt;.dat</b> files and the game loads the most recent one.
+                                Make sure you edited the newest save.
+                            </li>
+                            <li>
+                                <b>A stray backup copy in the campaign folder.</b> Any extra <b>.dat</b> file in the
+                                campaign folder can get picked up by the game instead of your edited save. Keep manual
+                                backup copies outside the folder, or use a different file extension. (This program's
+                                automatic backups use <b>.bak</b> for exactly this reason.)
+                            </li>
+                        </ul>
+                        <p>
+                            <b>Restoring a savefile:</b> the automatic backup is created next to the save the first
+                            time you open it, named <b>&lt;savename&gt;.dat.bak</b>. To restore it, close the game,
+                            delete the broken <b>.dat</b> file, and remove the <b>.bak</b> ending from the backup's
+                            filename.
                         </p>
                     </div>
                 </div>

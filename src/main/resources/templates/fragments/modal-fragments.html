@@ -139,6 +139,19 @@
         </template>
 
 
+        <!------------------------------------------------------ SAVEFILE OPEN ERROR ------------------------------------------------------------->
+        <template id="savefileErrorTemplate">
+            <div style="text-align: center;">
+                <h2 style="color: red;">Couldn't open save file</h2>
+                <p>That file couldn't be opened as a Frosthaven save.<br>
+                    Make sure you picked a campaign <b>AutoSave_&lt;number&gt;.dat</b> file and that
+                    the game isn't currently using it.</p>
+                <br>
+                <a class="btn" href="#" onclick="closeModal()">Close</a>
+            </div>
+        </template>
+
+
         <!------------------------------------------------------ SIZE MISMATCH WARNING ------------------------------------------------------------->
         <template id="sizeMismatchTemplate">
             <div style="text-align: center;">

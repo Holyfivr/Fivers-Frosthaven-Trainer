@@ -7,8 +7,15 @@
         File
         <ul class="dropdown">
             <!-- sends request to open file endpoint and registers a pending action to notify user when file is loaded -->
-            <li><a id="openRulesetLink" th:href="@{/open-file}" onclick="registerPendingAction('fileLoaded')">
+            <!-- Ruleset and savefile sessions are mutually exclusive: while one is open, -->
+            <!-- opening the other is disabled until the current one is saved/closed.     -->
+            <li th:classappend="${saveFileLoaded} ? 'inactive-dropdown'"><a id="openRulesetLink" th:href="@{/open-file}"
+                    onclick="registerPendingAction('fileLoaded')">
                     <div>Open Ruleset</div>
+                </a></li>
+            <li th:classappend="${rulesetLoaded} ? 'inactive-dropdown'"><a id="openSavefileLink"
+                    th:href="@{/open-savefile}" onclick="registerPendingAction('savefileLoaded')">
+                    <div>Open Savefile</div>
                 </a></li>
             <hr>
             <!-- These options are inactive unless a file is loaded -->
@@ -24,7 +31,8 @@
                     </button>
                 </form>
             </li>
-            <li th:classappend="${!rulesetLoaded} ? 'inactive-dropdown'"><a id="saveRuleset"
+            <!-- Also disabled while a save file is open, to avoid confusion about which file is being edited -->
+            <li th:classappend="${!rulesetLoaded or saveFileLoaded} ? 'inactive-dropdown'"><a id="saveRuleset"
                     onclick="openModal('saveTemplate')">
                     <div>Save Ruleset</div>
                 </a></li>

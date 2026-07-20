@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/how.css">
     <script src="../js/script.js" type="text/javascript" defer></script>
     <script src="../js/copy.js" type="text/javascript" defer></script>
 
@@ -14,54 +15,73 @@
 <body>
 
     <div id="aboutContainer">
-        <canvas id="c" width="1400" height="350" style="margin-top: -20px;"></canvas>
+        <canvas id="c" width="1400" height="350" style="margin-top: -70px;"></canvas>
         <script src="../js/animatedtextbg.js"></script>
 
-        <div style="margin: 0 auto; margin-top: -50px; text-align: left; width:700px;">
-            <center><b><span style="color: red;">
-                        <ul style="text-align: left; display: inline-block; list-style: disc;">
-
-                            <li style="margin-bottom: 10px;">
-                                Editing the ruleset file will affect all existing campaigns.
-                            </li>
-                            <li>
-                                The tool is only intended to be used for single player. I do not know the effects of
-                                using it in multiplayer.
-                            </li>
-
-                        </ul>
-                    </span></b></center>
-            <br>
-
-            Start by opening your Frosthaven ruleset file using the <b>"Open Ruleset"</b> option in the menu
-            bar.
-            Navigate to the folder where your Frosthaven ruleset files are stored, which should be in:
-            <br>
-            <b>...\Steam\steamapps\common\Frosthaven\Frosthaven_Data\StreamingAssets\Rulebase</b>
+        <div id="howWarning" style="margin-top: -70px;">
+            Ruleset changes affect ALL campaigns.<br>
+            Savefile changes only affect the save you open.
         </div>
-        <br>
-        <div style="margin: 0 auto; text-align: left; width:700px;">
-            When you load the ruleset file for the first time, a backup of the original file will be created
-            automatically.
-            This backup can be restored at any time using the <b>"File" &rarr; "Restore Original"</b> option in the menu
-            bar.
-            <br>
-            To create a manual backup of your current ruleset file, use the <b>"File" &rarr; "Create Backup"</b> option in
-            the menu bar,
-            select a name for the backup, and it will be saved in the same folder as the original ruleset file.
-            <br><br>
-            Don't forget to save your changes before closing the program, using the <b>"File" &rarr; "Save Ruleset"</b>
-            option in the menu bar.<br><br>
-            <center>
-                If you want to check out the source code or get in touch, here's the link to the GitHub repo: <b><a
-                        href="#" class="btn" style="border: none;"
-                        onclick="copyToClipboard('https://github.com/Holyfivr/Fivers-Frosthaven-Trainer/')">https://github.com/Holyfivr/Fivers-Frosthaven-Trainer/</a></b>
-                (click the link to copy it to your clipboard).
-            </center>
+
+        <div id="editorGrid">
+
+            <div class="editor-card">
+                <h3>Ruleset Editor</h3>
+                <p>
+                    Edits the game's rules: characters, items and ability cards.
+                </p>
+                <p>
+                    Open your ruleset with <b>File &rarr; Open Ruleset</b>.
+                    The file is called <b>Base.ruleset</b> and is stored in:
+                </p>
+                <div class="path-box">...\Steam\steamapps\common\Frosthaven\Frosthaven_Data\StreamingAssets\Rulebase</div>
+                <p>
+                    Make your changes in the menus above, then save with
+                    <b>File &rarr; Save Ruleset</b>. Saving also closes the ruleset.
+                </p>
+            </div>
+
+            <div class="editor-card">
+                <h3>Savefile Editor</h3>
+                <p>
+                    Edits one campaign save: gold and materials for each character,
+                    plus the town's herbs and stats (morale, prosperity, soldiers, defense).
+                </p>
+                <p>
+                    Open a save with <b>File &rarr; Open Savefile</b>.
+                    The saves are called <b>AutoSave_&lt;number&gt;.dat</b> and are stored in:
+                </p>
+                <div class="path-box">...\AppData\LocalLow\Snapshot Games Inc\Frosthaven\Steam\&lt;steam_id&gt;\Campaign\&lt;party_name&gt;</div>
+                <p>
+                    Edit the values in the town and character tabs, then click <b>Save &amp; Close</b>.
+                    Close the game before saving.
+                </p>
+            </div>
+
         </div>
-        <br>
 
+        <div class="how-note">
+            <h4>Backups</h4>
+            The first time you open a file, a backup of the original is created automatically:
+            the ruleset backup goes in the <b>"original ruleset"</b> folder and can be restored with
+            <b>File &rarr; Restore Original</b>; the savefile backup is placed next to the save file
+            with a <b>.bak</b> extension. You can also create manual ruleset backups with
+            <b>File &rarr; Create Backup</b>.
+        </div>
 
+        <div class="how-note">
+            <h4>One file at a time</h4>
+            Only one file can be open at a time. Save or close the current ruleset/savefile
+            before opening the other. If something doesn't work, check
+            <b>More &rarr; Troubleshooting</b>.
+        </div>
+
+        <div id="githubNote">
+            If you want to check out the source code or get in touch, here's the link to the GitHub repo: <b><a
+                    href="#" class="btn" style="border: none;"
+                    onclick="copyToClipboard('https://github.com/Holyfivr/Fivers-Frosthaven-Trainer/')">https://github.com/Holyfivr/Fivers-Frosthaven-Trainer/</a></b>
+            (click the link to copy it to your clipboard).
+        </div>
 
     </div>
 </body>

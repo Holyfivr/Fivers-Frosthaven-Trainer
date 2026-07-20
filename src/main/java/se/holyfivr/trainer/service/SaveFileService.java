@@ -1,0 +1,148 @@
+package se.holyfivr.trainer.service;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.stereotype.Service;
+
+import se.holyfivr.trainer.core.ActiveSessionData;
+import se.holyfivr.trainer.core.parser.SaveFileParser;
+import se.holyfivr.trainer.model.SaveCharacter;
+import se.holyfivr.trainer.model.SaveField;
+
+/* ===================================== SAVE FILE SERVICE ===================================== */
+/*                                                                                               */
+/* Handles opening, editing and saving Frosthaven save files (.dat).                             */
+/*                                                                                               */
+/* On open:  a one-time backup copy is created next to the save file (with a .bak extension,     */
+/*           NOT .dat — the game scans the campaign folder and would happily load a stray .dat   */
+/*           backup instead of the real save). The file is then read into memory and parsed.     */
+/*                                                                                               */
+/* On save:  each submitted value is written back as a same-size, in-place 4-byte overwrite at   */
+/*           the exact offset recorded during parsing. Only offsets that were found by the       */
+/*           parser can be written to, so the client can never write to arbitrary positions.     */
+/* ============================================================================================= */
+
+@Service
+public class SaveFileService {
+
+    /* Outcome of an open attempt, so the controller can react appropriately:      */
+    /* OPENED = success, CANCELLED = user closed the chooser (stay silent),         */
+    /* FAILED = a file was chosen but couldn't be opened as a valid save.           */
+    public enum OpenResult { OPENED, CANCELLED, FAILED }
+
+    private final ActiveSessionData activeSessionData;
+    private final FileService fileService;
+    private final SaveFileParser saveFileParser;
+
+    public SaveFileService(ActiveSessionData activeSessionData, FileService fileService,
+            SaveFileParser saveFileParser) {
+        this.activeSessionData = activeSessionData;
+        this.fileService = fileService;
+        this.saveFileParser = saveFileParser;
+    }
+
+    /* ======================================================================== */
+    /* Opens the file chooser for save files (.dat), creates a backup, reads    */
+    /* the file into memory and parses the character records into the session.  */
+    /* Returns an OpenResult so the frontend can tell success, a plain cancel,   */
+    /* and a genuine failure apart (and not show a false toast on cancel).       */
+    /* ======================================================================== */
+    public OpenResult openSaveFileWithDialog() {
+        // Ruleset and save file sessions are mutually exclusive. The menu option
+        // is greyed out while a ruleset is open; this guard backs that up.
+        if (activeSessionData.getRulesetPath() != null) {
+            return OpenResult.CANCELLED;
+        }
+        File selectedFile = fileService.chooseFile("Frosthaven Save Files", "*.dat", "lastSaveDir");
+        if (selectedFile == null) {
+            return OpenResult.CANCELLED;
+        }
+        try {
+            Path savePath = selectedFile.toPath();
+
+            byte[] saveBytes = Files.readAllBytes(savePath);
+            List<SaveCharacter> characters = saveFileParser.parse(saveBytes);
+
+            // No town or character records means this isn't a Frosthaven campaign
+            // save (or the format changed). Treat it as a failed open rather than
+            // showing an empty editor, and don't back up a file we can't edit.
+            if (characters.isEmpty()) {
+                activeSessionData.clearSaveFile();
+                return OpenResult.FAILED;
+            }
+
+            // One-time backup next to the save file. Uses .bak so the game
+            // never mistakes the backup for a real save.
+            Path backupPath = savePath.resolveSibling(selectedFile.getName() + ".bak");
+            if (Files.notExists(backupPath)) {
+                Files.copy(savePath, backupPath);
+            }
+
+            activeSessionData.setSaveFilePath(savePath);
+            activeSessionData.setSaveFileBytes(saveBytes);
+            activeSessionData.setSaveCharacters(characters);
+            return OpenResult.OPENED;
+        } catch (IOException e) {
+            e.printStackTrace();
+            activeSessionData.clearSaveFile();
+            return OpenResult.FAILED;
+        }
+    }
+
+    /* ======================================================================== */
+    /* Applies the submitted values and writes the save file back to disk.      */
+    /* The form posts inputs named "field_<offset>". We only look up offsets    */
+    /* that the parser found, patch each value in place in the in-memory copy,  */
+    /* and write the whole (same-size) file back.                               */
+    /* Returns false if anything goes wrong (e.g. the game holds a file lock),  */
+    /* in which case the session is kept open so the user can try again.        */
+    /* ======================================================================== */
+    public boolean saveAndClose(Map<String, String> submittedValues) {
+        byte[] saveBytes = activeSessionData.getSaveFileBytes();
+        Path savePath = activeSessionData.getSaveFilePath();
+        if (saveBytes == null || savePath == null) {
+            return false;
+        }
+        try {
+            for (SaveCharacter character : activeSessionData.getSaveCharacters()) {
+                for (SaveField field : character.getFields()) {
+                    String submitted = submittedValues.get("field_" + field.getOffset());
+                    if (submitted == null || submitted.isBlank()) {
+                        continue;
+                    }
+                    // Clamp to the field's allowed range (0 .. max), matching
+                    // the limits enforced by the form inputs
+                    int value = Integer.parseInt(submitted.trim());
+                    value = Math.clamp(value, 0, field.getMax());
+                    writeIntLE(saveBytes, field.getOffset(), value);
+                }
+            }
+            Files.write(savePath, saveBytes);
+            activeSessionData.clearSaveFile();
+            return true;
+        } catch (IOException | NumberFormatException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /* ======================================================================== */
+    /* Closes the save file session without writing anything to disk.           */
+    /* ======================================================================== */
+    public void closeSaveFile() {
+        activeSessionData.clearSaveFile();
+    }
+
+    // Helper: writes a 4-byte little-endian int at the given offset
+    private void writeIntLE(byte[] data, int offset, int value) {
+        data[offset] = (byte) (value & 0xff);
+        data[offset + 1] = (byte) ((value >> 8) & 0xff);
+        data[offset + 2] = (byte) ((value >> 16) & 0xff);
+        data[offset + 3] = (byte) ((value >> 24) & 0xff);
+    }
+}

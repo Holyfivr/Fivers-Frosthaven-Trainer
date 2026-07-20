@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import se.holyfivr.trainer.model.AbilityCard;
 import se.holyfivr.trainer.model.Item;
 import se.holyfivr.trainer.model.PlayerCharacter;
+import se.holyfivr.trainer.model.SaveCharacter;
 
 /* ======================================================================== */
 /* This class is used to store all data that is relevant for the current    */
@@ -51,6 +52,51 @@ public class ActiveSessionData {
 
     public void setSizeMismatchWarning(boolean sizeMismatchWarning) {
         this.sizeMismatchWarning = sizeMismatchWarning;
+    }
+
+    /* ========================================================================= */
+    /* SAVE FILE SESSION (.dat editing)                                          */
+    /* Holds the currently opened save file: its path, the raw bytes, and the    */
+    /* parsed character records. While a save file is open, ruleset saving is    */
+    /* disabled in the menu to avoid confusion about which file is being edited. */
+    /* ========================================================================= */
+    private Path saveFilePath;
+    private byte[] saveFileBytes;
+    private final List<SaveCharacter> saveCharacters = new ArrayList<>();
+
+    public Path getSaveFilePath() {
+        return saveFilePath;
+    }
+
+    public void setSaveFilePath(Path saveFilePath) {
+        this.saveFilePath = saveFilePath;
+    }
+
+    public byte[] getSaveFileBytes() {
+        return saveFileBytes;
+    }
+
+    public void setSaveFileBytes(byte[] saveFileBytes) {
+        this.saveFileBytes = saveFileBytes;
+    }
+
+    public List<SaveCharacter> getSaveCharacters() {
+        return saveCharacters;
+    }
+
+    public void setSaveCharacters(List<SaveCharacter> characters) {
+        saveCharacters.clear();
+        saveCharacters.addAll(characters);
+    }
+
+    public boolean isSaveFileLoaded() {
+        return saveFilePath != null;
+    }
+
+    public void clearSaveFile() {
+        saveFilePath = null;
+        saveFileBytes = null;
+        saveCharacters.clear();
     }
 
     /* ========================================== */

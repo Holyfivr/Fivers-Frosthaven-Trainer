@@ -14,6 +14,19 @@ body {
     --color-mid-blue: #234C6A;
     --color-light-blue: #456882;
     --color-cream: #E3E3E3;
+
+    /* Shared neutrals and accents */
+    --color-white: #FFFFFF;
+    --color-black: #000000;
+    --color-red: #FF0000;
+
+    /* Drop shadows */
+    --color-shadow: rgba(0, 0, 0, 0.562);
+    --color-shadow-soft: rgba(0, 0, 0, 0.4);
+
+    /* Disabled/inactive menu text */
+    --color-inactive: rgba(109, 147, 157, 0.596);
+    --color-inactive-dropdown: rgba(129, 154, 161, 0.326);
 }
 
 /* Iframe */
@@ -34,7 +47,7 @@ body {
     height: 25px;
     text-align: center;
     box-shadow: 0px -4px 10px var(--color-light-blue);
-    border-top: 1px solid rgb(255, 255, 255);
+    border-top: 1px solid var(--color-white);
     padding-top: 10px;
     color: var(--color-cream);
 }
@@ -84,7 +97,7 @@ body {
 }
 
 .warning-btn:hover {
-    background-color: red;
+    background-color: var(--color-red);
     color: var(--color-cream);
 }
 
@@ -101,7 +114,7 @@ body {
     margin-bottom: 20px;
     text-align: center;
     flex-direction: column;
-    box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.562);
+    box-shadow: 0px 4px 5px var(--color-shadow);
     color: var(--color-mid-blue);
 
 }
@@ -133,7 +146,7 @@ body {
     height: fit-content;
     z-index: 1000;
     padding: 10px;
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 10px 15px var(--color-shadow-soft);
     border: 2px solid var(--color-cream);
 }
 

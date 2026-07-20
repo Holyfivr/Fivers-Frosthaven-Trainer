@@ -69,7 +69,7 @@
     overflow: hidden;
     max-height: 0;
     transition: max-height 0.3s ease;
-    background-color: #fff;
+    background-color: var(--color-white);
     border-radius: 0 0 4px 4px;
 }
 
@@ -95,7 +95,7 @@
 }
 
 .ts-note {
-    color: red;
+    color: var(--color-red);
 }
 
 .ts-footer {

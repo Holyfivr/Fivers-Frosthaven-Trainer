@@ -14,14 +14,19 @@
 
 <body>
 
-    <!-- Hidden flag to communicate if file was successfully loaded to JS -->
-    <input type="hidden" id="rulesetLoadedCheck" th:value="${rulesetLoaded}" />
+    <!-- Hidden flags: a ruleset/save file was JUST opened (not merely already open). -->
+    <!-- Used for the success toasts, so cancelling the file chooser shows nothing.   -->
+    <input type="hidden" id="fileOpenedCheck" th:value="${fileOpened}" />
+    <input type="hidden" id="savefileOpenedCheck" th:value="${savefileOpened}" />
 
     <!-- Hidden flag: opened file size differs from the original backup -->
     <input type="hidden" id="sizeMismatchCheck" th:value="${showSizeMismatchModal}" />
 
     <!-- Hidden flag: the last save attempt failed -->
     <input type="hidden" id="saveErrorCheck" th:value="${saveError}" />
+
+    <!-- Hidden flag: a chosen file couldn't be opened as a valid save -->
+    <input type="hidden" id="savefileErrorCheck" th:value="${savefileError}" />
 
     <nav class="menu-bar">
         <ul class="menu">
@@ -60,7 +65,8 @@
             onclick="copyToClipboard('https://github.com/Holyfivr/Fivers-Frosthaven-Trainer/')">https://github.com/Holyfivr/Fivers-Frosthaven-Trainer/</a>
     </div>.
     </div>
-    <iframe id="contentFrame" name="contentFrame" title="contentFrame" th:src="@{/how}">
+    <!-- While a save file is open, the contentframe shows the save editor instead of the default page -->
+    <iframe id="contentFrame" name="contentFrame" title="contentFrame" th:src="${saveFileLoaded} ? @{/savefile} : @{/how}">
 
 </body>
 

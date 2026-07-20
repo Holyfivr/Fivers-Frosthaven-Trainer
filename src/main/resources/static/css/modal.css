@@ -18,7 +18,7 @@
     border: 2px solid var(--color-light-blue);
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 10px 15px var(--color-shadow-soft);
     text-align: center;
     min-width: 300px;
     position: relative;

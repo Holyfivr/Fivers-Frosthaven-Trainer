@@ -104,6 +104,10 @@
                         <td class="object-attribute-td">Attack: </td>
                         <td><input type="number" name="attack" th:value="${item.attack}" max="99" min="1"></td>
                     </tr>
+                    <tr th:if="${item.damage != null and item.damage != '0'}">
+                        <td class="object-attribute-td">Damage: </td>
+                        <td><input type="number" name="damage" th:value="${item.damage}" max="99" min="1"></td>
+                    </tr>
                     <tr th:if="${item.range != null and item.range != '0' and item.range != '-1'}">
                         <td class="object-attribute-td">Range: </td>
                         <td><input type="number" name="range" th:value="${item.range}" max="99" min="1"></td>
@@ -111,15 +115,14 @@
                     <tr th:if="${item.target != null}">
                         <td class="object-attribute-td">Target: </td>
                         <td>
-                            <div data-target-aoe>
-                                <input type="hidden" name="target" data-target-aoe-hidden th:value="${item.target}">
-                                <input th:if="${item.target == '-1'}" type="text" data-target-aoe-number th:value="AoE"
-                                    disabled>
-                                <input th:unless="${item.target == '-1'}" type="number" data-target-aoe-number
-                                    th:value="${item.target}" max="99" min="1">
-
-
-                            </div>
+                            <!-- AoE items (target -1): read-only label; submit -1 unchanged via a hidden field -->
+                            <span th:if="${item.target == '-1'}">
+                                <input type="hidden" name="target" value="-1">
+                                <input type="text" value="AoE" disabled>
+                            </span>
+                            <!-- Normal items: the number input carries name="target", so edits actually submit -->
+                            <input th:unless="${item.target == '-1'}" type="number" name="target"
+                                th:value="${item.target}" max="99" min="1">
                         </td>
                     </tr>
                     <tr th:if="${item.shield != null}">

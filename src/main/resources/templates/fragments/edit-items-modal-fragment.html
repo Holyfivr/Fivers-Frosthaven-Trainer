@@ -88,6 +88,37 @@
                             </select>
                         </div>
 
+                        <!-- Only affects items with a single, non-'Any' element; 'Any'/array items are left alone -->
+                        <div class="modal-field">
+                            <label for="consumesInput">Consumes</label>
+                            <select name="setConsumes" id="consumesInput">
+                                <option value="Unchanged">Unchanged</option>
+                                <option value="Air">Air</option>
+                                <option value="Dark">Dark</option>
+                                <option value="Earth">Earth</option>
+                                <option value="Fire">Fire</option>
+                                <option value="Ice">Ice</option>
+                                <option value="Light">Light</option>
+                            </select>
+                        </div>
+
+                        <!-- Mass infuse doesn't actually have any working targets,
+                        since we intentionally leave out 'Any', and any arrays.
+                        Leaving it for future consideration if I rework the way
+                        I parse these. -->
+<!--                         <div class="modal-field">
+                            <label for="infuseInput">Infuse</label>
+                            <select name="setInfuse" id="infuseInput">
+                                <option value="Unchanged">Unchanged</option>
+                                <option value="Air">Air</option>
+                                <option value="Dark">Dark</option>
+                                <option value="Earth">Earth</option>
+                                <option value="Fire">Fire</option>
+                                <option value="Ice">Ice</option>
+                                <option value="Light">Light</option>
+                            </select>
+                        </div> -->
+
                     </td>
 
                 </tr>

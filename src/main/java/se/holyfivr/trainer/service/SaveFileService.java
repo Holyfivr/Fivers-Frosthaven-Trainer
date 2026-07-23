@@ -10,6 +10,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import se.holyfivr.trainer.core.ActiveSessionData;
+import se.holyfivr.trainer.core.SaveEnhancementEditor;
 import se.holyfivr.trainer.core.parser.SaveFileParser;
 import se.holyfivr.trainer.model.SaveCharacter;
 import se.holyfivr.trainer.model.SaveField;
@@ -38,12 +39,14 @@ public class SaveFileService {
     private final ActiveSessionData activeSessionData;
     private final FileService fileService;
     private final SaveFileParser saveFileParser;
+    private final SaveEnhancementEditor enhancementEditor;
 
     public SaveFileService(ActiveSessionData activeSessionData, FileService fileService,
-            SaveFileParser saveFileParser) {
+            SaveFileParser saveFileParser, SaveEnhancementEditor enhancementEditor) {
         this.activeSessionData = activeSessionData;
         this.fileService = fileService;
         this.saveFileParser = saveFileParser;
+        this.enhancementEditor = enhancementEditor;
     }
 
     /* ======================================================================== */
@@ -86,6 +89,7 @@ public class SaveFileService {
             activeSessionData.setSaveFilePath(savePath);
             activeSessionData.setSaveFileBytes(saveBytes);
             activeSessionData.setSaveCharacters(characters);
+            activeSessionData.setEnhancementGroups(enhancementEditor.parseGroups(saveBytes));
             return OpenResult.OPENED;
         } catch (IOException e) {
             e.printStackTrace();
@@ -125,10 +129,34 @@ public class SaveFileService {
             Files.write(savePath, saveBytes);
             activeSessionData.clearSaveFile();
             return true;
-        } catch (IOException | NumberFormatException e) {
+        } catch (Exception e) {
+            // IOException (locked file), NumberFormatException (bad submitted value), or any
+            // unexpected RuntimeException (e.g. an out-of-range offset) all fail the save
+            // gracefully via the error modal rather than surfacing a 500.
             e.printStackTrace();
             return false;
         }
+    }
+
+    /* ======================================================================== */
+    /* Removes all of one class's card enhancements from the in-memory save.    */
+    /* Enhancements are class-persistent, so this is the "reset a character's    */
+    /* enhancements" action. The change is applied to the in-memory bytes only  */
+    /* and persisted on Save & Close (consistent with the resource edits).      */
+    /* Because a wipe shifts byte offsets, the save is fully re-parsed so the    */
+    /* resource fields and enhancement summary stay in sync with the new bytes. */
+    /* Returns false if there's no open save.                                   */
+    /* ======================================================================== */
+    public boolean resetEnhancements(String className) {
+        byte[] saveBytes = activeSessionData.getSaveFileBytes();
+        if (saveBytes == null || className == null || className.isBlank()) {
+            return false;
+        }
+        byte[] wiped = enhancementEditor.wipeClass(saveBytes, className);
+        activeSessionData.setSaveFileBytes(wiped);
+        activeSessionData.setSaveCharacters(saveFileParser.parse(wiped));
+        activeSessionData.setEnhancementGroups(enhancementEditor.parseGroups(wiped));
+        return true;
     }
 
     /* ======================================================================== */

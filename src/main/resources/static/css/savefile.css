@@ -109,6 +109,39 @@
     margin-top: 10px;
 }
 
+/* Enhancement reset tab */
+.enh-title {
+    margin: 8px 0 2px 0;
+}
+
+.enh-table {
+    margin: 8px auto 0 auto;
+    border-collapse: collapse;
+}
+
+.enh-table td {
+    padding: 4px 12px;
+    vertical-align: middle;
+}
+
+.enh-class {
+    text-align: right;
+    font-weight: bold;
+}
+
+.enh-count {
+    text-align: left;
+    font-size: 13px;
+    color: var(--color-light-blue);
+}
+
+/* Armed state of a reset link (first click), before the confirming second click */
+.enh-table .reset-link.armed {
+    background-color: var(--color-red);
+    color: var(--color-cream);
+    border-color: var(--color-red);
+}
+
 /* Footer note */
 #savefileNote {
     margin-top: 10px;

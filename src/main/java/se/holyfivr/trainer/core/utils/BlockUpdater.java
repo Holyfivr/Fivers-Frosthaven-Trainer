@@ -197,14 +197,20 @@ public class BlockUpdater {
             currentBlock = updateAttribute(currentBlock, ItemAttribute.MOVE           .get(), null, item.getMove());
             currentBlock = updateAttribute(currentBlock, ItemAttribute.PULL           .get(), null, item.getPull());
             currentBlock = updateAttribute(currentBlock, ItemAttribute.PUSH           .get(), null, item.getPush());
-            currentBlock = updateAttribute(currentBlock, ItemAttribute.JUMP           .get(), null, item.getJump());
+            currentBlock = updateAttribute(currentBlock, ItemAttribute.JUMP           .get(), item.getJump());
             currentBlock = updateAttribute(currentBlock, ItemAttribute.OMOVE          .get(), null, item.getOMove());
             currentBlock = updateAttribute(currentBlock, ItemAttribute.AMOVE          .get(), null, item.getAMove());
             currentBlock = updateAttribute(currentBlock, ItemAttribute.SHIELD_VALUE   .get(), null, item.getShieldValue());
             currentBlock = updateAttribute(currentBlock, ItemAttribute.PROSPERITY_REQ .get(), null, item.getProsperReq());
             currentBlock = updateAttribute(currentBlock, ItemAttribute.ITEM_NAME      .get(), null, item.getItemName());
             currentBlock = updateAttribute(currentBlock, ItemAttribute.COST           .get(), null, item.getCost()); 
-            currentBlock = updateAttribute(currentBlock, ItemAttribute.USAGE          .get(), null, item.getUsage());
+            currentBlock = updateAttribute(currentBlock, ItemAttribute.USAGE          .get(), item.getUsage());
+            // Item Infuse/Consumes are single-line word values (unlike card Consumes, which is the
+            // nested Elements structure). The item UI disables the select for 'Any' and array
+            // values, so those arrive as null here and the word updater no-ops on them, leaving
+            // them untouched. Only single non-'Any' elements (all bare in the ruleset) are written.
+            currentBlock = updateAttribute(currentBlock, ItemAttribute.INFUSE         .get(), item.getInfuse());
+            currentBlock = updateAttribute(currentBlock, ItemAttribute.CONSUMES       .get(), item.getConsumes());
             currentBlock = updateAttribute(currentBlock, ItemAttribute.RARITY         .get(), null, item.getRarity());
             currentBlock = updateAttribute(currentBlock, ItemAttribute.TOTAL_IN_GAME  .get(), null, item.getTotalInGame());
         }

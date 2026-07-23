@@ -54,7 +54,21 @@ public class SaveFileController {
         }
         model.addAttribute("saveFileName", activeSessionData.getSaveFilePath().getFileName().toString());
         model.addAttribute("saveCharacters", activeSessionData.getSaveCharacters());
+        model.addAttribute("enhancementGroups", activeSessionData.getEnhancementGroups());
         return "savefile";
+    }
+
+    /* ======================================================================== */
+    /* Removes one class's enhancements from the open save (in memory; written  */
+    /* on Save & Close). GET so it works as a plain link inside the editor       */
+    /* (JavaFX WebView blocks window.confirm, and this avoids a nested form).     */
+    /* Redirects back to the editor, which re-renders with refreshed field       */
+    /* offsets and the updated enhancement list.                                */
+    /* ======================================================================== */
+    @GetMapping("/reset-enhancements")
+    public String resetEnhancements(@RequestParam("className") String className) {
+        saveFileService.resetEnhancements(className);
+        return "redirect:/savefile";
     }
 
     /* ======================================================================== */

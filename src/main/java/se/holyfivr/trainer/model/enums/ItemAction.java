@@ -13,7 +13,9 @@ public enum ItemAction {
     SET_MOVEMENT      ("setMovement"),
     SET_XP            ("setXp"),
     SET_TARGET        ("setTarget"),
-    SET_PIERCE        ("setPierce");
+    SET_PIERCE        ("setPierce"),
+    SET_CONSUMES      ("setConsumes"),
+    SET_INFUSE        ("setInfuse");
 
     private final String action;
 

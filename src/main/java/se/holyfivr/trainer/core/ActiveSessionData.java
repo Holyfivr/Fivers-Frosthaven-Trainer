@@ -11,6 +11,7 @@ import java.util.Set;
 import org.springframework.stereotype.Service;
 
 import se.holyfivr.trainer.model.AbilityCard;
+import se.holyfivr.trainer.model.EnhancementGroup;
 import se.holyfivr.trainer.model.Item;
 import se.holyfivr.trainer.model.PlayerCharacter;
 import se.holyfivr.trainer.model.SaveCharacter;
@@ -63,6 +64,8 @@ public class ActiveSessionData {
     private Path saveFilePath;
     private byte[] saveFileBytes;
     private final List<SaveCharacter> saveCharacters = new ArrayList<>();
+    // Per-class enhancement summary of the open save (drives the reset buttons)
+    private final List<EnhancementGroup> enhancementGroups = new ArrayList<>();
 
     public Path getSaveFilePath() {
         return saveFilePath;
@@ -89,6 +92,15 @@ public class ActiveSessionData {
         saveCharacters.addAll(characters);
     }
 
+    public List<EnhancementGroup> getEnhancementGroups() {
+        return enhancementGroups;
+    }
+
+    public void setEnhancementGroups(List<EnhancementGroup> groups) {
+        enhancementGroups.clear();
+        enhancementGroups.addAll(groups);
+    }
+
     public boolean isSaveFileLoaded() {
         return saveFilePath != null;
     }
@@ -97,6 +109,7 @@ public class ActiveSessionData {
         saveFilePath = null;
         saveFileBytes = null;
         saveCharacters.clear();
+        enhancementGroups.clear();
     }
 
     /* ========================================== */

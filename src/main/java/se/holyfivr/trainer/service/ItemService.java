@@ -3,6 +3,7 @@ package se.holyfivr.trainer.service;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import se.holyfivr.trainer.model.enums.ItemAction;
@@ -46,29 +47,33 @@ public class ItemService {
     /* ================================================================= */
     public void saveItem(Item existingItem, Item item) {
 
-        if (existingItem != null) {
-            existingItem
-                    .setCost                 (item.getCost                 ())
-                    .setTotalInGame          (item.getTotalInGame          ())
-                    .setUsage                (item.getUsage                ())
-                    .setProsperReq           (item.getProsperReq           ())
-                    .setConsumes             (item.getConsumes             ())
-                    .setInfuse               (item.getInfuse               ())
-                    .setHeal                 (item.getHeal                 ())
-                    .setAttack               (item.getDamage               ())
-                    .setDamage               (item.getDamage               ())
-                    .setRange                (item.getRange                ())
-                    .setTarget               (item.getTarget               ())
-                    .setShield               (item.getShield               ())
-                    .setRetaliate            (item.getRetaliate            ())
-                    .setMove                 (item.getMove                 ())
-                    .setOMove                (item.getOMove                ())
-                    .setAMove                (item.getAMove                ())
-                    .setPull                 (item.getPull                 ())
-                    .setPush                 (item.getPush                 ())
-                    .setJump                 (item.getJump                 ())
-                    .setShieldValue          (item.getShieldValue          ());
+        if (existingItem == null) {
+            return;
         }
+        // Copy only the fields the form actually submitted (non-null). A hidden row or a
+        // disabled select (e.g. Infuse/Consumes set to 'Any', or an Attack field on a
+        // Damage-only item) arrives null and must NOT overwrite the existing value —
+        // previously that blanked those attributes on every save.
+        copy(item.getCost(),         existingItem::setCost);
+        copy(item.getTotalInGame(),  existingItem::setTotalInGame);
+        copy(item.getUsage(),        existingItem::setUsage);
+        copy(item.getProsperReq(),   existingItem::setProsperReq);
+        copy(item.getConsumes(),     existingItem::setConsumes);
+        copy(item.getInfuse(),       existingItem::setInfuse);
+        copy(item.getHeal(),         existingItem::setHeal);
+        copy(item.getAttack(),       existingItem::setAttack);
+        copy(item.getDamage(),       existingItem::setDamage);
+        copy(item.getRange(),        existingItem::setRange);
+        copy(item.getTarget(),       existingItem::setTarget);
+        copy(item.getShield(),       existingItem::setShield);
+        copy(item.getRetaliate(),    existingItem::setRetaliate);
+        copy(item.getMove(),         existingItem::setMove);
+        copy(item.getOMove(),        existingItem::setOMove);
+        copy(item.getAMove(),        existingItem::setAMove);
+        copy(item.getPull(),         existingItem::setPull);
+        copy(item.getPush(),         existingItem::setPush);
+        copy(item.getJump(),         existingItem::setJump);
+        copy(item.getShieldValue(),  existingItem::setShieldValue);
 
         /* This is disabled for the forseeable future, until I can implement */
         /* an "upgraded" version of the filler-banks that can use bytes from */
@@ -83,6 +88,14 @@ public class ItemService {
 
     }
 
+    /* Applies a submitted value only if it was actually present (non-null),   */
+    /* so hidden/disabled form fields leave the existing value untouched.      */
+    private void copy(String value, Consumer<String> setter) {
+        if (value != null) {
+            setter.accept(value);
+        }
+    }
+
     /* ============================================ */
     /* Updates all items with the received value.   */
     /*                                              */
@@ -94,7 +107,10 @@ public class ItemService {
     
     public void updateAllItems(String action, String value) {
 
-        if (value == null || value.isBlank() || value.equals("0")) {
+        // "Unchanged" is the default for the dropdown fields (Usage/Consumes/Infuse). Blank/0
+        // are the "leave alone" values for the numeric fields. Skip all of these so an untouched
+        // field never overwrites every item (important now that word values are actually written).
+        if (value == null || value.isBlank() || value.equals("0") || value.equalsIgnoreCase("Unchanged")) {
             return;
         }
 
@@ -118,7 +134,9 @@ public class ItemService {
             case SET_MOVEMENT           -> {updateAllItems(Item::getMove,        Item::setMove,          value);
                                             updateAllItems(Item::getOMove,       Item::setOMove,         value);
                                             updateAllItems(Item::getAMove,       Item::setAMove,         value);}
-            case SET_PROSPERITY_REQ     ->  activeSessionData.setProsperity(value); 
+            case SET_PROSPERITY_REQ     ->  activeSessionData.setProsperity(value);
+            case SET_CONSUMES           ->  updateAllElementItems(Item::getConsumes, Item::setConsumes, value);
+            case SET_INFUSE             ->  updateAllElementItems(Item::getInfuse,   Item::setInfuse,   value);
         }
     }
 
@@ -127,6 +145,23 @@ public class ItemService {
             if (getter.apply(item) != null) {
                 setter.accept(item, value);
             }
+        }
+    }
+
+    /* ============================================================================ */
+    /* Mass-updates element attributes (Consumes/Infuse), but only for items whose  */
+    /* current value is a single, non-'Any' element. Items set to 'Any' or an array */
+    /* are left untouched, because switching those to a specific element breaks the  */
+    /* item in-game (the single-card editor guards this with JS; here we enforce it   */
+    /* server-side so a mass edit can't corrupt them).                               */
+    /* ============================================================================ */
+    private void updateAllElementItems(Function<Item, String> getter, BiConsumer<Item, String> setter, String value) {
+        for (Item item : activeSessionData.getItems().values()) {
+            String current = getter.apply(item);
+            if (current == null || current.equalsIgnoreCase("Any") || current.contains(",")) {
+                continue;
+            }
+            setter.accept(item, value);
         }
     }
 

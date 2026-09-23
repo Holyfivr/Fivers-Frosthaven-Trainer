@@ -55,6 +55,7 @@ public class SaveFileController {
         model.addAttribute("saveFileName", activeSessionData.getSaveFilePath().getFileName().toString());
         model.addAttribute("saveCharacters", activeSessionData.getSaveCharacters());
         model.addAttribute("enhancementGroups", activeSessionData.getEnhancementGroups());
+        model.addAttribute("cardChoiceResets", saveFileService.getCardChoiceResets());
         return "savefile";
     }
 
@@ -69,6 +70,13 @@ public class SaveFileController {
     public String resetEnhancements(@RequestParam("className") String className) {
         saveFileService.resetEnhancements(className);
         return "redirect:/savefile";
+    }
+
+    @GetMapping("/reset-character-levels")
+    public String resetCardChoices(@RequestParam("characterIndex") int characterIndex,
+            @RequestParam("targetLevel") int targetLevel) {
+        boolean reset = saveFileService.resetCardChoices(characterIndex, targetLevel);
+        return reset ? "redirect:/savefile" : "redirect:/savefile?cardResetError=true";
     }
 
     /* ======================================================================== */

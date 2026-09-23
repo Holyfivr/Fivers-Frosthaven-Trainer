@@ -136,7 +136,7 @@
 }
 
 /* Armed state of a reset link (first click), before the confirming second click */
-.enh-table .reset-link.armed {
+.reset-link.armed {
     background-color: var(--color-red);
     color: var(--color-cream);
     border-color: var(--color-red);

@@ -25,6 +25,8 @@
                 th:text="${character.name}" onclick="openTab(this)"></button>
             <button type="button" class="tab-btn" th:if="${!enhancementGroups.isEmpty()}"
                 data-tab="tab-enh" onclick="openTab(this)">Enhancements</button>
+            <button type="button" class="tab-btn" data-tab="tab-cards"
+                onclick="openTab(this)">Reset Character Levels</button>
         </div>
 
         <!-- Resource form holds all value inputs, the enhancement panel, and Save & Close -->
@@ -56,6 +58,31 @@
                             th:name="'field_' + ${field.offset}" th:value="${field.value}">
                     </div>
                 </div>
+            </div>
+
+            <div class="tab-panel" id="tab-cards">
+                <h3 class="enh-title">Reset card choices</h3>
+                <div class="sidenote">Reopens spent card choices above the chosen level. The character's
+                    level, XP, items and perks stay unchanged.</div>
+                <div class="sidenote">A target level may be missing because its card choice is already unspent,
+                    or the save cannot identify the earlier choices safely.</div>
+                <div class="sidenote" th:if="${param.cardResetError}">Could not safely reset this choice.</div>
+                <div class="sidenote" th:if="${cardChoiceResets.isEmpty()}">No spent card choices available to reset.</div>
+                <table class="enh-table" th:unless="${cardChoiceResets.isEmpty()}">
+                    <tr th:each="choice : ${cardChoiceResets}">
+                        <td class="enh-class" th:text="${choice.characterName}"></td>
+                        <td class="enh-count" th:text="'Level ' + ${choice.currentLevel}"></td>
+                        <td><label>Reset to level
+                            <select class="target-level" onchange="updateResetTarget(this)"
+                                th:attr="data-character-index=${choice.characterIndex}">
+                                <option th:each="target : ${choice.targetLevels}" th:value="${target}"
+                                    th:text="${target}"></option>
+                            </select></label></td>
+                        <td><a class="btn warning-btn reset-link"
+                            th:href="@{/reset-character-levels(characterIndex=${choice.characterIndex},targetLevel=${choice.targetLevels[0]})}"
+                            onclick="return armReset(this)">Reset</a></td>
+                    </tr>
+                </table>
             </div>
 
             <!-- Enhancements tab panel: reset LINKS (GET). Plain navigation, so the panel can
@@ -111,6 +138,16 @@
             link.textContent = "Confirm?";
             link.classList.add("armed");
             return false;                                   // first click: wait for confirmation
+        }
+
+        function updateResetTarget(select) {
+            const link = select.closest("tr").querySelector("a.reset-link");
+            const url = new URL(link.href, window.location.href);
+            url.searchParams.set("targetLevel", select.value);
+            link.href = url.toString();
+            link.dataset.armed = "0";
+            link.textContent = "Reset";
+            link.classList.remove("armed");
         }
 
         // Simple tab switching: show the clicked character's panel, hide the rest.

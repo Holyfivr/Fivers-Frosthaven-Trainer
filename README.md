@@ -32,6 +32,7 @@ So please be patient if updates are slow, as I am balancing this with my studies
 *   ✅**Ability Card Editing:** Change ability card effects and values.
 *   ✅**Mass Ability Card Editing** All ability card values can be edited to desired values in a popup window with all needed fields. Leave fields empty to skip changing that value.
 *   ✅**Savefile Editing:** Open a campaign savefile (`.dat`) and edit gold and materials (lumber, metal, hide) for each character, plus the town's herbs and stats (morale, prosperity, soldiers, defense, guard perk points). A backup of the save is created automatically the first time it's opened.
+*   ✅**Character Level-Choice Reset (experimental):** Choose a character and a target level to reopen completed card choices above it. See [the reset notes](CHARACTER_LEVEL_RESET.md) for scope and recovery guidance.
 
 ## Upcoming Features
 *   **Summon Cards:** Fix so summon cards work. Currently summons are unaffected by any changes in the program.
@@ -60,6 +61,10 @@ So please be patient if updates are slow, as I am balancing this with my studies
 (Default location: `..\AppData\LocalLow\Snapshot Games Inc\Frosthaven\Steam\<steam_id>\Campaign\<party_name>\AutoSave_<number>.dat`. The game loads the most recent one)
 3.  The first time you open a save, a backup copy (`.bak`) is created next to it.
 4.  Edit the values in the town and character tabs, then click **Save & Close**.
+    To redo supported card choices, open **Reset Character Levels**, choose the character and
+    target level, click **Reset** twice to confirm, then **Save & Close**. The game presents
+    the choices in level order the next time you load the edited save. This does not reduce
+    the character's actual level.
 5.  Start the game and load your campaign.
 
 Only one file can be open at a time. Save or close the current ruleset/savefile before opening the other.

@@ -10,6 +10,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import se.holyfivr.trainer.core.ActiveSessionData;
+import se.holyfivr.trainer.core.SaveCardChoiceEditor;
 import se.holyfivr.trainer.core.SaveEnhancementEditor;
 import se.holyfivr.trainer.core.parser.SaveFileParser;
 import se.holyfivr.trainer.model.SaveCharacter;
@@ -23,9 +24,9 @@ import se.holyfivr.trainer.model.SaveField;
 /*           NOT .dat — the game scans the campaign folder and would happily load a stray .dat   */
 /*           backup instead of the real save). The file is then read into memory and parsed.     */
 /*                                                                                               */
-/* On save:  each submitted value is written back as a same-size, in-place 4-byte overwrite at   */
-/*           the exact offset recorded during parsing. Only offsets that were found by the       */
-/*           parser can be written to, so the client can never write to arbitrary positions.     */
+/* On save:  each submitted resource value is written as a 4-byte overwrite at the exact offset  */
+/*           recorded during parsing. Binary list edits may have changed the file size, so the   */
+/*           fields are re-parsed after each such edit before the final bytes are saved.           */
 /* ============================================================================================= */
 
 @Service
@@ -40,13 +41,16 @@ public class SaveFileService {
     private final FileService fileService;
     private final SaveFileParser saveFileParser;
     private final SaveEnhancementEditor enhancementEditor;
+    private final SaveCardChoiceEditor cardChoiceEditor;
 
     public SaveFileService(ActiveSessionData activeSessionData, FileService fileService,
-            SaveFileParser saveFileParser, SaveEnhancementEditor enhancementEditor) {
+            SaveFileParser saveFileParser, SaveEnhancementEditor enhancementEditor,
+            SaveCardChoiceEditor cardChoiceEditor) {
         this.activeSessionData = activeSessionData;
         this.fileService = fileService;
         this.saveFileParser = saveFileParser;
         this.enhancementEditor = enhancementEditor;
+        this.cardChoiceEditor = cardChoiceEditor;
     }
 
     /* ======================================================================== */
@@ -102,7 +106,7 @@ public class SaveFileService {
     /* Applies the submitted values and writes the save file back to disk.      */
     /* The form posts inputs named "field_<offset>". We only look up offsets    */
     /* that the parser found, patch each value in place in the in-memory copy,  */
-    /* and write the whole (same-size) file back.                               */
+    /* and write the resulting file back.                                       */
     /* Returns false if anything goes wrong (e.g. the game holds a file lock),  */
     /* in which case the session is kept open so the user can try again.        */
     /* ======================================================================== */
@@ -157,6 +161,35 @@ public class SaveFileService {
         activeSessionData.setSaveCharacters(saveFileParser.parse(wiped));
         activeSessionData.setEnhancementGroups(enhancementEditor.parseGroups(wiped));
         return true;
+    }
+
+    /** Only safely inferable completed choices are offered. */
+    public List<SaveCardChoiceEditor.ResetOption> getCardChoiceResets() {
+        byte[] saveBytes = activeSessionData.getSaveFileBytes();
+        if (saveBytes == null) return List.of();
+        try {
+            return cardChoiceEditor.availableResets(saveBytes);
+        } catch (IllegalArgumentException e) {
+            return List.of(); // Unknown save format: do not offer binary edits.
+        }
+    }
+
+    /** Changes the open session only; Save & Close persists it. */
+    public boolean resetCardChoices(int characterIndex, int targetLevel) {
+        byte[] saveBytes = activeSessionData.getSaveFileBytes();
+        if (saveBytes == null) return false;
+        try {
+            byte[] reset = cardChoiceEditor.reset(saveBytes, characterIndex, targetLevel);
+            List<SaveCharacter> characters = saveFileParser.parse(reset);
+            List<se.holyfivr.trainer.model.EnhancementGroup> groups = enhancementEditor.parseGroups(reset);
+            if (characters.isEmpty()) return false;
+            activeSessionData.setSaveFileBytes(reset);
+            activeSessionData.setSaveCharacters(characters);
+            activeSessionData.setEnhancementGroups(groups);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
     }
 
     /* ======================================================================== */

@@ -8,7 +8,6 @@ import java.util.Properties;
 
 import org.springframework.stereotype.Component;
 
-/** Printed level of each class-qualified ability card in the bundled ruleset. */
 @Component
 public class CardLevelCatalog {
 
@@ -34,7 +33,6 @@ public class CardLevelCatalog {
         }
     }
 
-    /** Returns null for an unknown class, avoiding guesses about its cards. */
     public Map<Integer, Integer> forClass(String classId) {
         return levels.get(classId);
     }

@@ -61,10 +61,8 @@
             </div>
 
             <div class="tab-panel" id="tab-cards">
-                <div class="sidenote">Reopens spent card choices above the chosen level. The character's
-                    level, XP, items and perks stay unchanged.</div>
-                <div class="sidenote">A target level may be missing because its card choice is already unspent,
-                    or the save cannot identify the earlier choices safely.</div>
+                <div class="sidenote">Reopens card choices above the selected level. Level, XP, items and perks stay unchanged.</div>
+                <div class="sidenote">Only choices that can be reset safely are listed.</div>
                 <div class="sidenote" th:if="${param.cardResetError}">Could not safely reset this choice.</div>
                 <div class="sidenote" th:if="${cardChoiceResets.isEmpty()}">No spent card choices available to reset.</div>
                 <table class="enh-table" th:unless="${cardChoiceResets.isEmpty()}">

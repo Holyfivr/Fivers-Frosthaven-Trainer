@@ -10,19 +10,6 @@ import java.util.Set;
 
 import org.springframework.stereotype.Component;
 
-/**
- * Reopens a character's completed level-up card choices in a campaign save.
- *
- * The game stores owned cards in SelectedCardIDs (the active hand) and
- * UnusedCardIDs. Spending a choice adds an owned card and decrements
- * CardUnlocks. This editor reverses completed choices from a requested level
- * through the character's current level, leaving XP, level, perks, and items
- * untouched. The game then offers the banked choices in level order.
- *
- * Card levels come from the bundled ruleset catalog. If a character chose a
- * lower-level card later, partial history may be ambiguous; only reset depths
- * with a uniquely determined set of cards to remove are offered.
- */
 @Component
 public class SaveCardChoiceEditor {
 
@@ -45,7 +32,6 @@ public class SaveCardChoiceEditor {
     private record ChoiceState(Map<Integer, Integer> catalog, List<Integer> earned,
             int lastCompleted) {}
 
-    /** One character row, with only reset depths whose removed cards are unambiguous. */
     public List<ResetOption> availableResets(byte[] data) {
         Campaign campaign = parseCampaign(data);
         List<ResetOption> result = new ArrayList<>();
@@ -64,13 +50,12 @@ public class SaveCardChoiceEditor {
                     result.add(new ResetOption(i, character.name, character.level, List.copyOf(targets)));
                 }
             } catch (IllegalArgumentException ignored) {
-                continue; // Unsupported save state: never offer a reset we cannot validate.
+                continue;
             }
         }
         return result;
     }
 
-    /** Returns a new byte array; the source is never modified. Fails closed. */
     public byte[] reset(byte[] data, int characterIndex, int targetLevel) {
         Campaign campaign = parseCampaign(data);
         if (characterIndex < 0 || characterIndex >= campaign.characters.entries.size()) {
@@ -89,8 +74,6 @@ public class SaveCardChoiceEditor {
 
         List<Integer> unused = new ArrayList<>(character.unused.ids);
         List<Integer> selected = new ArrayList<>(character.selected.ids);
-        // Reverse the stable owned-card order. For the proven Bannerspear case
-        // this matches the game-tested newest-first removal byte-for-byte.
         for (int i = state.earned.size() - 1; i >= 0; i--) {
             if ((mask & (1 << i)) == 0) continue;
             int owned = state.earned.get(i);
@@ -190,7 +173,6 @@ public class SaveCardChoiceEditor {
         return new ChoiceState(catalog, earned, lastCompleted);
     }
 
-    /** A unique set of cards awarded above targetLevel, or -1 when ambiguous. */
     private static int removalMask(ChoiceState state, int targetLevel) {
         int[] result = {-1};
         assign(state, targetLevel, 2, 0, 0, result);

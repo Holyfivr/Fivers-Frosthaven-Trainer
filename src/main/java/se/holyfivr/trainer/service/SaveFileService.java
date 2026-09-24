@@ -13,6 +13,7 @@ import se.holyfivr.trainer.core.ActiveSessionData;
 import se.holyfivr.trainer.core.SaveCardChoiceEditor;
 import se.holyfivr.trainer.core.SaveEnhancementEditor;
 import se.holyfivr.trainer.core.parser.SaveFileParser;
+import se.holyfivr.trainer.model.EnhancementGroup;
 import se.holyfivr.trainer.model.SaveCharacter;
 import se.holyfivr.trainer.model.SaveField;
 
@@ -24,9 +25,10 @@ import se.holyfivr.trainer.model.SaveField;
 /*           NOT .dat — the game scans the campaign folder and would happily load a stray .dat   */
 /*           backup instead of the real save). The file is then read into memory and parsed.     */
 /*                                                                                               */
-/* On save:  each submitted resource value is written as a 4-byte overwrite at the exact offset  */
-/*           recorded during parsing. Binary list edits may have changed the file size, so the   */
-/*           fields are re-parsed after each such edit before the final bytes are saved.           */
+/* On save:  each submitted value is written as an in-place 4-byte overwrite at the exact offset */
+/*           recorded during parsing. Only offsets that were found by the parser can be written  */
+/*           to, so the client can never write to arbitrary positions. Resets that change the    */
+/*           file size re-parse the session immediately, so the offsets always stay in sync.     */
 /* ============================================================================================= */
 
 @Service
@@ -163,31 +165,51 @@ public class SaveFileService {
         return true;
     }
 
-    /** Only safely inferable completed choices are offered. */
+    /* ======================================================================== */
+    /* Lists the card choice resets that can be inferred safely from the save.  */
+    /* Returns an empty list for unsupported saves, so the tab just shows none. */
+    /* ======================================================================== */
     public List<SaveCardChoiceEditor.ResetOption> getCardChoiceResets() {
         byte[] saveBytes = activeSessionData.getSaveFileBytes();
-        if (saveBytes == null) return List.of();
+        if (saveBytes == null) {
+            return List.of();
+        }
         try {
             return cardChoiceEditor.availableResets(saveBytes);
         } catch (IllegalArgumentException e) {
             return List.of(); // Unknown save format: do not offer binary edits.
+        } catch (RuntimeException e) {
+            e.printStackTrace(); // Unexpected failure: hide the feature, keep the page working.
+            return List.of();
         }
     }
 
-    /** Changes the open session only; Save & Close persists it. */
+    /* ======================================================================== */
+    /* Reopens spent card choices above targetLevel in the in-memory save.      */
+    /* The result is parsed before it replaces the session, so a failed reset   */
+    /* leaves the session unchanged. Persisted on Save & Close, like the        */
+    /* enhancement reset. Returns false if the reset was refused or failed.     */
+    /* ======================================================================== */
     public boolean resetCardChoices(int characterIndex, int targetLevel) {
         byte[] saveBytes = activeSessionData.getSaveFileBytes();
-        if (saveBytes == null) return false;
+        if (saveBytes == null) {
+            return false;
+        }
         try {
             byte[] reset = cardChoiceEditor.reset(saveBytes, characterIndex, targetLevel);
             List<SaveCharacter> characters = saveFileParser.parse(reset);
-            List<se.holyfivr.trainer.model.EnhancementGroup> groups = enhancementEditor.parseGroups(reset);
-            if (characters.isEmpty()) return false;
+            List<EnhancementGroup> groups = enhancementEditor.parseGroups(reset);
+            if (characters.isEmpty()) {
+                return false;
+            }
             activeSessionData.setSaveFileBytes(reset);
             activeSessionData.setSaveCharacters(characters);
             activeSessionData.setEnhancementGroups(groups);
             return true;
         } catch (IllegalArgumentException e) {
+            return false; // The editor refused this reset.
+        } catch (RuntimeException e) {
+            e.printStackTrace(); // Unexpected failure: keep the session unchanged.
             return false;
         }
     }

@@ -69,8 +69,23 @@ class SaveCardChoiceEditorTest {
                 editor.availableResets(reset).getFirst().targetLevels());
     }
 
+    @Test
+    void refusesToRemoveADisabledCard() {
+        byte[] source = save("Xena", "BannerSpearID", 4, 0,
+                List.of(71, 72, 69, 63, 65, 78),
+                List.of(61, 62, 64, 66, 67, 68, 70, 73, 75, 76), 76);
+        assertEquals(List.of(3), editor.availableResets(source).getFirst().targetLevels());
+        assertThrows(IllegalArgumentException.class, () -> editor.reset(source, 0, 2));
+        assertEquals(1, readIntAfter(editor.reset(source, 0, 3), "CardUnlocks"));
+    }
+
     private static byte[] save(String name, String classId, int level, int unlocks,
             List<Integer> unused, List<Integer> selected) {
+        return save(name, classId, level, unlocks, unused, selected, 0);
+    }
+
+    private static byte[] save(String name, String classId, int level, int unlocks,
+            List<Integer> unused, List<Integer> selected, int disabledCardId) {
         ByteArrayOutputStream character = new ByteArrayOutputStream();
         character.writeBytes(stringField("Name", name));
         byte[] nestedId = stringField("ID", classId);
@@ -79,6 +94,15 @@ class SaveCardChoiceEditorTest {
         intField(character, "CardUnlocks", unlocks);
         field(character, 4, "UnusedCardIDs", indexedCards(unused));
         field(character, 4, "SelectedCardIDs", indexedCards(selected));
+        if (disabledCardId != 0) {
+            ByteArrayOutputStream modifier = new ByteArrayOutputStream();
+            intField(modifier, "DisabledCardID", disabledCardId);
+            modifier.write(0);
+            ByteArrayOutputStream modifiers = new ByteArrayOutputStream();
+            modifiers.writeBytes(entry(0, modifier.toByteArray()));
+            modifiers.write(0);
+            field(character, 4, "ScenarioModifiers", modifiers.toByteArray());
+        }
         character.write(0);
 
         ByteArrayOutputStream characters = new ByteArrayOutputStream();

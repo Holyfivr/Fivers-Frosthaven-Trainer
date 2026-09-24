@@ -40,7 +40,7 @@ public class SaveCardChoiceEditor {
     private record CardList(IndexedList span, List<Integer> ids) {}
     private record CharacterState(int index, String name, String classId, Entry entry,
             int entryLengthOffset, int level, int unlocks, int unlockOffset,
-            CardList unused, CardList selected) {}
+            CardList unused, CardList selected, Set<Integer> disabledCardIds) {}
     private record Campaign(IndexedList characters, int outerA, int outerB) {}
     private record ChoiceState(Map<Integer, Integer> catalog, List<Integer> earned,
             int lastCompleted) {}
@@ -56,7 +56,7 @@ public class SaveCardChoiceEditor {
                 List<Integer> targets = new ArrayList<>();
                 for (int target = 1; target < state.lastCompleted; target++) {
                     int mask = removalMask(state, target);
-                    if (mask >= 0 && canFillHand(character, state.catalog, state.earned, mask)) {
+                    if (isSafeRemoval(character, state, mask)) {
                         targets.add(target);
                     }
                 }
@@ -83,7 +83,7 @@ public class SaveCardChoiceEditor {
             throw new IllegalArgumentException("No completed choice exists above that level");
         }
         int mask = removalMask(state, targetLevel);
-        if (mask < 0 || !canFillHand(character, state.catalog, state.earned, mask)) {
+        if (!isSafeRemoval(character, state, mask)) {
             throw new IllegalArgumentException("The choices above that level cannot be inferred safely");
         }
 
@@ -214,6 +214,17 @@ public class SaveCardChoiceEditor {
         }
     }
 
+    private static boolean isSafeRemoval(CharacterState character, ChoiceState state, int mask) {
+        if (mask < 0) return false;
+        for (int i = 0; i < state.earned.size(); i++) {
+            if ((mask & (1 << i)) != 0
+                    && character.disabledCardIds.contains(state.earned.get(i))) {
+                return false;
+            }
+        }
+        return canFillHand(character, state.catalog, state.earned, mask);
+    }
+
     private static boolean canFillHand(CharacterState character, Map<Integer, Integer> catalog,
             List<Integer> earned, int mask) {
         int handCardsToReplace = 0;
@@ -259,9 +270,28 @@ public class SaveCardChoiceEditor {
                 + marker((byte) 16, "CardUnlocks").length;
         CardList unused = cardList(data, "UnusedCardIDs", entry.start, entry.end);
         CardList selected = cardList(data, "SelectedCardIDs", entry.start, entry.end);
+        Set<Integer> disabledCardIds = new HashSet<>();
+        byte[] disabledMarker = marker((byte) 16, "DisabledCardID");
+        for (int offset = entry.start; offset <= entry.end - disabledMarker.length; offset++) {
+            boolean match = true;
+            for (int i = 0; i < disabledMarker.length; i++) {
+                if (data[offset + i] != disabledMarker[i]) {
+                    match = false;
+                    break;
+                }
+            }
+            if (match) {
+                int valueOffset = offset + disabledMarker.length;
+                if (valueOffset + 4 > entry.end) {
+                    throw new IllegalArgumentException("Short disabled card field");
+                }
+                int disabledCardId = readInt(data, valueOffset);
+                if (disabledCardId != 0) disabledCardIds.add(disabledCardId);
+            }
+        }
         return new CharacterState(index, name, classId, entry, lengthOffset,
                 readInt(data, levelOffset), readInt(data, unlockOffset), unlockOffset,
-                unused, selected);
+                unused, selected, disabledCardIds);
     }
 
     private static CardList cardList(byte[] data, String name, int start, int end) {
@@ -273,8 +303,11 @@ public class SaveCardChoiceEditor {
 
     private static int cardIdOffset(byte[] data, Entry entry) {
         byte[] idMarker = marker((byte) 16, "ID");
-        int offset = unique(data, idMarker, entry.start, entry.end) + idMarker.length;
-        if (offset + 5 != entry.end || data[entry.end - 1] != 0) {
+        int keyEnd = zero(data, entry.start + 1, entry.end);
+        int markerStart = unique(data, idMarker, entry.start, entry.end);
+        int offset = markerStart + idMarker.length;
+        if (markerStart != keyEnd + 5 || offset + 5 != entry.end
+                || data[entry.end - 1] != 0) {
             throw new IllegalArgumentException("Unexpected card entry structure");
         }
         return offset;

@@ -72,7 +72,7 @@ public class SaveFileController {
         return "redirect:/savefile";
     }
 
-    @GetMapping("/reset-character-levels")
+    @GetMapping("/reset-card-choices")
     public String resetCardChoices(@RequestParam("characterIndex") int characterIndex,
             @RequestParam("targetLevel") int targetLevel) {
         boolean reset = saveFileService.resetCardChoices(characterIndex, targetLevel);

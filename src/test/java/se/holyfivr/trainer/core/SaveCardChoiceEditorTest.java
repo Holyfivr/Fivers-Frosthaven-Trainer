@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -79,13 +80,39 @@ class SaveCardChoiceEditorTest {
         assertEquals(1, readIntAfter(editor.reset(source, 0, 3), "CardUnlocks"));
     }
 
-    private static byte[] save(String name, String classId, int level, int unlocks,
-            List<Integer> unused, List<Integer> selected) {
-        return save(name, classId, level, unlocks, unused, selected, 0);
+    @Test
+    void ignoresADisabledStarterCard() {
+        byte[] source = save("Xena", "BannerSpearID", 4, 0,
+                List.of(71, 72, 69, 63, 65, 78),
+                List.of(61, 62, 64, 66, 67, 68, 70, 73, 75, 76), 61);
+        assertEquals(List.of(1, 2, 3), editor.availableResets(source).getFirst().targetLevels());
+    }
+
+    @Test
+    void findsADisabledCardAmongSeveralModifiers() {
+        // Real saves keep one modifier per entry, most with DisabledCardID 0.
+        // 78 is the level 4 card, so every reset target would remove it.
+        byte[] source = save("Xena", "BannerSpearID", 4, 0,
+                List.of(71, 72, 69, 63, 65, 78),
+                List.of(61, 62, 64, 66, 67, 68, 70, 73, 75, 76), 0, 78);
+        assertTrue(editor.availableResets(source).isEmpty());
+        assertThrows(IllegalArgumentException.class, () -> editor.reset(source, 0, 3));
+    }
+
+    @Test
+    void refusesAnUnexpectedDisabledCardStructure() {
+        byte[] source = save("Xena", "BannerSpearID", 4, 0,
+                List.of(71, 72, 69, 63, 65, 78),
+                List.of(61, 62, 64, 66, 67, 68, 70, 73, 75, 76), 76);
+        byte[] marker = concat(new byte[] {3}, "DisabledCardID\0".getBytes(StandardCharsets.US_ASCII));
+        int lengthOffset = indexOf(source, marker) + marker.length;
+        source[lengthOffset] = 14; // not the {ID} object the editor knows
+        assertTrue(editor.availableResets(source).isEmpty());
+        assertThrows(IllegalArgumentException.class, () -> editor.reset(source, 0, 3));
     }
 
     private static byte[] save(String name, String classId, int level, int unlocks,
-            List<Integer> unused, List<Integer> selected, int disabledCardId) {
+            List<Integer> unused, List<Integer> selected, int... disabledCardIds) {
         ByteArrayOutputStream character = new ByteArrayOutputStream();
         character.writeBytes(stringField("Name", name));
         byte[] nestedId = stringField("ID", classId);
@@ -94,12 +121,17 @@ class SaveCardChoiceEditorTest {
         intField(character, "CardUnlocks", unlocks);
         field(character, 4, "UnusedCardIDs", indexedCards(unused));
         field(character, 4, "SelectedCardIDs", indexedCards(selected));
-        if (disabledCardId != 0) {
-            ByteArrayOutputStream modifier = new ByteArrayOutputStream();
-            intField(modifier, "DisabledCardID", disabledCardId);
-            modifier.write(0);
+        if (disabledCardIds.length > 0) {
+            // Same layout as the game: DisabledItemID and DisabledCardID are {ID} objects
             ByteArrayOutputStream modifiers = new ByteArrayOutputStream();
-            modifiers.writeBytes(entry(0, modifier.toByteArray()));
+            for (int i = 0; i < disabledCardIds.length; i++) {
+                ByteArrayOutputStream modifier = new ByteArrayOutputStream();
+                intField(modifier, "Type", 20);
+                field(modifier, 3, "DisabledItemID", idObject(0));
+                field(modifier, 3, "DisabledCardID", idObject(disabledCardIds[i]));
+                modifier.write(0);
+                modifiers.writeBytes(entry(i, modifier.toByteArray()));
+            }
             modifiers.write(0);
             field(character, 4, "ScenarioModifiers", modifiers.toByteArray());
         }
@@ -130,6 +162,22 @@ class SaveCardChoiceEditorTest {
         }
         out.write(0);
         return out.toByteArray();
+    }
+
+    private static byte[] idObject(int id) {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        intField(out, "ID", id);
+        out.write(0);
+        return out.toByteArray();
+    }
+
+    private static int indexOf(byte[] bytes, byte[] needle) {
+        for (int i = 0; i <= bytes.length - needle.length; i++) {
+            if (Arrays.equals(bytes, i, i + needle.length, needle, 0, needle.length)) {
+                return i;
+            }
+        }
+        throw new AssertionError("Missing marker");
     }
 
     private static byte[] entry(int index, byte[] payload) {

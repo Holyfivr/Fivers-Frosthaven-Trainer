@@ -162,6 +162,44 @@ body {
     padding-left: 2.5px;
 }
 
+/* Hover/focus help: a small "?" with a text bubble positioned above it */
+.help {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 15px;
+    height: 15px;
+    border: 2px solid var(--color-light-blue);
+    border-radius: 50%;
+    color: var(--color-light-blue);
+    font-weight: bold;
+    cursor: default;
+}
+
+.help-text {
+    display: none;
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 8px);
+    transform: translateX(-50%);
+    width: 250px;
+    padding: 10px;
+    background-color: var(--color-light-blue);
+    color: var(--color-cream);
+    font-weight: normal;
+    text-align: left;
+    border: 2px solid var(--color-cream);
+    border-radius: 15px;
+    box-shadow: 0 10px 15px var(--color-shadow-soft);
+    z-index: 1000;
+}
+
+.help:hover .help-text,
+.help:focus .help-text {
+    display: block;
+}
+
 .info-icon-character {
     top: 197px !important;
     left: 610px !important;

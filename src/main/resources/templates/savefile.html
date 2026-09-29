@@ -62,7 +62,6 @@
 
             <div class="tab-panel" id="tab-cards">
                 <div class="sidenote">Reopens card choices above the selected level. Level, XP, items and perks stay unchanged.</div>
-                <div class="sidenote">Only choices that can be reset safely are listed.</div>
                 <div class="sidenote" th:if="${param.cardResetError}">Could not safely reset this choice.</div>
                 <div class="sidenote" th:if="${cardChoiceResets.isEmpty()}">No spent card choices available to reset.</div>
                 <table class="enh-table" th:unless="${cardChoiceResets.isEmpty()}">
@@ -75,6 +74,8 @@
                                 <option th:each="target : ${choice.targetLevels}" th:value="${target}"
                                     th:text="${target}"></option>
                             </select></label></td>
+                        <td><span class="help" tabindex="0" th:if="${choice.limited}">?
+                            <span class="help-text">If a player has at any point picked a lower-level card at a higher level, some target levels can't be reset separately. In this case, the allowed level span is limited. <p>This is to prevent corruption of the save file.</p></span></span></td>
                         <td><a class="btn warning-btn reset-link"
                             th:href="@{/reset-card-choices(characterIndex=${choice.characterIndex},targetLevel=${choice.targetLevels[0]})}"
                             onclick="return armReset(this)">Reset</a></td>

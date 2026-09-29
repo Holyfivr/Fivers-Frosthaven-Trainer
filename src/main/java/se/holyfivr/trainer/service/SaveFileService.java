@@ -25,7 +25,7 @@ import se.holyfivr.trainer.model.SaveField;
 /*           NOT .dat — the game scans the campaign folder and would happily load a stray .dat   */
 /*           backup instead of the real save). The file is then read into memory and parsed.     */
 /*                                                                                               */
-/* On save:  submitted values overwrite only parser-found offsets; the client cannot write      */
+/* On save:  submitted values overwrite only parser-found offsets; the client cannot write       */
 /*           elsewhere. Resets re-parse immediately to keep those offsets current.               */
 /* ============================================================================================= */
 
@@ -163,6 +163,10 @@ public class SaveFileService {
         return true;
     }
 
+    /* ======================================================================== */
+    /* Lists the card choice resets that can be inferred safely from the save.  */
+    /* Returns an empty list for unsupported saves, so the tab just shows none. */
+    /* ======================================================================== */
     public List<SaveCardChoiceEditor.ResetOption> getCardChoiceResets() {
         byte[] saveBytes = activeSessionData.getSaveFileBytes();
         if (saveBytes == null) {
@@ -178,6 +182,12 @@ public class SaveFileService {
         }
     }
 
+    /* ======================================================================== */
+    /* Reopens spent card choices above targetLevel in the in-memory save.      */
+    /* The result is parsed before it replaces the session, so a failed reset   */
+    /* leaves the session unchanged. Persisted on Save & Close, like the        */
+    /* enhancement reset. Returns false if the reset was refused or failed.     */
+    /* ======================================================================== */
     public boolean resetCardChoices(int characterIndex, int targetLevel) {
         byte[] saveBytes = activeSessionData.getSaveFileBytes();
         if (saveBytes == null) {

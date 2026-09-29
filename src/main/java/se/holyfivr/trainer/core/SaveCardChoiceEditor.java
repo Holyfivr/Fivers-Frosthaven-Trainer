@@ -3,12 +3,33 @@ package se.holyfivr.trainer.core;
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.springframework.stereotype.Component;
+
+/* ================================== SAVE CARD CHOICE EDITOR ================================== */
+/*                                                                                               */
+/* Reopens a character's spent level-up card choices in a Frosthaven save file.                  */
+/*                                                                                               */
+/* Owned cards live in two lists inside each character entry: SelectedCardIDs (the active hand)  */
+/* and UnusedCardIDs. Spending a level-up choice adds one card and lowers CardUnlocks by one.    */
+/* A reset reverses that for every level above the target: the chosen cards are removed (an      */
+/* unused starter takes a removed card's hand slot), and CardUnlocks goes up by the same count.  */
+/* Level, XP, perks and items are left untouched; the game offers the reopened choices on load.  */
+/*                                                                                               */
+/* Card levels come from card-level.properties. A higher level can award a lower-level card, so  */
+/* the save doesn't always show which level gave which card. Only resets where every possible    */
+/* history removes the same cards are offered. Cards set as a DisabledCardID are never removed.  */
+/*                                                                                               */
+/* UnusedCardIDs is rewritten with the removed entries left out, so five length fields shrink:   */
+/* the list itself, the character entry, AllCharacters, and the outer container length stored    */
+/* twice before "NextScenarioModifiers" (same as SaveEnhancementEditor). The result is parsed    */
+/* again and checked before it is returned. Anything unexpected throws IllegalArgumentException. */
+/* ============================================================================================= */
 
 @Component
 public class SaveCardChoiceEditor {
@@ -32,6 +53,10 @@ public class SaveCardChoiceEditor {
     private record ChoiceState(Map<Integer, Integer> catalog, List<Integer> earned,
             int lastCompleted) {}
 
+    /* ======================================================================== */
+    /* Lists each character's safe reset targets. Characters whose save state   */
+    /* can't be validated are skipped instead of failing the whole list.        */
+    /* ======================================================================== */
     public List<ResetOption> availableResets(byte[] data) {
         Campaign campaign = parseCampaign(data);
         List<ResetOption> result = new ArrayList<>();
@@ -56,6 +81,11 @@ public class SaveCardChoiceEditor {
         return result;
     }
 
+    /* ======================================================================== */
+    /* Returns a copy of the save with the choices above targetLevel reopened.  */
+    /* The source array is never modified. Throws IllegalArgumentException if   */
+    /* the reset isn't offered by availableResets or fails verification.        */
+    /* ======================================================================== */
     public byte[] reset(byte[] data, int characterIndex, int targetLevel) {
         Campaign campaign = parseCampaign(data);
         if (characterIndex < 0 || characterIndex >= campaign.characters.entries.size()) {
@@ -75,7 +105,9 @@ public class SaveCardChoiceEditor {
         List<Integer> unused = new ArrayList<>(character.unused.ids);
         List<Integer> selected = new ArrayList<>(character.selected.ids);
         for (int i = state.earned.size() - 1; i >= 0; i--) {
-            if ((mask & (1 << i)) == 0) continue;
+            if ((mask & (1 << i)) == 0) {
+                continue;
+            }
             int owned = state.earned.get(i);
             int handPosition = selected.indexOf(owned);
             if (handPosition >= 0) {
@@ -145,22 +177,34 @@ public class SaveCardChoiceEditor {
         }
         Set<Integer> owned = new HashSet<>();
         for (int id : character.unused.ids) {
-            if (!owned.add(id)) throw new IllegalArgumentException("Duplicate owned card");
+            if (!owned.add(id)) {
+                throw new IllegalArgumentException("Duplicate owned card");
+            }
         }
         for (int id : character.selected.ids) {
-            if (!owned.add(id)) throw new IllegalArgumentException("Duplicate owned card");
+            if (!owned.add(id)) {
+                throw new IllegalArgumentException("Duplicate owned card");
+            }
         }
         int lastCompleted = character.level - character.unlocks;
         List<Integer> earned = new ArrayList<>();
         for (int id : character.selected.ids) {
             Integer level = catalog.get(id);
-            if (level == null || level > lastCompleted) throw new IllegalArgumentException("Unknown owned card");
-            if (level > 1) earned.add(id);
+            if (level == null || level > lastCompleted) {
+                throw new IllegalArgumentException("Unknown owned card");
+            }
+            if (level > 1) {
+                earned.add(id);
+            }
         }
         for (int id : character.unused.ids) {
             Integer level = catalog.get(id);
-            if (level == null || level > lastCompleted) throw new IllegalArgumentException("Unknown owned card");
-            if (level > 1) earned.add(id);
+            if (level == null || level > lastCompleted) {
+                throw new IllegalArgumentException("Unknown owned card");
+            }
+            if (level > 1) {
+                earned.add(id);
+            }
         }
         for (Map.Entry<Integer, Integer> card : catalog.entrySet()) {
             if (card.getValue() == 1 && !owned.contains(card.getKey())) {
@@ -173,6 +217,11 @@ public class SaveCardChoiceEditor {
         return new ChoiceState(catalog, earned, lastCompleted);
     }
 
+    /* ======================================================================== */
+    /* Bitmask (over state.earned) of the cards awarded above targetLevel.      */
+    /* Tries every valid order the earned cards could have been picked in;      */
+    /* returns -1 if they don't all remove the same cards (ambiguous history).  */
+    /* ======================================================================== */
     private static int removalMask(ChoiceState state, int targetLevel) {
         int[] result = {-1};
         assign(state, targetLevel, 2, 0, 0, result);
@@ -181,10 +230,15 @@ public class SaveCardChoiceEditor {
 
     private static void assign(ChoiceState state, int target, int level, int used,
             int removed, int[] result) {
-        if (result[0] == -2) return;
+        if (result[0] == -2) {
+            return;
+        }
         if (level > state.lastCompleted) {
-            if (result[0] == -1) result[0] = removed;
-            else if (result[0] != removed) result[0] = -2;
+            if (result[0] == -1) {
+                result[0] = removed;
+            } else if (result[0] != removed) {
+                result[0] = -2;
+            }
             return;
         }
         for (int i = 0; i < state.earned.size(); i++) {
@@ -196,8 +250,14 @@ public class SaveCardChoiceEditor {
         }
     }
 
+    /* ======================================================================== */
+    /* A removal is safe if it's unambiguous, removes no disabled card, and     */
+    /* there are enough unused starters to refill the hand slots it empties.    */
+    /* ======================================================================== */
     private static boolean isSafeRemoval(CharacterState character, ChoiceState state, int mask) {
-        if (mask < 0) return false;
+        if (mask < 0) {
+            return false;
+        }
         for (int i = 0; i < state.earned.size(); i++) {
             if ((mask & (1 << i)) != 0
                     && character.disabledCardIds.contains(state.earned.get(i))) {
@@ -217,7 +277,9 @@ public class SaveCardChoiceEditor {
         }
         int unusedStarters = 0;
         for (int id : character.unused.ids) {
-            if (catalog.get(id) == 1) unusedStarters++;
+            if (catalog.get(id) == 1) {
+                unusedStarters++;
+            }
         }
         return unusedStarters >= handCardsToReplace;
     }
@@ -225,7 +287,9 @@ public class SaveCardChoiceEditor {
     private static Campaign parseCampaign(byte[] data) {
         IndexedList characters = indexedList(data, new byte[] {4}, "AllCharacters", 0, data.length);
         int ns = unique(data, "NextScenarioModifiers".getBytes(StandardCharsets.ISO_8859_1), 0, data.length);
-        if (ns < 10) throw new IllegalArgumentException("Missing outer save lengths");
+        if (ns < 10) {
+            throw new IllegalArgumentException("Missing outer save lengths");
+        }
         int outerA = ns - 10;
         int outerB = ns - 5;
         int length = readInt(data, outerA);
@@ -244,7 +308,9 @@ public class SaveCardChoiceEditor {
         int classOffset = unique(data, classMarker, entry.start, entry.end);
         int classLengthOffset = classOffset + classMarker.length;
         int classEnd = classLengthOffset + readInt(data, classLengthOffset);
-        if (classEnd > entry.end) throw new IllegalArgumentException("Class ID exceeds character");
+        if (classEnd > entry.end) {
+            throw new IllegalArgumentException("Class ID exceeds character");
+        }
         String classId = stringField(data, "ID", classLengthOffset + 4, classEnd);
         int levelOffset = unique(data, marker((byte) 16, "Level"), entry.start, entry.end)
                 + marker((byte) 16, "Level").length;
@@ -253,22 +319,23 @@ public class SaveCardChoiceEditor {
         CardList unused = cardList(data, "UnusedCardIDs", entry.start, entry.end);
         CardList selected = cardList(data, "SelectedCardIDs", entry.start, entry.end);
         Set<Integer> disabledCardIds = new HashSet<>();
-        byte[] disabledMarker = marker((byte) 16, "DisabledCardID");
+        byte[] disabledMarker = marker((byte) 3, "DisabledCardID");
+        byte[] idMarker = marker((byte) 16, "ID");
         for (int offset = entry.start; offset <= entry.end - disabledMarker.length; offset++) {
-            boolean match = true;
-            for (int i = 0; i < disabledMarker.length; i++) {
-                if (data[offset + i] != disabledMarker[i]) {
-                    match = false;
-                    break;
-                }
+            if (!Arrays.equals(data, offset, offset + disabledMarker.length,
+                    disabledMarker, 0, disabledMarker.length)) {
+                continue;
             }
-            if (match) {
-                int valueOffset = offset + disabledMarker.length;
-                if (valueOffset + 4 > entry.end) {
-                    throw new IllegalArgumentException("Short disabled card field");
-                }
-                int disabledCardId = readInt(data, valueOffset);
-                if (disabledCardId != 0) disabledCardIds.add(disabledCardId);
+            int fieldLengthOffset = offset + disabledMarker.length;
+            int idOffset = fieldLengthOffset + 4;
+            if (idOffset + idMarker.length + 5 > entry.end || readInt(data, fieldLengthOffset) != 13
+                    || !Arrays.equals(data, idOffset, idOffset + idMarker.length,
+                            idMarker, 0, idMarker.length)) {
+                throw new IllegalArgumentException("Unexpected disabled card structure");
+            }
+            int disabledCardId = readInt(data, idOffset + idMarker.length);
+            if (disabledCardId != 0) {
+                disabledCardIds.add(disabledCardId);
             }
         }
         return new CharacterState(index, name, classId, entry, lengthOffset,
@@ -279,7 +346,9 @@ public class SaveCardChoiceEditor {
     private static CardList cardList(byte[] data, String name, int start, int end) {
         IndexedList span = indexedList(data, new byte[] {4}, name, start, end);
         List<Integer> ids = new ArrayList<>();
-        for (Entry entry : span.entries) ids.add(readInt(data, cardIdOffset(data, entry)));
+        for (Entry entry : span.entries) {
+            ids.add(readInt(data, cardIdOffset(data, entry)));
+        }
         return new CardList(span, ids);
     }
 
@@ -302,11 +371,15 @@ public class SaveCardChoiceEditor {
         int length = readInt(data, lengthOffset);
         int payloadStart = lengthOffset + 4;
         int payloadEnd = lengthOffset + length;
-        if (length < 5 || payloadEnd > end) throw new IllegalArgumentException("List exceeds parent");
+        if (length < 5 || payloadEnd > end) {
+            throw new IllegalArgumentException("List exceeds parent");
+        }
         List<Entry> entries = new ArrayList<>();
         int cursor = payloadStart;
         while (cursor < payloadEnd - 1) {
-            if (data[cursor] != 3) throw new IllegalArgumentException("Unexpected list entry tag");
+            if (data[cursor] != 3) {
+                throw new IllegalArgumentException("Unexpected list entry tag");
+            }
             int keyEnd = zero(data, cursor + 1, payloadEnd);
             String key = new String(data, cursor + 1, keyEnd - cursor - 1, StandardCharsets.US_ASCII);
             if (!key.equals(Integer.toString(entries.size()))) {
@@ -366,30 +439,45 @@ public class SaveCardChoiceEditor {
         for (int i = start; i <= end - needle.length; i++) {
             boolean match = true;
             for (int j = 0; j < needle.length; j++) {
-                if (data[i + j] != needle[j]) { match = false; break; }
+                if (data[i + j] != needle[j]) {
+                    match = false;
+                    break;
+                }
             }
             if (match) {
-                if (found >= 0) throw new IllegalArgumentException("Ambiguous save field");
+                if (found >= 0) {
+                    throw new IllegalArgumentException("Ambiguous save field");
+                }
                 found = i;
             }
         }
-        if (found < 0) throw new IllegalArgumentException("Missing save field");
+        if (found < 0) {
+            throw new IllegalArgumentException("Missing save field");
+        }
         return found;
     }
 
     private static int zero(byte[] data, int start, int end) {
-        for (int i = start; i < end; i++) if (data[i] == 0) return i;
+        for (int i = start; i < end; i++) {
+            if (data[i] == 0) {
+                return i;
+            }
+        }
         throw new IllegalArgumentException("Missing field terminator");
     }
 
     private static int readInt(byte[] data, int offset) {
-        if (offset < 0 || offset + 4 > data.length) throw new IllegalArgumentException("Short save field");
+        if (offset < 0 || offset + 4 > data.length) {
+            throw new IllegalArgumentException("Short save field");
+        }
         return (data[offset] & 0xff) | ((data[offset + 1] & 0xff) << 8)
                 | ((data[offset + 2] & 0xff) << 16) | ((data[offset + 3] & 0xff) << 24);
     }
 
     private static void writeInt(byte[] data, int offset, int value) {
-        if (offset < 0 || offset + 4 > data.length) throw new IllegalArgumentException("Short save field");
+        if (offset < 0 || offset + 4 > data.length) {
+            throw new IllegalArgumentException("Short save field");
+        }
         data[offset] = (byte) value;
         data[offset + 1] = (byte) (value >>> 8);
         data[offset + 2] = (byte) (value >>> 16);

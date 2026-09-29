@@ -40,8 +40,9 @@ public class SaveCardChoiceEditor {
         this.cardLevels = cardLevels;
     }
 
+    // limited = some completed choices can't be reset on their own, so targets are missing
     public record ResetOption(int characterIndex, String characterName, int currentLevel,
-            List<Integer> targetLevels) {}
+            List<Integer> targetLevels, boolean limited) {}
 
     private record Entry(int start, int end) {}
     private record IndexedList(int lengthOffset, int payloadStart, int payloadEnd, List<Entry> entries) {}
@@ -72,7 +73,9 @@ public class SaveCardChoiceEditor {
                     }
                 }
                 if (!targets.isEmpty()) {
-                    result.add(new ResetOption(i, character.name, character.level, List.copyOf(targets)));
+                    boolean limited = targets.size() < state.lastCompleted - 1;
+                    result.add(new ResetOption(i, character.name, character.level,
+                            List.copyOf(targets), limited));
                 }
             } catch (IllegalArgumentException ignored) {
                 continue;

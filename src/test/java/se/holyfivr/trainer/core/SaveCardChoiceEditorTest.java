@@ -2,6 +2,7 @@ package se.holyfivr.trainer.core;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -25,6 +26,7 @@ class SaveCardChoiceEditorTest {
         List<SaveCardChoiceEditor.ResetOption> options = editor.availableResets(source);
         assertEquals(1, options.size());
         assertEquals(List.of(1, 2, 3), options.getFirst().targetLevels());
+        assertFalse(options.getFirst().limited());
 
         byte[] reset = editor.reset(source, 0, 1);
         assertArrayEquals(copy, source);
@@ -42,6 +44,7 @@ class SaveCardChoiceEditorTest {
         List<SaveCardChoiceEditor.ResetOption> options = editor.availableResets(source);
         assertEquals(1, options.size());
         assertEquals(List.of(1), options.getFirst().targetLevels());
+        assertTrue(options.getFirst().limited());
         assertThrows(IllegalArgumentException.class, () -> editor.reset(source, 0, 2));
         assertEquals(2, readIntAfter(editor.reset(source, 0, 1), "CardUnlocks"));
     }
@@ -52,6 +55,8 @@ class SaveCardChoiceEditorTest {
                 List.of(71, 72, 69, 63, 65),
                 List.of(61, 62, 64, 66, 67, 68, 70, 73, 75, 76));
         assertEquals(List.of(1, 2), editor.availableResets(source).getFirst().targetLevels());
+        // One choice is already unspent, so fewer targets is expected, not limited
+        assertFalse(editor.availableResets(source).getFirst().limited());
         byte[] reset = editor.reset(source, 0, 2);
         assertEquals(2, readIntAfter(reset, "CardUnlocks"));
         assertEquals(4, readIntAfter(reset, "Level"));
@@ -76,6 +81,7 @@ class SaveCardChoiceEditorTest {
                 List.of(71, 72, 69, 63, 65, 78),
                 List.of(61, 62, 64, 66, 67, 68, 70, 73, 75, 76), 76);
         assertEquals(List.of(3), editor.availableResets(source).getFirst().targetLevels());
+        assertTrue(editor.availableResets(source).getFirst().limited());
         assertThrows(IllegalArgumentException.class, () -> editor.reset(source, 0, 2));
         assertEquals(1, readIntAfter(editor.reset(source, 0, 3), "CardUnlocks"));
     }

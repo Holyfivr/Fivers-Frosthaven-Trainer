@@ -62,7 +62,8 @@ So please be patient if updates are slow, as I am balancing this with my studies
 3.  The first time you open a save, a backup copy (`.bak`) is created next to it.
 4.  Edit the values in the town and character tabs, then click **Save & Close**.
     To redo card choices, open **Reset card choices**, choose a character and target level,
-    click **Reset** twice, then **Save & Close**.
+    click **Reset** twice, then **Save & Close**. If a character picked a lower-level card at a
+    higher level, some target levels can't be reset separately and won't be listed.
 5.  Start the game and load your campaign.
 
 Only one file can be open at a time. Save or close the current ruleset/savefile before opening the other.

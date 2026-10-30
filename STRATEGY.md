@@ -25,7 +25,7 @@ The strategy is designed to mitigate this risk entirely by treating the file as 
 5.  **The "Byte Compensation Strategy":** In order to maintain the bytesize of each parsed block, we use a byte compensating strategy to account for each lost/added byte.
     *   **Padding:** If the user's edits make a block *shorter* than the original, we add spaces to the end of the block until it matches the original length.
     *   **Trimming:** If the user's edits make a block *longer* than the original (e.g., increasing HP from 9 to 10), we must reclaim space. We do this by removing redundant characters in a prioritized order:
-        1.  **Stripping Comments:** The file has plenty of comments. Anything behind a '#' can be safely removed and regarded as free bytes.
+        1.  **Stripping Comments:** The file has plenty of comments. Anything behind a comment '#' can be safely removed and regarded as free bytes. Only a '#' at the start of a line or after whitespace opens a comment (the YAML rule); a '#' glued to other text, like the colour in "<mark=#6EBE4922>" inside quoted card text, is content and is never touched.
         2.  **Trailing Whitespace:** There's plenty of lines in the file that end with multiple whitespaces. Removing invisible spaces at the end of lines will give us some bytes.
         3.  **Carriage Returns:** Converting Windows line endings (`\r\n`) to Unix line endings (`\n`). This is invisible and saves 1 byte per line.
         4.  **Remove Double Spaces behind colons:** Many lines will have unnecessary padding in the "value" part of the key/value pairs. These can be safely trimmed to one.

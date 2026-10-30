@@ -114,7 +114,10 @@ public class SaveUtils {
         return true;
     }
 
-    /* Sanitizes lines that accidentally stack up multiple inline comments. */
+    /* Sanitizes lines that accidentally stack up multiple inline comments.   */
+    /* Only a '#' at line start or after a space/tab opens a comment (the YAML */
+    /* rule). A glued '#', like the colour in "<mark=#6EBE4922>" inside card   */
+    /* text, is content and is left alone.                                     */
     public String stripDoubleHashComments(String block) {
         if (block == null || block.isEmpty()) {
             return block;
@@ -123,8 +126,9 @@ public class SaveUtils {
         StringBuilder result = new StringBuilder(block.length());
         for (int i = 0; i < lines.length; i++) {
             String line = lines[i];
-            int firstHash = line.indexOf('#');
-            if (firstHash != -1) {
+            Matcher comment = PatternRepository.COMMENT_START_PATTERN.matcher(line);
+            if (comment.find()) {
+                int firstHash = comment.end() - 1;
                 int secondHash = line.indexOf('#', firstHash + 1);
                 if (secondHash != -1) {
                     line = line.substring(0, secondHash);

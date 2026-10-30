@@ -338,9 +338,12 @@ public class RulesetSaver {
         // This was implemented after all the other ones, when I realised
         // that I could just start picking bytes from comments. So, to start with
         // thats what we do, since they are basically just free bytes.
-        // Removes characters AFTER '#' but never removes the '#'
+        // Removes characters AFTER '#' but never removes the '#'.
+        // Only a '#' at line start or after a space/tab opens a comment (the
+        // YAML rule). A glued '#' like the colour in "<mark=#6EBE4922>" is card
+        // text, and eating it corrupts the card markup (see PatternRepository).
         while (charsToRemove > 0 && currentBlock.contains("#")) {
-            String newBlock = currentBlock.replaceFirst("(?m)(#).", "$1");
+            String newBlock = PatternRepository.COMMENT_TRIM_PATTERN.matcher(currentBlock).replaceFirst("$1");
             // If nothing changed, there is nothing more to trim safely
             if (newBlock.equals(currentBlock)) {
                 break;

@@ -43,7 +43,10 @@ public class CharacterService {
         "HIVEID",
         "InfuserID",
         "MetalMosaicID",
-        "PainConduitID" 
+        "PainConduitID",
+        "CrashingTideID",
+        "ShattersongID",
+        "DeepwraithID"
     };
 
     private final ActiveSessionData activeSessionData;

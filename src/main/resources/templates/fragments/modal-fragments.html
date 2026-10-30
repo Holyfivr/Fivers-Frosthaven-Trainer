@@ -97,7 +97,6 @@
         <!------------------------------------------------------ ENABLE STARTERS ------------------------------------------------------------->
 
         <template id="enableAllTemplate">
-            <i>*not all characters can be enabled safely yet</i><br>
             <b>Make the following characters available from start:</b>
             <div style="text-align: left; width: 400px; margin: 0 auto;">
                 <ul>
@@ -109,6 +108,9 @@
                     <li>Infuser</li>
                     <li>Metal Mosaic</li>
                     <li>Pain Conduit</li>
+                    <li>Crashing Tide</li>
+                    <li>Shattersong</li>
+                    <li>Deepwraith</li>
                 </ul>
             </div>
 
@@ -132,7 +134,8 @@
                 <p>The file couldn't be saved.<br>
                     Check the
                     <a th:href="@{/troubleshooting}" target="contentFrame" onclick="closeModal()">Troubleshooting</a>
-                    guide for a list of possible reasons.</p>
+                    guide for a list of possible reasons.
+                </p>
                 <br>
                 <a class="btn" href="#" onclick="closeModal()">Close</a>
             </div>
@@ -173,11 +176,13 @@
                         </li>
                     </ul>
                 </div>
-                <div class="sidenote">(If patched: do this right after patching, before making any changes, so the new backup stays clean.)</div>
+                <div class="sidenote">(If patched: do this right after patching, before making any changes, so the new
+                    backup stays clean.)</div>
                 <br>
                 <form th:action="@{/restore-backup}" method="POST" style="display:inline;"
                     onsubmit="registerPendingAction('backupRestored')">
-                    <button class="warning-btn btn" type="submit">The game is broken. Restore the file from the old backup</button>
+                    <button class="warning-btn btn" type="submit">The game is broken. Restore the file from the old
+                        backup</button>
                 </form>
                 <form th:action="@{/replace-backup}" method="POST" style="display:inline;"
                     onsubmit="registerPendingAction('backupReplaced')">

@@ -252,4 +252,33 @@ public final class PatternRepository {
     public static final Pattern QUANTITY_PATTERN =
             Pattern.compile("(?m)\\bQuantity:\\s*\\d+");
 
+
+    /* ====================================================================== */
+    /*                              COMMENT PATTERNS                          */
+    /* ====================================================================== */
+
+    /**
+     * A '#' that starts a YAML comment: at the start of a line, or preceded
+     * by a space or tab. A '#' glued to other text is NOT a comment.
+     *
+     * The ruleset has 114 of those inside quoted card text, e.g. the colour
+     * in "<mark=#6EBE4922>". Treating them as comments let the saver eat the
+     * colour digits (and, on a big enough edit, the closing quote).
+     */
+    private static final String COMMENT_START = "(?:^|[ \\t])#";
+
+    /**
+     * Finds the first comment start on a line. The match ends on the '#'.
+     */
+    public static final Pattern COMMENT_START_PATTERN =
+            Pattern.compile("(?m)" + COMMENT_START);
+
+    /**
+     * Matches a comment start plus the one character after the '#'.
+     * Replacing with "$1" removes that character, which is how the saver
+     * steals filler bytes from comments when a block has grown.
+     */
+    public static final Pattern COMMENT_TRIM_PATTERN =
+            Pattern.compile("(?m)(" + COMMENT_START + ").");
+
 }
